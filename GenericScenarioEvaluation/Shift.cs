@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GenericScenarioEvaluation
 {
-    class PremanufacturingNotice
+    class Shift
     {
         public string ScenarioName;
         public string Element;

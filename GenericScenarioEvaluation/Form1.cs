@@ -57,7 +57,24 @@ namespace GenericScenarioEvaluation
             InitializeComponent();
             ProcessExcel();
             foreach (DataRow r in elementsAndDataTable.Rows)
+            {
                 if (r[scenarioElements[3]] == DBNull.Value) r[scenarioElements[3]] = string.Empty;
+                if (r[scenarioElements[4]] == DBNull.Value) r[scenarioElements[4]] = string.Empty;
+                if (r[scenarioElements[5]] == DBNull.Value) r[scenarioElements[5]] = string.Empty;
+                if (r[scenarioElements[6]] == DBNull.Value) r[scenarioElements[6]] = string.Empty;
+                if (r[scenarioElements[7]] == DBNull.Value) r[scenarioElements[7]] = string.Empty;
+                if (r[scenarioElements[8]] == DBNull.Value) r[scenarioElements[8]] = string.Empty;
+                if (r[scenarioElements[9]] == DBNull.Value) r[scenarioElements[9]] = string.Empty;
+                if (r[scenarioElements[10]] == DBNull.Value) r[scenarioElements[10]] = string.Empty;
+                if (r[scenarioElements[11]] == DBNull.Value) r[scenarioElements[11]] = string.Empty;
+                if (r[scenarioElements[12]] == DBNull.Value) r[scenarioElements[12]] = string.Empty;
+                if (r[scenarioElements[13]] == DBNull.Value) r[scenarioElements[13]] = string.Empty;
+                if (r[scenarioElements[14]] == DBNull.Value) r[scenarioElements[14]] = string.Empty;
+                if (r[scenarioElements[15]] == DBNull.Value) r[scenarioElements[15]] = string.Empty;
+                if (r[scenarioElements[16]] == DBNull.Value) r[scenarioElements[16]] = string.Empty;
+                if (r[scenarioElements[17]] == DBNull.Value) r[scenarioElements[17]] = string.Empty;
+                if (r[scenarioElements[18]] == DBNull.Value) r[scenarioElements[18]] = string.Empty;
+            }
 
             int count = 0;
             List<Source> sources = new List<Source>();
@@ -310,11 +327,11 @@ namespace GenericScenarioEvaluation
             this.dataGridView9.Columns.Add(scenarioElements[4], scenarioElements[5]);
             this.dataGridView9.Columns.Add(scenarioElements[8], scenarioElements[8]);
 
-            List<PremanufacturingNotice> pmn = new List<PremanufacturingNotice>();
+            List<Shift> shifts = new List<Shift>();
             foreach (DataRow row in results)
             {
                 count++;
-                pmn.Add(new PremanufacturingNotice
+                shifts.Add(new Shift
                 {
                     ScenarioName = row[scenarioElements[1]].ToString(),
                     Element = row[scenarioElements[2]].ToString(),
