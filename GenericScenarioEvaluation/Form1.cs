@@ -581,6 +581,42 @@ namespace GenericScenarioEvaluation
             }
 
 
+            this.dataGridView10.Columns.Add(scenarioElements[1], scenarioElements[1]);
+            this.dataGridView10.Columns.Add(scenarioElements[2], scenarioElements[2]);
+            this.dataGridView10.Columns.Add(scenarioElements[3], scenarioElements[3]);
+            this.dataGridView10.Columns.Add(scenarioElements[4], scenarioElements[5]);
+            this.dataGridView10.Columns.Add(scenarioElements[8], scenarioElements[8]);
+
+            results = from myRow in elementsAndDataTable.AsEnumerable()
+                      where !string.IsNullOrEmpty(myRow.Field<string>(scenarioElements[2]))
+                      && !string.IsNullOrEmpty(myRow.Field<string>(scenarioElements[3]))
+                      && myRow.Field<string>(accessed) != "True"
+                      select myRow;
+
+            List<DataValue> values = new List<DataValue>();
+            foreach (DataRow row in results)
+            {
+                count++;
+                values.Add(new DataValue
+                {
+                    ScenarioName = row[scenarioElements[1]].ToString(),
+                    Element = row[scenarioElements[2]].ToString(),
+                    Type = row[scenarioElements[3]].ToString(),
+                    Type2 = row[scenarioElements[4]].ToString(),
+                    SourceSummary = row[scenarioElements[8]].ToString()
+                });
+                string[] temp = new string[] {
+                    row[scenarioElements[1]].ToString(),
+                    row[scenarioElements[2]].ToString(),
+                    row[scenarioElements[3]].ToString(),
+                    row[scenarioElements[4]].ToString(),
+                    row[scenarioElements[8]].ToString()
+                };
+                this.dataGridView10.Rows.Add(temp);
+                row[accessed] = "True";
+            }
+
+
             results = from myRow in elementsAndDataTable.AsEnumerable()
                       where myRow.Field<string>(accessed) != "True"
                       select myRow;
@@ -631,6 +667,10 @@ namespace GenericScenarioEvaluation
             for (int i = 0; i < dataGridView9.Columns.Count; i++)
             {
                 dataGridView9.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            }
+            for (int i = 0; i < dataGridView10.Columns.Count; i++)
+            {
+                dataGridView10.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
 
 

@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ControlTechnology.cs" />
+    <Compile Include="DataValue.cs" />
     <Compile Include="EnvironmentalRelease.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
