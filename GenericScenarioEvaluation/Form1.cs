@@ -56,156 +56,31 @@ namespace GenericScenarioEvaluation
         {
             InitializeComponent();
             ProcessExcel();
+            foreach (DataRow r in elementsAndDataTable.Rows)
+                if (r[scenarioElements[3]] == DBNull.Value) r[scenarioElements[3]] = string.Empty;
 
             int count = 0;
             List<Source> sources = new List<Source>();
             foreach (DataRow row in elementsAndDataTable.Rows)
             {
                 string name = row[scenarioElements[1]].ToString();
-                if (!string.IsNullOrEmpty(row[scenarioElements[9]].ToString()))
-                {
-                    bool contained = false;
-                    foreach (Source s in sources)
+                for (int i = 9; i < 17; i++)
+                    if (!string.IsNullOrEmpty(row[scenarioElements[i]].ToString()))
                     {
-                        if (s.Value == row[scenarioElements[9]].ToString()) contained = true;
-                    }
-                    if (!contained)
-                    {
-                        sources.Add(new Source
+                        bool contained = false;
+                        foreach (Source s in sources)
                         {
-                            ScenarioName = name,
-                            Value = row[scenarioElements[9]].ToString()
-                        });
-                    }
-                }
-                if (!string.IsNullOrEmpty(row[scenarioElements[10]].ToString()))
-                {
-                    bool contained = false;
-                    foreach (Source s in sources)
-                    {
-                        if (s.Value == row[scenarioElements[10]].ToString()) contained = true;
-                    }
-                    if (!contained)
-                    {
-                        sources.Add(new Source
+                            if (s.Value == row[scenarioElements[i]].ToString()) contained = true;
+                        }
+                        if (!contained)
                         {
-                            ScenarioName = name,
-                            Value = row[scenarioElements[10]].ToString()
-                        });
+                            sources.Add(new Source
+                            {
+                                ScenarioName = name,
+                                Value = row[scenarioElements[i]].ToString()
+                            });
+                        }
                     }
-                }
-                if (!string.IsNullOrEmpty(row[scenarioElements[11]].ToString()))
-                {
-                    bool contained = false;
-                    foreach (Source s in sources)
-                    {
-                        if (s.Value == row[scenarioElements[11]].ToString()) contained = true;
-                    }
-                    if (!contained)
-                    {
-                        sources.Add(new Source
-                        {
-                            ScenarioName = name,
-                            Value = row[scenarioElements[11]].ToString()
-                        });
-                    }
-                }
-                if (!string.IsNullOrEmpty(row[scenarioElements[12]].ToString()))
-                {
-                    bool contained = false;
-                    foreach (Source s in sources)
-                    {
-                        if (s.Value == row[scenarioElements[12]].ToString()) contained = true;
-                    }
-                    if (!contained)
-                    {
-                        sources.Add(new Source
-                        {
-                            ScenarioName = name,
-                            Value = row[scenarioElements[12]].ToString()
-                        });
-                    }
-                }
-                if (!string.IsNullOrEmpty(row[scenarioElements[13]].ToString()))
-                {
-                    bool contained = false;
-                    foreach (Source s in sources)
-                    {
-                        if (s.Value == row[scenarioElements[13]].ToString()) contained = true;
-                    }
-                    if (!contained)
-                    {
-                        sources.Add(new Source
-                        {
-                            ScenarioName = name,
-                            Value = row[scenarioElements[13]].ToString()
-                        });
-                    }
-                }
-                if (!string.IsNullOrEmpty(row[scenarioElements[13]].ToString()))
-                {
-                    bool contained = false;
-                    foreach (Source s in sources)
-                    {
-                        if (s.Value == row[scenarioElements[13]].ToString()) contained = true;
-                    }
-                    if (!contained)
-                    {
-                        sources.Add(new Source
-                        {
-                            ScenarioName = name,
-                            Value = row[scenarioElements[13]].ToString()
-                        });
-                    }
-                }
-                if (!string.IsNullOrEmpty(row[scenarioElements[14]].ToString()))
-                {
-                    bool contained = false;
-                    foreach (Source s in sources)
-                    {
-                        if (s.Value == row[scenarioElements[14]].ToString()) contained = true;
-                    }
-                    if (!contained)
-                    {
-                        sources.Add(new Source
-                        {
-                            ScenarioName = name,
-                            Value = row[scenarioElements[14]].ToString()
-                        });
-                    }
-                }
-                if (!string.IsNullOrEmpty(row[scenarioElements[15]].ToString()))
-                {
-                    bool contained = false;
-                    foreach (Source s in sources)
-                    {
-                        if (s.Value == row[scenarioElements[15]].ToString()) contained = true;
-                    }
-                    if (!contained)
-                    {
-                        sources.Add(new Source
-                        {
-                            ScenarioName = name,
-                            Value = row[scenarioElements[15]].ToString()
-                        });
-                    }
-                }
-                if (!string.IsNullOrEmpty(row[scenarioElements[16]].ToString()))
-                {
-                    bool contained = false;
-                    foreach (Source s in sources)
-                    {
-                        if (s.Value == row[scenarioElements[16]].ToString()) contained = true;
-                    }
-                    if (!contained)
-                    {
-                        sources.Add(new Source
-                        {
-                            ScenarioName = name,
-                            Value = row[scenarioElements[15]].ToString()
-                        });
-                    }
-                }
             }
 
             this.dataGridView2.Columns.Add(scenarioElements[1], scenarioElements[1]);
@@ -218,7 +93,8 @@ namespace GenericScenarioEvaluation
             this.dataGridView2.Columns.Add(scenarioElements[9], scenarioElements[9]);
 
             var results = from myRow in elementsAndDataTable.AsEnumerable()
-                          where myRow.Field<string>("Data Element").Contains("Occupational") && !myRow.Field<string>("Data Element").Contains("Process Description")
+                          where myRow.Field<string>("Data Element").Contains("Occupational") 
+                          && !myRow.Field<string>("Data Element").Contains("Process Description")
                           select myRow;
 
             List<OccupationalExposure> expsoures = new List<OccupationalExposure>();
@@ -311,64 +187,13 @@ namespace GenericScenarioEvaluation
             this.dataGridView4.Columns.Add(scenarioElements[8], scenarioElements[8]);
 
             results = from myRow in elementsAndDataTable.AsEnumerable()
-                      where myRow.Field<string>("Data Element").ToLower().Contains("daily use")
+                      where myRow.Field<string>("Sub-Element (Type)").ToLower().Contains("use rate") ||
+                        myRow.Field<string>("Data Element").ToLower().Contains("use rate") ||
+                        myRow.Field<string>("Data Element").ToLower().Contains("daily use") ||
+                        myRow.Field<string>("Data Element").ToLower().Contains("annual use")
                       select myRow;
 
             List<UseRate> useRates = new List<UseRate>();
-            foreach (DataRow row in results)
-            {
-                count++;
-                useRates.Add(new UseRate
-                {
-                    ScenarioName = row[scenarioElements[1]].ToString(),
-                    Value = row[scenarioElements[2]].ToString(),
-                    Type = row[scenarioElements[3]].ToString(),
-                    SourceSummary = row[scenarioElements[8]].ToString()
-                });
-                string[] temp = new string[] {
-                    row[scenarioElements[1]].ToString(),
-                    row[scenarioElements[2]].ToString(),
-                    row[scenarioElements[4]].ToString(),
-                    row[scenarioElements[8]].ToString()
-               };
-                this.dataGridView4.Rows.Add(temp);
-                if (row[accessed].ToString() == "True")
-                    System.Windows.Forms.MessageBox.Show("Found one!");
-                row[accessed] = "True";
-            }
-
-            results = from myRow in elementsAndDataTable.AsEnumerable()
-                      where myRow.Field<string>("Data Element").ToLower().Contains("annual use")
-                      select myRow;
-
-            foreach (DataRow row in results)
-            {
-                count++;
-                useRates.Add(new UseRate
-                {
-                    ScenarioName = row[scenarioElements[1]].ToString(),
-                    Value = row[scenarioElements[2]].ToString(),
-                    Type = row[scenarioElements[3]].ToString(),
-                    SourceSummary = row[scenarioElements[8]].ToString()
-                });
-                string[] temp = new string[] {
-                    row[scenarioElements[1]].ToString(),
-                    row[scenarioElements[2]].ToString(),
-                    row[scenarioElements[4]].ToString(),
-                    row[scenarioElements[8]].ToString()
-                };
-                this.dataGridView4.Rows.Add(temp);
-                if (row[accessed].ToString() == "True")
-                    System.Windows.Forms.MessageBox.Show("Found one!");
-                row[accessed] = "True";
-            }
-
-            results = from myRow in elementsAndDataTable.AsEnumerable()
-                      where myRow.Field<string>("Data Element").ToLower().Contains("use rate") &&
-                      !myRow.Field<string>("Data Element").ToLower().Contains("daily use") &&
-                      !myRow.Field<string>("Data Element").ToLower().Contains("annual use")
-                      select myRow;
-
             foreach (DataRow row in results)
             {
                 count++;
@@ -400,7 +225,10 @@ namespace GenericScenarioEvaluation
             this.dataGridView5.Columns.Add(scenarioElements[8], scenarioElements[8]);
 
             results = from myRow in elementsAndDataTable.AsEnumerable()
-                      where myRow.Field<string>("Data Element").Contains("Environmental Release")
+                      where myRow.Field<string>("Data Element").Contains("Environmental Release") ||
+                      myRow.Field<string>("Data Element").Contains("TRI Releases (lb/yr)") ||
+                      myRow.Field<string>("Data Element").Contains("Total Industry Estimated Process Water Discharge Flow")
+
                       && !myRow.Field<string>("Data Element").Contains("Process Description")
                       select myRow;
 
@@ -434,7 +262,8 @@ namespace GenericScenarioEvaluation
             }
 
             results = from myRow in elementsAndDataTable.AsEnumerable()
-                      where myRow.Field<string>("Data Element").Contains("Control Technologies")
+                      where myRow.Field<string>("Data Element").Contains("Control Technologies") ||
+                        myRow.Field<string>("Data Element").Contains("Treatment Technology")
                       select myRow;
 
             this.dataGridView6.Columns.Add(scenarioElements[1], scenarioElements[1]);
@@ -469,9 +298,10 @@ namespace GenericScenarioEvaluation
             }
 
             results = from myRow in elementsAndDataTable.AsEnumerable()
-                      where myRow.Field<string>("Data Element").Contains("PMN")
-                      && !myRow.Field<string>("Data Element").Contains("Process Description")
-                      && !myRow.Field<string>("Data Element").Contains("Use Rate")
+                      where myRow.Field<string>("Data Element").Contains("Shift")||
+                      myRow.Field<string>(scenarioElements[3]).Contains("Shift")
+                      //&& !myRow.Field<string>("Data Element").Contains("Process Description")
+                      //&& !myRow.Field<string>("Data Element").Contains("Use Rate")
                       select myRow;
 
             this.dataGridView9.Columns.Add(scenarioElements[1], scenarioElements[1]);
@@ -580,6 +410,81 @@ namespace GenericScenarioEvaluation
                 row[accessed] = "True";
             }
 
+            this.dataGridView11.Columns.Add(scenarioElements[1], scenarioElements[1]);
+            this.dataGridView11.Columns.Add(scenarioElements[2], scenarioElements[2]);
+            this.dataGridView11.Columns.Add(scenarioElements[3], scenarioElements[3]);
+            this.dataGridView11.Columns.Add(scenarioElements[4], scenarioElements[5]);
+            this.dataGridView11.Columns.Add(scenarioElements[8], scenarioElements[8]);
+
+
+            results = from myRow in elementsAndDataTable.AsEnumerable()
+                      where myRow.Field<string>("Data Element").Contains("Number of Sites")
+                      || myRow.Field<string>(scenarioElements[3]).Contains("Number of Sites")
+                      select myRow;
+
+            List<Site> sites = new List<Site>();
+            foreach (DataRow row in results)
+            {
+                count++;
+                sites.Add(new Site
+                {
+                    ScenarioName = row[scenarioElements[1]].ToString(),
+                    Element = row[scenarioElements[2]].ToString(),
+                    Type = row[scenarioElements[3]].ToString(),
+                    SourceSummary = row[scenarioElements[8]].ToString()
+                });
+                string[] temp = new string[] {
+                    row[scenarioElements[1]].ToString(),
+                    row[scenarioElements[2]].ToString(),
+                    row[scenarioElements[3]].ToString(),
+                    row[scenarioElements[4]].ToString(),
+                    row[scenarioElements[6]].ToString(),
+                    row[scenarioElements[7]].ToString(),
+                    row[scenarioElements[8]].ToString()
+                };
+                this.dataGridView11.Rows.Add(temp);
+                if (row[accessed].ToString() == "True")
+                    System.Windows.Forms.MessageBox.Show("Found one!");
+                row[accessed] = "True";
+            }
+
+            this.dataGridView12.Columns.Add(scenarioElements[1], scenarioElements[1]);
+            this.dataGridView12.Columns.Add(scenarioElements[2], scenarioElements[2]);
+            this.dataGridView12.Columns.Add(scenarioElements[3], scenarioElements[3]);
+            this.dataGridView12.Columns.Add(scenarioElements[4], scenarioElements[5]);
+            this.dataGridView12.Columns.Add(scenarioElements[8], scenarioElements[8]);
+
+
+            results = from myRow in elementsAndDataTable.AsEnumerable()
+                      where myRow.Field<string>("Data Element").Contains("PPE")
+                      || myRow.Field<string>(scenarioElements[3]).Contains("PPE")
+                      select myRow;
+
+            List<ppe> ppes = new List<ppe>();
+            foreach (DataRow row in results)
+            {
+                count++;
+                ppes.Add(new ppe
+                {
+                    ScenarioName = row[scenarioElements[1]].ToString(),
+                    Element = row[scenarioElements[2]].ToString(),
+                    Type = row[scenarioElements[3]].ToString(),
+                    SourceSummary = row[scenarioElements[8]].ToString()
+                });
+                string[] temp = new string[] {
+                    row[scenarioElements[1]].ToString(),
+                    row[scenarioElements[2]].ToString(),
+                    row[scenarioElements[3]].ToString(),
+                    row[scenarioElements[4]].ToString(),
+                    row[scenarioElements[6]].ToString(),
+                    row[scenarioElements[7]].ToString(),
+                    row[scenarioElements[8]].ToString()
+                };
+                this.dataGridView12.Rows.Add(temp);
+                if (row[accessed].ToString() == "True")
+                    System.Windows.Forms.MessageBox.Show("Found one!");
+                row[accessed] = "True";
+            }
 
             this.dataGridView10.Columns.Add(scenarioElements[1], scenarioElements[1]);
             this.dataGridView10.Columns.Add(scenarioElements[2], scenarioElements[2]);
@@ -594,6 +499,7 @@ namespace GenericScenarioEvaluation
                       select myRow;
 
             List<DataValue> values = new List<DataValue>();
+            List<string> uniqueDataElements = new List<string>();
             foreach (DataRow row in results)
             {
                 count++;
@@ -605,6 +511,7 @@ namespace GenericScenarioEvaluation
                     Type2 = row[scenarioElements[4]].ToString(),
                     SourceSummary = row[scenarioElements[8]].ToString()
                 });
+                if (!uniqueDataElements.Contains(row[scenarioElements[2]].ToString())) uniqueDataElements.Add(row[scenarioElements[2]].ToString());
                 string[] temp = new string[] {
                     row[scenarioElements[1]].ToString(),
                     row[scenarioElements[2]].ToString(),
@@ -626,7 +533,7 @@ namespace GenericScenarioEvaluation
             {
                 dataGridView1.Columns.Add(s, s);
             }
-            for (int i =0; i< dataGridView1.Columns.Count; i++ )
+            for (int i = 0; i < dataGridView1.Columns.Count; i++)
             {
                 dataGridView1.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
             }
@@ -636,6 +543,8 @@ namespace GenericScenarioEvaluation
                 for (int i = 0; i < scenarioElements.Length; i++) data.Add(r[scenarioElements[i]].ToString());
                 this.dataGridView1.Rows.Add(data.ToArray<string>());
             }
+
+            // format data grid views
             for (int i = 0; i < dataGridView2.Columns.Count; i++)
             {
                 dataGridView2.Columns[i].AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;

@@ -69,10 +69,12 @@
     </Compile>
     <Compile Include="OccupationalExposure.cs" />
     <Compile Include="OperatingDays.cs" />
+    <Compile Include="ppe.cs" />
     <Compile Include="PremanufacturingNotice.cs" />
     <Compile Include="ProcessDescription.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Site.cs" />
     <Compile Include="Source.cs" />
     <Compile Include="UseRate.cs" />
     <Compile Include="Worker.cs" />
