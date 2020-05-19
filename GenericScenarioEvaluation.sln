@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30104.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenericScenarioEvaluation", "GenericScenarioEvaluation\GenericScenarioEvaluation.csproj", "{739F1703-F61A-4501-998E-27A6F1640DB1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{739F1703-F61A-4501-998E-27A6F1640DB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{739F1703-F61A-4501-998E-27A6F1640DB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{739F1703-F61A-4501-998E-27A6F1640DB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{739F1703-F61A-4501-998E-27A6F1640DB1}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0A1E9122-F3BE-4784-8526-6D409F9C3457}
+	EndGlobalSection
+EndGlobal
