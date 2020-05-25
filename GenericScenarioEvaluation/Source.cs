@@ -9,6 +9,8 @@ namespace GenericScenarioEvaluation
     class Source
     {
         public string ScenarioName;
-        public string Value;
+        public string ReferenceText;
+        public string Risdata { get; set; }
+
     }
 }

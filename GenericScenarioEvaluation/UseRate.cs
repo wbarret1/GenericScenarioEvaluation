@@ -8,8 +8,10 @@ namespace GenericScenarioEvaluation
 {
     class UseRate
     {
-        public string ScenarioName;
-        public string Value;
+        public GenericScenario GenericScenario;
+        public Source[] sources;
+        public string ElementNumber;
+        public string ElementName;
         public string Type;
         public string SourceSummary;
     }

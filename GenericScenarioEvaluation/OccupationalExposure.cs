@@ -8,13 +8,15 @@ namespace GenericScenarioEvaluation
 {
     class OccupationalExposure
     {
+        public GenericScenario GenericScenario;
+        public Source[] sources;
         public string ScenarioName;
+        public string ElementNumber;
+        public string ElementName;
         public string Type;
         public string ExposureType;
-        public string Actiity_Source;
+        public string Activity_Source;
         public string mediaOfRelease;
         public string sourceSummary;
-
-
     }
 }

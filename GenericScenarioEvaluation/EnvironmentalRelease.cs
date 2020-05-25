@@ -8,11 +8,13 @@ namespace GenericScenarioEvaluation
 {
     class EnvironmentalRelease
     {
-        public string ScenarioName;
-        public string Element;
+        public GenericScenario GenericScenario;
+        public Source[] sources;
+        public string ElementNumber;
+        public string ElementName;
         public string Type;
         public string Type2;
-        public string ActiitySource;
+        public string ActivitySource;
         public string MediaOfRelease;
         public string SourceSummary;
     }

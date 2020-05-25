@@ -8,10 +8,11 @@ namespace GenericScenarioEvaluation
 {
     class Site
     {
-        public string ScenarioName;
-        public string Element;
+        public GenericScenario GenericScenario;
+        public Source[] sources;
+        public string ElementName;
+        public string ElementNumber;
         public string Type;
-        public string Type2;
         public string SourceSummary;
     }
 }

@@ -8,8 +8,10 @@ namespace GenericScenarioEvaluation
 {
     class ControlTechnology
     {
-        public string ScenarioName;
-        public string Element;
+        public GenericScenario GenericScenario;
+        public Source[] sources;
+        public string ElementNumber;
+        public string ElementName;
         public string Type;
         public string Type2;
         public string SourceSummary;
