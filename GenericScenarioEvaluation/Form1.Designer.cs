@@ -55,6 +55,10 @@
             this.productionRateDataGridView = new System.Windows.Forms.DataGridView();
             this.tabPage13 = new System.Windows.Forms.TabPage();
             this.dataValueDataGridView = new System.Windows.Forms.DataGridView();
+            this.tabPage14 = new System.Windows.Forms.TabPage();
+            this.tabPage15 = new System.Windows.Forms.TabPage();
+            this.ConcentrationDataGridView = new System.Windows.Forms.DataGridView();
+            this.CalculationdataGridView = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.remainingValuesDataGridView)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -82,15 +86,19 @@
             ((System.ComponentModel.ISupportInitialize)(this.productionRateDataGridView)).BeginInit();
             this.tabPage13.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataValueDataGridView)).BeginInit();
+            this.tabPage14.SuspendLayout();
+            this.tabPage15.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.ConcentrationDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CalculationdataGridView)).BeginInit();
             this.SuspendLayout();
             // 
-            // remainingValuesDataGridView1
+            // remainingValuesDataGridView
             // 
             this.remainingValuesDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.remainingValuesDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.remainingValuesDataGridView.Location = new System.Drawing.Point(3, 2);
             this.remainingValuesDataGridView.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.remainingValuesDataGridView.Name = "remainingValuesDataGridView1";
+            this.remainingValuesDataGridView.Name = "remainingValuesDataGridView";
             this.remainingValuesDataGridView.RowHeadersWidth = 51;
             this.remainingValuesDataGridView.RowTemplate.Height = 24;
             this.remainingValuesDataGridView.Size = new System.Drawing.Size(1345, 645);
@@ -111,6 +119,8 @@
             this.tabControl1.Controls.Add(this.tabPage11);
             this.tabControl1.Controls.Add(this.tabPage12);
             this.tabControl1.Controls.Add(this.tabPage13);
+            this.tabControl1.Controls.Add(this.tabPage14);
+            this.tabControl1.Controls.Add(this.tabPage15);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -390,16 +400,58 @@
             this.tabPage13.Text = "Data Values";
             this.tabPage13.UseVisualStyleBackColor = true;
             // 
-            // dataGridView1
+            // dataValueDataGridView
             // 
             this.dataValueDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataValueDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataValueDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.dataValueDataGridView.Name = "dataGridView1";
+            this.dataValueDataGridView.Name = "dataValueDataGridView";
             this.dataValueDataGridView.RowHeadersWidth = 51;
             this.dataValueDataGridView.RowTemplate.Height = 24;
             this.dataValueDataGridView.Size = new System.Drawing.Size(1351, 649);
             this.dataValueDataGridView.TabIndex = 0;
+            // 
+            // tabPage14
+            // 
+            this.tabPage14.Controls.Add(this.ConcentrationDataGridView);
+            this.tabPage14.Location = new System.Drawing.Point(4, 25);
+            this.tabPage14.Name = "tabPage14";
+            this.tabPage14.Size = new System.Drawing.Size(1351, 649);
+            this.tabPage14.TabIndex = 13;
+            this.tabPage14.Text = "Concentrations";
+            this.tabPage14.UseVisualStyleBackColor = true;
+            // 
+            // tabPage15
+            // 
+            this.tabPage15.Controls.Add(this.CalculationdataGridView);
+            this.tabPage15.Location = new System.Drawing.Point(4, 25);
+            this.tabPage15.Name = "tabPage15";
+            this.tabPage15.Size = new System.Drawing.Size(1351, 649);
+            this.tabPage15.TabIndex = 14;
+            this.tabPage15.Text = "Calculations";
+            this.tabPage15.UseVisualStyleBackColor = true;
+            // 
+            // dataGridView1
+            // 
+            this.ConcentrationDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.ConcentrationDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConcentrationDataGridView.Location = new System.Drawing.Point(0, 0);
+            this.ConcentrationDataGridView.Name = "dataGridView1";
+            this.ConcentrationDataGridView.RowHeadersWidth = 51;
+            this.ConcentrationDataGridView.RowTemplate.Height = 24;
+            this.ConcentrationDataGridView.Size = new System.Drawing.Size(1351, 649);
+            this.ConcentrationDataGridView.TabIndex = 0;
+            // 
+            // dataGridView2
+            // 
+            this.CalculationdataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.CalculationdataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CalculationdataGridView.Location = new System.Drawing.Point(0, 0);
+            this.CalculationdataGridView.Name = "dataGridView2";
+            this.CalculationdataGridView.RowHeadersWidth = 51;
+            this.CalculationdataGridView.RowTemplate.Height = 24;
+            this.CalculationdataGridView.Size = new System.Drawing.Size(1351, 649);
+            this.CalculationdataGridView.TabIndex = 0;
             // 
             // Form1
             // 
@@ -437,6 +489,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.productionRateDataGridView)).EndInit();
             this.tabPage13.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataValueDataGridView)).EndInit();
+            this.tabPage14.ResumeLayout(false);
+            this.tabPage15.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.ConcentrationDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.CalculationdataGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -470,6 +526,10 @@
         private System.Windows.Forms.DataGridView productionRateDataGridView;
         private System.Windows.Forms.TabPage tabPage13;
         private System.Windows.Forms.DataGridView dataValueDataGridView;
+        private System.Windows.Forms.TabPage tabPage14;
+        private System.Windows.Forms.DataGridView ConcentrationDataGridView;
+        private System.Windows.Forms.TabPage tabPage15;
+        private System.Windows.Forms.DataGridView CalculationdataGridView;
     }
 }
 

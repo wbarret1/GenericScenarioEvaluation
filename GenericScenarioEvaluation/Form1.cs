@@ -19,6 +19,8 @@ namespace GenericScenarioEvaluation
         DataTable elementsAndDataTable = new DataTable();
         DataTable infoTable = new DataTable();
         DataTable occExpTable = new DataTable("Occupational Exposure");
+        DataTable concentrationTable = new DataTable("Concntrations");
+        DataTable calculationTable = new DataTable("Calculations");
         DataTable procDescriptionTable = new DataTable("Process Descriptions");
         DataTable useRateTable = new DataTable("Use Rates");
         DataTable envReleaseTable = new DataTable("Environmental Releases");
@@ -35,6 +37,8 @@ namespace GenericScenarioEvaluation
         List<DataElement> dataElements = new List<DataElement>();
         List<Source> sources = new List<Source>();
         List<OccupationalExposure> expsoures = new List<OccupationalExposure>();
+        List<Concentration> concentrations = new List<Concentration>();
+        List<Calculation> calculations = new List<Calculation>();
         List<ProcessDescription> processDescriptions = new List<ProcessDescription>();
         List<UseRate> useRates = new List<UseRate>();
         List<EnvironmentalRelease> envRelease = new List<EnvironmentalRelease>();
@@ -102,6 +106,7 @@ namespace GenericScenarioEvaluation
 
             var elements = from myElement in dataElements.AsEnumerable()
                            where myElement.ElementName.Contains("Occupational")
+                           && !myElement.ElementName.ToLower().Contains("characterization")
                            && !myElement.ElementName.Contains("Process Description")
                            select myElement;
 
@@ -111,6 +116,7 @@ namespace GenericScenarioEvaluation
                 OccupationalExposure o = new OccupationalExposure()
                 {
                     ScenarioName = el.ElementName,
+                    ElementName = el.ElementName,
                     ElementNumber = el.Element,
                     Type = el.Type,
                     ExposureType = el.ExposureType,
@@ -122,13 +128,74 @@ namespace GenericScenarioEvaluation
                 o.sources = GetSources(el);
                 expsoures.Add(o);
                 el.accessed = true;
-                occExpTable.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.ExposureType, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
+                occExpTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.ExposureType, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
             }
             occupationalExposureDataGridView.DataSource = occExpTable;
 
+            elements = from myElement in dataElements.AsEnumerable()
+                       where (myElement.ElementName.ToLower().Contains("concentration") ||
+                        myElement.ElementName.ToLower().Contains("concentration") ||
+                        myElement.ElementName.ToLower().Contains("fraction"))
+               && !myElement.ElementName.Contains("Process Description")
+               && !myElement.ElementName.ToLower().Contains("characterization")
+                       select myElement;
+
+            foreach (DataElement el in elements)
+            {
+                count++;
+                Concentration o = new Concentration()
+                {
+                    ScenarioName = el.ESD_GS_Name,
+                    ElementName = el.ElementName,
+                    ElementNumber = el.Element,
+                    Type = el.Type,
+                    sourceSummary = el.SourceSummary
+                };
+                o.GenericScenario = GetScenario(o.ScenarioName);
+                o.sources = GetSources(el);
+                concentrations.Add(o);
+                el.accessed = true;
+                concentrationTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
+            }
+            ConcentrationDataGridView.DataSource = concentrationTable;
+
 
             elements = from myElement in dataElements.AsEnumerable()
-                       where myElement.ElementName.Contains("Process Description")
+                       where (myElement.ElementName.ToLower().Contains("calculat") ||
+                        myElement.Type.ToLower().Contains("calculat") ||
+                        myElement.Type2.ToLower().Contains("calculat") )
+                  //      myElement.SourceSummary.ToLower().Contains("calculat"))
+               && !myElement.ElementName.Contains("Process Description")
+               && !myElement.ElementName.ToLower().Contains("characterization")
+                       select myElement;
+
+            foreach (DataElement el in elements)
+            {
+                count++;
+                Calculation o = new Calculation()
+                {
+                    ScenarioName = el.ESD_GS_Name,
+                    ElementName = el.ElementName,
+                    ElementNumber = el.Element,
+                    Type = el.Type,
+                    ExposureType = el.ExposureType,
+                    Activity_Source = el.Activity_Source,
+                    mediaOfRelease = el.mediaOfRelease,
+                    sourceSummary = el.SourceSummary
+                };
+                o.GenericScenario = GetScenario(el.ESD_GS_Name);
+                o.sources = GetSources(el);
+                calculations.Add(o);
+                el.accessed = true;
+                calculationTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.ExposureType, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
+            }
+            CalculationdataGridView.DataSource = calculationTable;
+
+
+            elements = from myElement in dataElements.AsEnumerable()
+                       where (myElement.ElementName.Contains("Process Description") ||
+                        myElement.Type.Contains("Process Description") ||
+                       myElement.ElementName.ToLower().Contains("characterization"))
                        select myElement;
 
             foreach (DataElement el in elements)
@@ -136,6 +203,7 @@ namespace GenericScenarioEvaluation
                 count++;
                 ProcessDescription de = new ProcessDescription()
                 {
+                    ScenarioName = el.ElementName,
                     ElementName = el.ElementName,
                     ElementNumber = el.Element,
                     Type = el.Type,
@@ -146,7 +214,7 @@ namespace GenericScenarioEvaluation
                 de.GenericScenario = GetScenario(el.ESD_GS_Name);
                 de.sources = GetSources(el);
                 el.accessed = true;
-                procDescriptionTable.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.Type2, el.SourceSummary });
+                procDescriptionTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
             }
             processDescriptionDataGridView.DataSource = procDescriptionTable;
 
@@ -164,6 +232,7 @@ namespace GenericScenarioEvaluation
                 UseRate ur = new UseRate()
                 {
                     ElementNumber = el.Element,
+                    ScenarioName = el.ElementName,
                     ElementName = el.ElementName,
                     Type = el.Type,
                     SourceSummary = el.SourceSummary
@@ -172,7 +241,7 @@ namespace GenericScenarioEvaluation
                 ur.GenericScenario = GetScenario(el.ESD_GS_Name);
                 ur.sources = GetSources(el);
                 el.accessed = true;
-                useRateTable.Rows.Add(new string[] { ur.ElementNumber, ur.ElementName, ur.Type, ur.SourceSummary });
+                useRateTable.Rows.Add(new string[] { ur.ElementNumber, el.ESD_GS_Name, ur.ElementName, ur.Type, ur.SourceSummary });
             }
             useRateDataGridView.DataSource = useRateTable;
 
@@ -182,6 +251,7 @@ namespace GenericScenarioEvaluation
                        myElement.ElementName.Contains("TRI Releases (lb/yr)") ||
                        myElement.ElementName.Contains("Total Industry Estimated Process Water Discharge Flow")
                        && !myElement.ElementName.ToLower().Contains("Process Description")
+                && !myElement.ElementName.ToLower().Contains("characterization")
                        select myElement;
 
             foreach (DataElement el in elements)
@@ -191,6 +261,7 @@ namespace GenericScenarioEvaluation
                 {
                     ElementNumber = el.Element,
                     ElementName = el.ElementName,
+                    ScenarioName = el.ElementName,
                     Type = el.Type,
                     Type2 = el.Type2,
                     ActivitySource = el.Activity_Source,
@@ -201,7 +272,7 @@ namespace GenericScenarioEvaluation
                 er.sources = GetSources(el);
                 envRelease.Add(er);
                 el.accessed = true;
-                envReleaseTable.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.Type2, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
+                envReleaseTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
             }
             environmentalReleaseDataGridView.DataSource = envReleaseTable;
 
@@ -217,6 +288,7 @@ namespace GenericScenarioEvaluation
                 ControlTechnology ct = new ControlTechnology()
                 {
                     ElementNumber = el.Element,
+                    ScenarioName = el.ElementName,
                     ElementName = el.ElementName,
                     Type = el.Type,
                     Type2 = el.Type2,
@@ -226,7 +298,7 @@ namespace GenericScenarioEvaluation
                 ct.sources = GetSources(el);
                 controlTech.Add(ct);
                 el.accessed = true;
-                contolTechTable.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.Type2, el.SourceSummary });
+                contolTechTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
             }
             controlTechnologyDataGridView.DataSource = contolTechTable;
 
@@ -242,6 +314,7 @@ namespace GenericScenarioEvaluation
                 Shift shift = new Shift()
                 {
                     ElementNumber = el.Element,
+                    ScenarioName = el.ElementName,
                     ElementName = el.ElementName,
                     Type = el.Type,
                     Type2 = el.Type2,
@@ -251,7 +324,7 @@ namespace GenericScenarioEvaluation
                 shift.sources = GetSources(el);
                 shifts.Add(shift);
                 el.accessed = true;
-                shiftTable.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.Type2, el.SourceSummary });
+                shiftTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
             }
             shiftDataGridView.DataSource = shiftTable;
 
@@ -259,7 +332,8 @@ namespace GenericScenarioEvaluation
             elements = from myElement in dataElements.AsEnumerable()
                        where myElement.ElementName.Contains("Operating")
                        && !myElement.Type.Contains("Process Description")
-                       && !myElement.Type.Contains("Use Rate")
+                       && !myElement.ElementName.Contains("Use Rate")
+               && !myElement.ElementName.ToLower().Contains("characterization")
                        select myElement;
 
             foreach (DataElement el in elements)
@@ -269,6 +343,7 @@ namespace GenericScenarioEvaluation
                 {
                     ElementNumber = el.Element,
                     ElementName = el.ElementName,
+                    ScenarioName = el.ElementName,
                     Type = el.Type,
                     Type2 = el.Type2,
                     SourceSummary = el.SourceSummary
@@ -277,7 +352,7 @@ namespace GenericScenarioEvaluation
                 day.sources = GetSources(el);
                 el.accessed = true;
                 opDays.Add(day);
-                operatingDaysTable.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.Type2, el.SourceSummary });
+                operatingDaysTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
             }
             operatingDaysDataGridView.DataSource = operatingDaysTable;
 
@@ -295,13 +370,14 @@ namespace GenericScenarioEvaluation
                 {
                     ElementNumber = el.Element,
                     ElementName = el.ElementName,
+                    ScenarioName = el.ElementName,
                     Type = el.Type,
                     SourceSummary = el.SourceSummary
                 };
                 worker.GenericScenario = GetScenario(el.ESD_GS_Name);
                 worker.sources = GetSources(el);
                 workers.Add(worker);
-                workerTable.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.SourceSummary });
+                workerTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
                 el.accessed = true;
             }
             workersDataGridView.DataSource = workerTable;
@@ -319,13 +395,14 @@ namespace GenericScenarioEvaluation
                 {
                     ElementNumber = el.Element,
                     ElementName = el.ElementName,
+                    ScenarioName = el.ElementName,
                     Type = el.Type,
                     SourceSummary = el.SourceSummary
                 };
                 site.GenericScenario = GetScenario(el.ESD_GS_Name);
                 site.sources = GetSources(el);
                 sites.Add(site);
-                siteTable.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.SourceSummary });
+                siteTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
                 el.accessed = true;
             }
             sitesDataGridView.DataSource = siteTable;
@@ -343,20 +420,21 @@ namespace GenericScenarioEvaluation
                 {
                     ElementNumber = el.Element,
                     ElementName = el.ElementName,
+                    ScenarioName = el.ElementName,
                     Type = el.Type,
                     SourceSummary = el.SourceSummary
                 };
                 pp.GenericScenario = GetScenario(el.ESD_GS_Name);
                 pp.sources = GetSources(el);
                 ppes.Add(pp);
-                ppeTable.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.SourceSummary });
+                ppeTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
                 el.accessed = true;
             }
             ppeDataGridView.DataSource = ppeTable;
 
 
             elements = from myElement in dataElements.AsEnumerable()
-                       where myElement.ElementName.ToLower().Contains("production")
+                       where myElement.ElementName.ToLower().Contains("production rate")
                        && !myElement.Type.Contains("Process Description")
                        select myElement;
 
@@ -367,21 +445,21 @@ namespace GenericScenarioEvaluation
                 {
                     ElementNumber = el.Element,
                     ElementName = el.ElementName,
+                    ScenarioName = el.ElementName,
                     Type = el.Type,
                     SourceSummary = el.SourceSummary
                 };
                 pp.GenericScenario = GetScenario(el.ESD_GS_Name);
                 pp.sources = GetSources(el);
                 productions.Add(pp);
-                productionRateTable.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.SourceSummary });
+                productionRateTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
                 el.accessed = true;
             }
             productionRateDataGridView.DataSource = productionRateTable;
 
             
             elements = from myElement in dataElements.AsEnumerable()
-                       where !string.IsNullOrEmpty(myElement.ElementName)
-                       && !string.IsNullOrEmpty(myElement.Type)
+                       where !string.IsNullOrEmpty(myElement.Type)
                        && !myElement.accessed
                        select myElement;
 
@@ -392,14 +470,16 @@ namespace GenericScenarioEvaluation
                 {
                     ElementName = el.ElementName,
                     ElementNumber = el.Element,
+                    ScenarioName = el.ElementName,
                     SourceSummary = el.SourceSummary
                 };
                 o.GenericScenario = GetScenario(el.ESD_GS_Name);
                 o.sources = GetSources(el);
                 values.Add(o);
+                el.accessed = true;
                 if (!uniqueDataElements.Contains(el.ElementName)) uniqueDataElements.Add(el.ElementName);
                 if (!uniqueDataSubElements.Contains(el.Type)) uniqueDataSubElements.Add(el.Type);
-                parameterTable.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.SourceSummary });
+                parameterTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
             }
             dataValueDataGridView.DataSource = parameterTable;
             
@@ -415,6 +495,7 @@ namespace GenericScenarioEvaluation
                 {
                     ElementName = el.ElementName,
                     ElementNumber = el.Element,
+                    ScenarioName = el.ElementName,
                     Type = el.Type,
                     Type2 = el.Type2,
                     ExposureType = el.ExposureType,
@@ -427,37 +508,100 @@ namespace GenericScenarioEvaluation
                 remainingValues.Add(o);
                 if (!uniqueDataElements.Contains(el.ElementName)) uniqueDataElements.Add(el.ElementName);
                 if (!uniqueDataSubElements.Contains(el.Type)) uniqueDataSubElements.Add(el.Type);
-                remainingDataTable.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.Type2, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
+                remainingDataTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
             }
             remainingValuesDataGridView.DataSource = remainingDataTable;
-
+            SetColumnWidths();
             ExportDataSet(genScenarios, @"..\..\output.xlsx");
+            int numrows = 0;
+            foreach (DataTable table in genScenarios.Tables)
+            {
+                numrows = numrows + table.Rows.Count;
+            }
+
+            //if (occExpTable.Rows.Count != expsoures.Count)
+            //{
+
+            //}
+            //if (procDescriptionTable.Rows.Count != processDescriptions.Count)
+            //{
+
+            //}
+            //if (envReleaseTable.Rows.Count != envRelease.Count)
+            //{
+
+            //}
+            //if (contolTechTable.Rows.Count != controlTech.Count)
+            //{
+
+            //}
+            //if (parameterTable.Rows.Count != values.Count)
+            //{
+
+            //}
+            //if (operatingDaysTable.Rows.Count != opDays.Count)
+            //{
+
+            //}
+            //if (ppeTable.Rows.Count != ppes.Count)
+            //{
+
+            //}
+            //if (productionRateTable.Rows.Count != productions.Count)
+            //{
+
+            //}
+            //if (shiftTable.Rows.Count != shifts.Count)
+            //{
+
+            //}
+            //if (useRateTable.Rows.Count != useRates.Count)
+            //{
+
+            //}
+            //if (workerTable.Rows.Count != workers.Count)
+            //{
+
+            //}
+            //if (remainingDataTable.Rows.Count != remainingValues.Count)
+            //{
+
+            //}
+
+            foreach(DataTable t1 in genScenarios.Tables)
+            {
+                foreach(DataTable t2 in genScenarios.Tables)
+                {
+                    if (!t1.Equals(t2))
+                    {
+                        foreach(DataRow r1 in t1.Rows)
+                        {
+                            foreach (DataRow r2 in t2.Rows)
+                            {
+                                if(r1["Element Number"].ToString() == r2["Element Number"].ToString())
+                                {
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
         }
 
         void SetUpDataTables()
         {
-            //foreach (string s in scenarioElements) occExpTable.Columns.Add(s, typeof(string));
-            //foreach (string s in scenarioElements) procDescriptionTable.Columns.Add(s, typeof(string));
-            //foreach (string s in scenarioElements) useRateTable.Columns.Add(s, typeof(string));
-            //foreach (string s in scenarioElements) envReleaseTable.Columns.Add(s, typeof(string));
-            //foreach (string s in scenarioElements) contolTechTable.Columns.Add(s, typeof(string));
-            //foreach (string s in scenarioElements) shiftTable.Columns.Add(s, typeof(string));
-            //foreach (string s in scenarioElements) operatingDaysTable.Columns.Add(s, typeof(string));
-            //foreach (string s in scenarioElements) workerTable.Columns.Add(s, typeof(string));
-            //foreach (string s in scenarioElements) siteTable.Columns.Add(s, typeof(string));
-            //foreach (string s in scenarioElements) ppeTable.Columns.Add(s, typeof(string));
-            //foreach (string s in scenarioElements) productionRateTable.Columns.Add(s, typeof(string));
-            //foreach (string s in scenarioElements) parameterTable.Columns.Add(s, typeof(string));
-            //foreach (string s in scenarioElements) remainingDataTable.Columns.Add(s, typeof(string));
-
             // dataValueDataGridView.Rows.Add(new string[] { el.Element, el.ElementName, el.Type,el.SourceSummary });
             this.parameterTable.Columns.Add("Element Number");
+            this.parameterTable.Columns.Add("Scenario Name");
             this.parameterTable.Columns.Add("Element Name");
             this.parameterTable.Columns.Add("Element Type");
             this.parameterTable.Columns.Add("Source Summary");
 
             // remainingValuesDataGridView1.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.Type2, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
             this.remainingDataTable.Columns.Add("Element Number");
+            this.remainingDataTable.Columns.Add("Scenario Name");
             this.remainingDataTable.Columns.Add("Element Name");
             this.remainingDataTable.Columns.Add("Element Type");
             this.remainingDataTable.Columns.Add("Element Type 2");
@@ -468,6 +612,7 @@ namespace GenericScenarioEvaluation
 
             // occupationalExposureDataGridView.Rows.Add(new string[] { o.ElementNumber, o.ScenarioName, o.ElementNumber, o.Type, o.Activity_Source, o.sourceSummary, o.mediaOfRelease, o.sourceSummary });
             this.occExpTable.Columns.Add("Element Number");
+            this.occExpTable.Columns.Add("Scenario Name");
             this.occExpTable.Columns.Add("Element Name");
             this.occExpTable.Columns.Add("Element Type");
             this.occExpTable.Columns.Add("Exposure Type");
@@ -475,8 +620,26 @@ namespace GenericScenarioEvaluation
             this.occExpTable.Columns.Add("Media Of Release");
             this.occExpTable.Columns.Add("Source Summary");
 
+            // occupationalExposureDataGridView.Rows.Add(new string[] { o.ElementNumber, o.ScenarioName, o.ElementNumber, o.Type, o.Activity_Source, o.sourceSummary, o.mediaOfRelease, o.sourceSummary });
+            this.concentrationTable.Columns.Add("Element Number");
+            this.concentrationTable.Columns.Add("Scenario Name");
+            this.concentrationTable.Columns.Add("Element Name");
+            this.concentrationTable.Columns.Add("Element Type");
+            this.concentrationTable.Columns.Add("Source Summary");
+
+            // occupationalExposureDataGridView.Rows.Add(new string[] { o.ElementNumber, o.ScenarioName, o.ElementNumber, o.Type, o.Activity_Source, o.sourceSummary, o.mediaOfRelease, o.sourceSummary });
+            this.calculationTable.Columns.Add("Element Number");
+            this.calculationTable.Columns.Add("Scenario Name");
+            this.calculationTable.Columns.Add("Element Name");
+            this.calculationTable.Columns.Add("Element Type");
+            this.calculationTable.Columns.Add("Exposure Type");
+            this.calculationTable.Columns.Add("Activity Source");
+            this.calculationTable.Columns.Add("Media Of Release");
+            this.calculationTable.Columns.Add("Source Summary");
+
             // processDescriptionDataGridView.Rows.Add(new string[] { de.ElementNumber, de.ElementName, de.Type, de.Type2, de.SourceSummary
             this.procDescriptionTable.Columns.Add("Element Number");
+            this.procDescriptionTable.Columns.Add("Scenario Name");
             this.procDescriptionTable.Columns.Add("Element Name");
             this.procDescriptionTable.Columns.Add("Element Type");
             this.procDescriptionTable.Columns.Add("Element Type 2");
@@ -484,12 +647,14 @@ namespace GenericScenarioEvaluation
 
             // useRateDataGridView.Rows.Add(new string[] { ur.ElementNumber, ur.ElementName, ur.Type, ur.SourceSummary });
             this.useRateTable.Columns.Add("Element Number");
+            this.useRateTable.Columns.Add("Scenario Name");
             this.useRateTable.Columns.Add("Element Name");
             this.useRateTable.Columns.Add("Element Type");
             this.useRateTable.Columns.Add("Source Summary");
 
             // environmentalReleaseDataGridView.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.Type2, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
             this.envReleaseTable.Columns.Add("Element Number");
+            this.envReleaseTable.Columns.Add("Scenario Name");
             this.envReleaseTable.Columns.Add("Element Name");
             this.envReleaseTable.Columns.Add("Element Type");
             this.envReleaseTable.Columns.Add("Element Type 2");
@@ -499,6 +664,7 @@ namespace GenericScenarioEvaluation
 
             // controlTechnologyDataGridView.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.Type2, el.SourceSummary });
             this.contolTechTable.Columns.Add("Element Number");
+            this.contolTechTable.Columns.Add("Scenario Name");
             this.contolTechTable.Columns.Add("Element Name");
             this.contolTechTable.Columns.Add("Element Type");
             this.contolTechTable.Columns.Add("Element Type 2");
@@ -506,6 +672,7 @@ namespace GenericScenarioEvaluation
 
             // shiftDataGridView.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.Type2, el.SourceSummary });
             this.shiftTable.Columns.Add("Element Number");
+            this.shiftTable.Columns.Add("Scenario Name");
             this.shiftTable.Columns.Add("Element Name");
             this.shiftTable.Columns.Add("Element Type");
             this.shiftTable.Columns.Add("Element Type 2");
@@ -513,6 +680,7 @@ namespace GenericScenarioEvaluation
 
             // operatingDaysDataGridView.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.Type2, el.SourceSummary });
             this.operatingDaysTable.Columns.Add("Element Number");
+            this.operatingDaysTable.Columns.Add("Scenario Name");
             this.operatingDaysTable.Columns.Add("Element Name");
             this.operatingDaysTable.Columns.Add("Element Type");
             this.operatingDaysTable.Columns.Add("Element Type 2");
@@ -520,28 +688,36 @@ namespace GenericScenarioEvaluation
 
             // workersDataGridView.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.SourceSummary });
             this.workerTable.Columns.Add("Element Number");
+            this.workerTable.Columns.Add("Scenario Name");
             this.workerTable.Columns.Add("Element Name");
             this.workerTable.Columns.Add("Element Type");
             this.workerTable.Columns.Add("Source Summary");
 
             // sitesDataGridView.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.SourceSummary });
             this.siteTable.Columns.Add("Element Number");
+            this.siteTable.Columns.Add("Scenario Name");
             this.siteTable.Columns.Add("Element Name");
             this.siteTable.Columns.Add("Element Type");
             this.siteTable.Columns.Add("Source Summary");
 
             // ppeDataGridView.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.SourceSummary });
             this.ppeTable.Columns.Add("Element Number");
+            this.ppeTable.Columns.Add("Scenario Name");
             this.ppeTable.Columns.Add("Element Name");
             this.ppeTable.Columns.Add("Element Type");
             this.ppeTable.Columns.Add("Source Summary");
 
             // productionRateDataGridView.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.SourceSummary });
             this.productionRateTable.Columns.Add("Element Number");
+            this.productionRateTable.Columns.Add("Scenario Name");
             this.productionRateTable.Columns.Add("Element Name");
             this.productionRateTable.Columns.Add("Element Type");
             this.productionRateTable.Columns.Add("Source Summary");
 
+        }
+
+        void SetColumnWidths() 
+        { 
 
             // format data grid views
             for (int i = 0; i < dataValueDataGridView.Columns.Count; i++)
@@ -597,14 +773,32 @@ namespace GenericScenarioEvaluation
             genScenarios.Tables.Add(envReleaseTable);
             genScenarios.Tables.Add(productionRateTable);
             genScenarios.Tables.Add(contolTechTable);
-            genScenarios.Tables.Add(useRateTable);
+            genScenarios.Tables.Add(calculationTable);
+            genScenarios.Tables.Add(concentrationTable);
             genScenarios.Tables.Add(siteTable);
             genScenarios.Tables.Add(operatingDaysTable);
             genScenarios.Tables.Add(workerTable);
             genScenarios.Tables.Add(shiftTable);
             genScenarios.Tables.Add(ppeTable);
+            genScenarios.Tables.Add(useRateTable);
             genScenarios.Tables.Add(parameterTable);
             genScenarios.Tables.Add(remainingDataTable);
+
+//            DataTable occExpTable = new DataTable("Occupational Exposure");
+//            DataTable concentrationTable = new DataTable("Concntrations");
+ //           DataTable calculationTable = new DataTable("Calculations");
+ //           DataTable procDescriptionTable = new DataTable("Process Descriptions");
+ //           DataTable useRateTable = new DataTable("Use Rates");
+ //           DataTable envReleaseTable = new DataTable("Environmental Releases");
+ //           DataTable contolTechTable = new DataTable("Control Technologies");
+ //           DataTable shiftTable = new DataTable("Shifts");
+ //           DataTable operatingDaysTable = new DataTable("Operating Days");
+ //           DataTable workerTable = new DataTable("Workers");
+ //           DataTable siteTable = new DataTable("Number of Sites");
+  //          DataTable ppeTable = new DataTable("PPE");
+   //         DataTable productionRateTable = new DataTable("ProductionRate");
+     //       DataTable parameterTable = new DataTable("Parameters");
+       //     DataTable remainingDataTable = new DataTable("Data Values");
         }
 
         void CleanUpGSNames()
@@ -970,7 +1164,6 @@ namespace GenericScenarioEvaluation
 
                     DocumentFormat.OpenXml.Spreadsheet.Sheets sheets = workbook.WorkbookPart.Workbook.GetFirstChild<DocumentFormat.OpenXml.Spreadsheet.Sheets>();
                     string relationshipId = workbook.WorkbookPart.GetIdOfPart(sheetPart);
-
                     uint sheetId = 1;
                     if (sheets.Elements<DocumentFormat.OpenXml.Spreadsheet.Sheet>().Count() > 0)
                     {
@@ -987,7 +1180,6 @@ namespace GenericScenarioEvaluation
                     foreach (System.Data.DataColumn column in table.Columns)
                     {
                         columns.Add(column.ColumnName);
-
                         DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
                         cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
                         cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(column.ColumnName);
