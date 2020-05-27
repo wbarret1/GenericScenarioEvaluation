@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace GenericScenarioEvaluation
 {
-    class Site
+    public class Site
     {
-        public GenericScenario GenericScenario;
-        public Source[] sources;
-        public string ElementNumber;
-        public string ScenarioName;
-        public string ElementName;
-        public string Type;
-        public string SourceSummary;
+        public int Id { get; set; }
+        public GenericScenario GenericScenario { get; set; }
+        public Source[] sources { get; set; }
+        public string ElementName { get; set; }
+        public string ElementNumber { get; set; }
+        public string Type { get; set; }
+        public string SourceSummary { get; set; }
     }
 }

@@ -8,15 +8,16 @@ namespace GenericScenarioEvaluation
 {
     public class GenericScenario
     {
-        public string Category;
-        public string DocumentType;
-        public string DatePrepared;
-        public string ESD_GS_Name;
-        public string FullCitation;
-        public string DevelopedBy;
-        public string Description;
-        public string InPaperIndustryDescriptor;
-        public string IndustryCodeOrDescription;
-        public string IndustryCodeType;
+        public int Id { get; set; }
+        public string Category { get; set; }
+        public string DocumentType { get; set; }
+        public string DatePrepared { get; set; }
+        public string ESD_GS_Name { get; set; }
+        public string FullCitation { get; set; }
+        public string DevelopedBy { get; set; }
+        public string Description { get; set; }
+        public string InPaperIndustryDescriptor { get; set; }
+        public string IndustryCodeOrDescription { get; set; }
+        public string IndustryCodeType { get; set; }
     }
 }
