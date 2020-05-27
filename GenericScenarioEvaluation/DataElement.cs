@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 
 namespace GenericScenarioEvaluation
 {
-    class DataElement
+    public class DataElement
     {
-        public string Element;
-        public string ESD_GS_Name;
-        public string ElementName;
-        public string Type;
-        public string Type2;
-        public string ExposureType;
-        public string Activity_Source;
-        public string mediaOfRelease;
-        public string SourceSummary;
+        public int Id { get; set; }
+        public string Element { get; set; }
+        public string ESD_GS_Name { get; set; }
+        public string ElementName { get; set; }
+        public string Type { get; set; }
+        public string Type2 { get; set; }
+        public string ExposureType { get; set; }
+        public string Activity_Source { get; set; }
+        public string mediaOfRelease { get; set; }
+        public string SourceSummary { get; set; }
         public string source1;
         public string source2;
         public string source3;

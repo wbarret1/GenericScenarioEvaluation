@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 
 namespace GenericScenarioEvaluation
 {
-    class OccupationalExposure
+    public class OccupationalExposure
     {
-        public GenericScenario GenericScenario;
-        public Source[] sources;
-        public string ScenarioName;
-        public string ElementNumber;
-        public string ElementName;
-        public string Type;
-        public string ExposureType;
-        public string Activity_Source;
-        public string mediaOfRelease;
-        public string sourceSummary;
+        public int Id { get; set; }
+        public GenericScenario GenericScenario { get; set; }
+        public Source[] sources { get; set; }
+        public string ScenarioName { get; set; }
+        public string ElementNumber { get; set; }
+        public string ElementName { get; set; }
+        public string Type { get; set; }
+        public string ExposureType { get; set; }
+        public string Activity_Source { get; set; }
+        public string mediaOfRelease { get; set; }
+        public string sourceSummary { get; set; }
     }
 }

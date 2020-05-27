@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace GenericScenarioEvaluation
 {
-    class Source
+    public class Source
     {
-        public string ScenarioName;
-        public string ReferenceText;
+        public int Id { get; set; }
+        public string ScenarioName { get; set; }
+        public string ReferenceText { get; set; }
         public string Risdata { get; set; }
 
     }
