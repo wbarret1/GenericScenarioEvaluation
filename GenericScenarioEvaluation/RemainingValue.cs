@@ -12,6 +12,7 @@ namespace GenericScenarioEvaluation
         public string ElementNumber { get; set; }
         public GenericScenario GenericScenario { get; set; }
         public Source[] sources { get; set; }
+        public string ScenarioName { get; set; }
         public string ElementName { get; set; }
         public string Type { get; set; }
         public string Type2 { get; set; }
