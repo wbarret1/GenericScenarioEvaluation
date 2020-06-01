@@ -44,7 +44,7 @@ namespace GenericScenarioEvaluation
         List<EnvironmentalRelease> envRelease = new List<EnvironmentalRelease>();
         List<ControlTechnology> controlTech = new List<ControlTechnology>();
         List<Shift> shifts = new List<Shift>();
-        List<OperatingDays> opDays = new List<OperatingDays>();
+        List<OperatingDay> opDays = new List<OperatingDay>();
         List<Worker> workers = new List<Worker>();
         List<Site> sites = new List<Site>();
         List<PPE> ppes = new List<PPE>();
@@ -115,7 +115,7 @@ namespace GenericScenarioEvaluation
                 count++;
                 OccupationalExposure o = new OccupationalExposure()
                 {
-                    ScenarioName = el.ElementName,
+                    ScenarioName = el.ESD_GS_Name,
                     ElementName = el.ElementName,
                     ElementNumber = el.Element,
                     Type = el.Type,
@@ -125,6 +125,7 @@ namespace GenericScenarioEvaluation
                     sourceSummary = el.SourceSummary
                 };
                 o.GenericScenario = GetScenario(o.ScenarioName);
+                o.GenericScenario.OccupationalExposures.Add(o);
                 o.sources = GetSources(el);
                 expsoures.Add(o);
                 el.accessed = true;
@@ -152,6 +153,7 @@ namespace GenericScenarioEvaluation
                     sourceSummary = el.SourceSummary
                 };
                 o.GenericScenario = GetScenario(o.ScenarioName);
+                o.GenericScenario.Concentrations.Add(o);
                 o.sources = GetSources(el);
                 concentrations.Add(o);
                 el.accessed = true;
@@ -184,6 +186,7 @@ namespace GenericScenarioEvaluation
                     sourceSummary = el.SourceSummary
                 };
                 o.GenericScenario = GetScenario(el.ESD_GS_Name);
+                o.GenericScenario.Calculations.Add(o);
                 o.sources = GetSources(el);
                 calculations.Add(o);
                 el.accessed = true;
@@ -203,7 +206,7 @@ namespace GenericScenarioEvaluation
                 count++;
                 ProcessDescription de = new ProcessDescription()
                 {
-                    ScenarioName = el.ElementName,
+                    ScenarioName = el.ESD_GS_Name,
                     ElementName = el.ElementName,
                     ElementNumber = el.Element,
                     Type = el.Type,
@@ -212,6 +215,7 @@ namespace GenericScenarioEvaluation
                 };
                 processDescriptions.Add(de);
                 de.GenericScenario = GetScenario(el.ESD_GS_Name);
+                de.GenericScenario.ProcessDescriptions.Add(de);
                 de.sources = GetSources(el);
                 el.accessed = true;
                 procDescriptionTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
@@ -232,13 +236,14 @@ namespace GenericScenarioEvaluation
                 UseRate ur = new UseRate()
                 {
                     ElementNumber = el.Element,
-                    ScenarioName = el.ElementName,
+                    ScenarioName = el.ESD_GS_Name,
                     ElementName = el.ElementName,
                     Type = el.Type,
                     SourceSummary = el.SourceSummary
                 };
                 useRates.Add(ur);
                 ur.GenericScenario = GetScenario(el.ESD_GS_Name);
+                ur.GenericScenario.UseRates.Add(ur);
                 ur.sources = GetSources(el);
                 el.accessed = true;
                 useRateTable.Rows.Add(new string[] { ur.ElementNumber, el.ESD_GS_Name, ur.ElementName, ur.Type, ur.SourceSummary });
@@ -261,7 +266,7 @@ namespace GenericScenarioEvaluation
                 {
                     ElementNumber = el.Element,
                     ElementName = el.ElementName,
-                    ScenarioName = el.ElementName,
+                    ScenarioName = el.ESD_GS_Name,
                     Type = el.Type,
                     Type2 = el.Type2,
                     ActivitySource = el.Activity_Source,
@@ -270,6 +275,7 @@ namespace GenericScenarioEvaluation
                 };
                 er.GenericScenario = GetScenario(el.ESD_GS_Name);
                 er.sources = GetSources(el);
+                er.GenericScenario.EnvironmentalReleases.Add(er);
                 envRelease.Add(er);
                 el.accessed = true;
                 envReleaseTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
@@ -295,6 +301,7 @@ namespace GenericScenarioEvaluation
                     SourceSummary = el.SourceSummary
                 };
                 ct.GenericScenario = GetScenario(el.ESD_GS_Name);
+                ct.GenericScenario.ControlTechnologies.Add(ct);
                 ct.sources = GetSources(el);
                 controlTech.Add(ct);
                 el.accessed = true;
@@ -314,13 +321,14 @@ namespace GenericScenarioEvaluation
                 Shift shift = new Shift()
                 {
                     ElementNumber = el.Element,
-                    ScenarioName = el.ElementName,
+                    ScenarioName = el.ESD_GS_Name,
                     ElementName = el.ElementName,
                     Type = el.Type,
                     Type2 = el.Type2,
                     SourceSummary = el.SourceSummary
                 };
                 shift.GenericScenario = GetScenario(el.ESD_GS_Name);
+                shift.GenericScenario.Shifts.Add(shift);
                 shift.sources = GetSources(el);
                 shifts.Add(shift);
                 el.accessed = true;
@@ -339,16 +347,17 @@ namespace GenericScenarioEvaluation
             foreach (DataElement el in elements)
             {
                 count++;
-                OperatingDays day = new OperatingDays()
+                OperatingDay day = new OperatingDay()
                 {
                     ElementNumber = el.Element,
                     ElementName = el.ElementName,
-                    ScenarioName = el.ElementName,
+                    ScenarioName = el.ESD_GS_Name,
                     Type = el.Type,
                     Type2 = el.Type2,
                     SourceSummary = el.SourceSummary
                 };
                 day.GenericScenario = GetScenario(el.ESD_GS_Name);
+                day.GenericScenario.OperatingDays.Add(day);
                 day.sources = GetSources(el);
                 el.accessed = true;
                 opDays.Add(day);
@@ -370,11 +379,12 @@ namespace GenericScenarioEvaluation
                 {
                     ElementNumber = el.Element,
                     ElementName = el.ElementName,
-                    ScenarioName = el.ElementName,
+                    ScenarioName = el.ESD_GS_Name,
                     Type = el.Type,
                     SourceSummary = el.SourceSummary
                 };
                 worker.GenericScenario = GetScenario(el.ESD_GS_Name);
+                worker.GenericScenario.Workers.Add(worker);
                 worker.sources = GetSources(el);
                 workers.Add(worker);
                 workerTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
@@ -401,6 +411,7 @@ namespace GenericScenarioEvaluation
                 };
                 site.GenericScenario = GetScenario(el.ESD_GS_Name);
                 site.sources = GetSources(el);
+                site.GenericScenario.Sites.Add(site);
                 sites.Add(site);
                 siteTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
                 el.accessed = true;
@@ -420,11 +431,12 @@ namespace GenericScenarioEvaluation
                 {
                     ElementNumber = el.Element,
                     ElementName = el.ElementName,
-                    ScenarioName = el.ElementName,
+                    ScenarioName = el.ESD_GS_Name,
                     Type = el.Type,
                     SourceSummary = el.SourceSummary
                 };
                 pp.GenericScenario = GetScenario(el.ESD_GS_Name);
+                pp.GenericScenario.PPEs.Add(pp);
                 pp.sources = GetSources(el);
                 ppes.Add(pp);
                 ppeTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
@@ -445,11 +457,13 @@ namespace GenericScenarioEvaluation
                 {
                     ElementNumber = el.Element,
                     ElementName = el.ElementName,
-                    ScenarioName = el.ElementName,
+                    ScenarioName = el.ESD_GS_Name,
                     Type = el.Type,
                     SourceSummary = el.SourceSummary
                 };
                 pp.GenericScenario = GetScenario(el.ESD_GS_Name);
+                pp.GenericScenario.ProductionRates.Add(pp);
+                pp.GenericScenario.ProductionRates.Add(pp);
                 pp.sources = GetSources(el);
                 productions.Add(pp);
                 productionRateTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
@@ -470,10 +484,11 @@ namespace GenericScenarioEvaluation
                 {
                     ElementName = el.ElementName,
                     ElementNumber = el.Element,
-                    ScenarioName = el.ElementName,
+                    ScenarioName = el.ESD_GS_Name,
                     SourceSummary = el.SourceSummary
                 };
                 o.GenericScenario = GetScenario(el.ESD_GS_Name);
+                o.GenericScenario.DataValues.Add(o);
                 o.sources = GetSources(el);
                 values.Add(o);
                 el.accessed = true;
@@ -495,7 +510,7 @@ namespace GenericScenarioEvaluation
                 {
                     ElementName = el.ElementName,
                     ElementNumber = el.Element,
-                    ScenarioName = el.ElementName,
+                    ScenarioName = el.ESD_GS_Name,
                     Type = el.Type,
                     Type2 = el.Type2,
                     ExposureType = el.ExposureType,
@@ -504,6 +519,7 @@ namespace GenericScenarioEvaluation
                     SourceSummary = el.SourceSummary
                 };
                 o.GenericScenario = GetScenario(el.ESD_GS_Name);
+                o.GenericScenario.Parameters.Add(o);
                 o.sources = GetSources(el);
                 remainingValues.Add(o);
                 if (!uniqueDataElements.Contains(el.ElementName)) uniqueDataElements.Add(el.ElementName);
@@ -512,80 +528,11 @@ namespace GenericScenarioEvaluation
             }
             remainingValuesDataGridView.DataSource = remainingDataTable;
             SetColumnWidths();
-            ExportDataSet(genScenarios, @"..\..\output.xlsx");
+            ExportDataSet(scenarios, genScenarios, @"..\..\output.xlsx");
             int numrows = 0;
             foreach (DataTable table in genScenarios.Tables)
             {
                 numrows = numrows + table.Rows.Count;
-            }
-
-            //if (occExpTable.Rows.Count != expsoures.Count)
-            //{
-
-            //}
-            //if (procDescriptionTable.Rows.Count != processDescriptions.Count)
-            //{
-
-            //}
-            //if (envReleaseTable.Rows.Count != envRelease.Count)
-            //{
-
-            //}
-            //if (contolTechTable.Rows.Count != controlTech.Count)
-            //{
-
-            //}
-            //if (parameterTable.Rows.Count != values.Count)
-            //{
-
-            //}
-            //if (operatingDaysTable.Rows.Count != opDays.Count)
-            //{
-
-            //}
-            //if (ppeTable.Rows.Count != ppes.Count)
-            //{
-
-            //}
-            //if (productionRateTable.Rows.Count != productions.Count)
-            //{
-
-            //}
-            //if (shiftTable.Rows.Count != shifts.Count)
-            //{
-
-            //}
-            //if (useRateTable.Rows.Count != useRates.Count)
-            //{
-
-            //}
-            //if (workerTable.Rows.Count != workers.Count)
-            //{
-
-            //}
-            //if (remainingDataTable.Rows.Count != remainingValues.Count)
-            //{
-
-            //}
-
-            foreach(DataTable t1 in genScenarios.Tables)
-            {
-                foreach(DataTable t2 in genScenarios.Tables)
-                {
-                    if (!t1.Equals(t2))
-                    {
-                        foreach(DataRow r1 in t1.Rows)
-                        {
-                            foreach (DataRow r2 in t2.Rows)
-                            {
-                                if(r1["Element Number"].ToString() == r2["Element Number"].ToString())
-                                {
-
-                                }
-                            }
-                        }
-                    }
-                }
             }
 
         }
@@ -1149,34 +1096,79 @@ namespace GenericScenarioEvaluation
             }
         }
 
-        private void ExportDataSet(DataSet ds, string destination)
+        private void ExportDataSet(GenericScenario[] gs ,DataSet ds, string destination)
         {
             using (var workbook = DocumentFormat.OpenXml.Packaging.SpreadsheetDocument.Create(destination, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook))
             {
                 var workbookPart = workbook.AddWorkbookPart();
                 workbook.WorkbookPart.Workbook = new DocumentFormat.OpenXml.Spreadsheet.Workbook();
                 workbook.WorkbookPart.Workbook.Sheets = new DocumentFormat.OpenXml.Spreadsheet.Sheets();
+
+                var sheetPart = workbook.WorkbookPart.AddNewPart<DocumentFormat.OpenXml.Packaging.WorksheetPart>();
+                var sheetData = new DocumentFormat.OpenXml.Spreadsheet.SheetData();
+                sheetPart.Worksheet = new DocumentFormat.OpenXml.Spreadsheet.Worksheet(sheetData);
+
+                DocumentFormat.OpenXml.Spreadsheet.Sheets sheets = workbook.WorkbookPart.Workbook.GetFirstChild<DocumentFormat.OpenXml.Spreadsheet.Sheets>();
+                string relationshipId = workbook.WorkbookPart.GetIdOfPart(sheetPart);
+                uint sheetId = 1;
+                if (sheets.Elements<DocumentFormat.OpenXml.Spreadsheet.Sheet>().Count() > 0)
+                {
+                    sheetId =
+                        sheets.Elements<DocumentFormat.OpenXml.Spreadsheet.Sheet>().Select(s => s.SheetId.Value).Max() + 1;
+                }
+
+                DocumentFormat.OpenXml.Spreadsheet.Sheet sheet = new DocumentFormat.OpenXml.Spreadsheet.Sheet() { Id = relationshipId, SheetId = sheetId, Name = "Generic Scenarios"};
+                sheets.Append(sheet);
+
+                DocumentFormat.OpenXml.Spreadsheet.Row headerRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
+
+                List<String> columns = new List<string>();
+                foreach (string column in gs[0].GetColumns())
+                {
+                    columns.Add(column);
+                    DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
+                    cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
+                    cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(column);
+                    headerRow.AppendChild(cell);
+                }
+
+                sheetData.AppendChild(headerRow);
+
+                foreach (GenericScenario g in gs)
+                {
+                    DocumentFormat.OpenXml.Spreadsheet.Row newRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
+                    foreach (String col in columns)
+                    {
+                        DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
+                        cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
+                        cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(g[col]); //
+                        newRow.AppendChild(cell);
+                    }
+                    sheetData.AppendChild(newRow);
+                }
+
+
                 foreach (System.Data.DataTable table in ds.Tables)
                 {
-                    var sheetPart = workbook.WorkbookPart.AddNewPart<DocumentFormat.OpenXml.Packaging.WorksheetPart>();
-                    var sheetData = new DocumentFormat.OpenXml.Spreadsheet.SheetData();
+                    sheetPart = workbook.WorkbookPart.AddNewPart<DocumentFormat.OpenXml.Packaging.WorksheetPart>();
+                    sheetData = new DocumentFormat.OpenXml.Spreadsheet.SheetData();
                     sheetPart.Worksheet = new DocumentFormat.OpenXml.Spreadsheet.Worksheet(sheetData);
 
-                    DocumentFormat.OpenXml.Spreadsheet.Sheets sheets = workbook.WorkbookPart.Workbook.GetFirstChild<DocumentFormat.OpenXml.Spreadsheet.Sheets>();
-                    string relationshipId = workbook.WorkbookPart.GetIdOfPart(sheetPart);
-                    uint sheetId = 1;
+                    sheets = workbook.WorkbookPart.Workbook.GetFirstChild<DocumentFormat.OpenXml.Spreadsheet.Sheets>();
+                    relationshipId = workbook.WorkbookPart.GetIdOfPart(sheetPart);
+                    sheetId = 1;
                     if (sheets.Elements<DocumentFormat.OpenXml.Spreadsheet.Sheet>().Count() > 0)
                     {
                         sheetId =
                             sheets.Elements<DocumentFormat.OpenXml.Spreadsheet.Sheet>().Select(s => s.SheetId.Value).Max() + 1;
                     }
 
-                    DocumentFormat.OpenXml.Spreadsheet.Sheet sheet = new DocumentFormat.OpenXml.Spreadsheet.Sheet() { Id = relationshipId, SheetId = sheetId, Name = table.TableName };
+                    sheet = new DocumentFormat.OpenXml.Spreadsheet.Sheet() { Id = relationshipId, SheetId = sheetId, Name = table.TableName };
                     sheets.Append(sheet);
 
-                    DocumentFormat.OpenXml.Spreadsheet.Row headerRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
+                    headerRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
 
-                    List<String> columns = new List<string>();
+                    columns = new List<string>();
                     foreach (System.Data.DataColumn column in table.Columns)
                     {
                         columns.Add(column.ColumnName);

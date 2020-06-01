@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GenericScenarioEvaluation
 {
-    class Concentration
+    public class Concentration
     {
         public GenericScenario GenericScenario;
         public Source[] sources;

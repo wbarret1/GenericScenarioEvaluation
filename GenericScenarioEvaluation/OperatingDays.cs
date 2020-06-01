@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GenericScenarioEvaluation
 {
-    class OperatingDays
+    public class OperatingDay
     {
         public int Id { get; set; }
         public GenericScenario GenericScenario { get; set; }
