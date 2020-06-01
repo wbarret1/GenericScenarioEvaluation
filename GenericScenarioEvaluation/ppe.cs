@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GenericScenarioEvaluation
 {
-    class PPE
+    public class PPE
     {
         public GenericScenario GenericScenario;
         public Source[] sources;

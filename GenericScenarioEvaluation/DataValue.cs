@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GenericScenarioEvaluation
 {
-    class DataValue
+    public class DataValue
     {
         public int Id { get; set; }
         public GenericScenario GenericScenario { get; set; }

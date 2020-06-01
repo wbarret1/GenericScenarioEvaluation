@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GenericScenarioEvaluation
 {
-    class Calculation
+    public class Calculation
     {
         public GenericScenario GenericScenario;
         public Source[] sources;
