@@ -17,7 +17,7 @@ namespace GenericScenarioEvaluation
     {
         DataSet genScenarios = new DataSet();
         DataTable elementsAndDataTable = new DataTable();
-        DataTable infoTable = new DataTable();
+        DataTable infoTable = new DataTable("Sources");
         DataTable occExpTable = new DataTable("Occupational Exposure");
         DataTable concentrationTable = new DataTable("Concntrations");
         DataTable calculationTable = new DataTable("Calculations");
@@ -33,6 +33,7 @@ namespace GenericScenarioEvaluation
         DataTable productionRateTable = new DataTable("ProductionRate");
         DataTable parameterTable = new DataTable("Parameters");
         DataTable remainingDataTable = new DataTable("Data Values");
+        DataTable sourceTable = new DataTable("Sources");
 
         List<DataElement> dataElements = new List<DataElement>();
         List<Source> sources = new List<Source>();
@@ -197,7 +198,7 @@ namespace GenericScenarioEvaluation
 
             elements = from myElement in dataElements.AsEnumerable()
                        where (myElement.ElementName.Contains("Process Description") ||
-                        myElement.Type.Contains("Process Description") ||
+                  myElement.Type.Contains("Process Description") ||
                        myElement.ElementName.ToLower().Contains("characterization"))
                        select myElement;
 
@@ -716,6 +717,7 @@ namespace GenericScenarioEvaluation
         void AddTablesToSet()
         {
             genScenarios.Tables.Add(procDescriptionTable);
+            genScenarios.Tables.Add(infoTable);
             genScenarios.Tables.Add(occExpTable);
             genScenarios.Tables.Add(envReleaseTable);
             genScenarios.Tables.Add(productionRateTable);

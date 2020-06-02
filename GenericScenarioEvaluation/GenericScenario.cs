@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Markup;
 
 namespace GenericScenarioEvaluation
 {
@@ -11,6 +12,7 @@ namespace GenericScenarioEvaluation
     {
         public GenericScenario()
         {
+            IndustryCodes = new List<string>();
             OccupationalExposures = new List<OccupationalExposure>();
             ProcessDescriptions = new List<ProcessDescription>();
             EnvironmentalReleases = new List<EnvironmentalRelease>();
@@ -49,6 +51,8 @@ namespace GenericScenarioEvaluation
                         return this.Description;
                     case "In-Paper Industry Descriptor":
                         return this.InPaperIndustryDescriptor;
+                    case "Industry Count":
+                        return this.IndustryCodes.Count().ToString();
                     case "Industry Code Or Description":
                         return this.IndustryCodeOrDescription;
                     case "Industry Code Type":
@@ -101,6 +105,7 @@ namespace GenericScenarioEvaluation
                 "Description",
                 "In-Paper Industry Descriptor",
                 "Industry Code Or Description",
+                "Industry Count",
                 "Industry Code Type",
                 "Process Descriptions",
                 "Occupational Exposures",
@@ -130,9 +135,31 @@ namespace GenericScenarioEvaluation
         public string DevelopedBy { get; set; }
         public string Description { get; set; }
         public string InPaperIndustryDescriptor { get; set; }
-        public string IndustryCodeOrDescription { get; set; }
+
+        string _IndustryCodeOrDescription;
+        public string IndustryCodeOrDescription { 
+            get
+            {
+                return _IndustryCodeOrDescription;
+            } 
+            set
+            {
+                _IndustryCodeOrDescription = value;
+                string[] vals = null;
+                this.IndustryCodes.Clear();
+                if (value.Contains(";")) vals = value.Split(';');
+                if (value.Contains(",")) vals = value.Split(',');
+                if (value.Contains("/")) vals = value.Split('/');
+                if (vals != null) foreach (string s in vals) 
+                    {
+                        this.IndustryCodes.Add(s);
+                    }
+                if (Int32.TryParse(value, out int testVal)) this.IndustryCodes.Add(testVal.ToString());
+            }             
+        }
         public string IndustryCodeType { get; set; }
 
+        public List<string> IndustryCodes { get; set; }
         public List<ProcessDescription> ProcessDescriptions { get; set; }
         public List<OccupationalExposure> OccupationalExposures { get; set; }
         public List<ControlTechnology> ControlTechnologies { get; set; }
