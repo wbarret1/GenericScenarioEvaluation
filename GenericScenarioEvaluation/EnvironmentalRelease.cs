@@ -19,5 +19,52 @@ namespace GenericScenarioEvaluation
         public string ActivitySource { get; set; }
         public string MediaOfRelease { get; set; }
         public string SourceSummary { get; set; }
+
+        public bool RecycledOrReused
+        {
+            get
+            {
+                return this.MediaOfRelease.ToLower().Contains("recycl") ||
+                    this.MediaOfRelease.ToLower().Contains("reuse");
+            }
+        }
+        public bool ToAir
+        {
+            get
+            {
+                return this.MediaOfRelease.ToLower().Contains("air") ||
+                    this.MediaOfRelease.ToLower().Contains("incinerat") ||
+                    this.MediaOfRelease.ToLower().Contains("evapor") ||
+                    this.MediaOfRelease.ToLower().Contains("potw");
+            }
+        }
+        public bool ToWater
+        {
+            get
+            {
+                return this.MediaOfRelease.ToLower().Contains("water") ||
+                    this.ElementName.ToLower().Contains("water") ||
+                    this.MediaOfRelease.ToLower().Contains("wwt") ||
+                    this.MediaOfRelease.ToLower().Contains("injection") ||
+                    this.MediaOfRelease.ToLower().Contains("potw");
+            }
+        }
+        public bool ToLand
+        {
+            get
+            {
+                return this.MediaOfRelease.ToLower().Contains("land") ||
+                    this.ActivitySource.ToLower().Contains("solid") ||
+                    this.MediaOfRelease.ToLower().Contains("solid") ||
+                    this.MediaOfRelease.ToLower().Contains("Hazard");
+            }
+        }
+        public bool NotSpecified
+        {
+            get
+            {
+                return this.ToAir && this.ToAir && this.ToWater;
+            }
+        }
     }
 }

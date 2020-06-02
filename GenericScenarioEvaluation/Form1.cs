@@ -130,7 +130,7 @@ namespace GenericScenarioEvaluation
                 o.sources = GetSources(el);
                 expsoures.Add(o);
                 el.accessed = true;
-                occExpTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.ExposureType, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
+                occExpTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.ExposureType, o.Dermal ? "1" : "0", o.DermalSolid ? "1" : "0", o.DermalLiquid ? "1" : "0", o.Inhalation ? "1" : "0", o.Particulate ? "1" : "0", o.ChemicalOrVapor ? "1" : "0", el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
             }
             occupationalExposureDataGridView.DataSource = occExpTable;
 
@@ -279,7 +279,11 @@ namespace GenericScenarioEvaluation
                 er.GenericScenario.EnvironmentalReleases.Add(er);
                 envRelease.Add(er);
                 el.accessed = true;
-                envReleaseTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
+                if (!(er.RecycledOrReused || er.ToAir || er.ToLand || er.ToWater))
+                {
+
+                }
+                envReleaseTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.Activity_Source, el.mediaOfRelease, er.ToAir ? "1" : "0", er.ToLand ? "1" : "0", er.ToWater ? "1" : "0", er.RecycledOrReused ? "1" : "0", er.NotSpecified ? "1" : "0", el.SourceSummary });
             }
             environmentalReleaseDataGridView.DataSource = envReleaseTable;
 
@@ -564,6 +568,12 @@ namespace GenericScenarioEvaluation
             this.occExpTable.Columns.Add("Element Name");
             this.occExpTable.Columns.Add("Element Type");
             this.occExpTable.Columns.Add("Exposure Type");
+            this.occExpTable.Columns.Add("Dermal");
+            this.occExpTable.Columns.Add("Dermal Solid");
+            this.occExpTable.Columns.Add("Dermal Liquid");
+            this.occExpTable.Columns.Add("Inhalation");
+            this.occExpTable.Columns.Add("Inhalation Particulate");
+            this.occExpTable.Columns.Add("Inhalation Chemical or Vapor");
             this.occExpTable.Columns.Add("Activity Source");
             this.occExpTable.Columns.Add("Media Of Release");
             this.occExpTable.Columns.Add("Source Summary");
@@ -608,6 +618,11 @@ namespace GenericScenarioEvaluation
             this.envReleaseTable.Columns.Add("Element Type 2");
             this.envReleaseTable.Columns.Add("Activity_Source");
             this.envReleaseTable.Columns.Add("Media Of Release");
+            this.envReleaseTable.Columns.Add("To Air");
+            this.envReleaseTable.Columns.Add("To Land");
+            this.envReleaseTable.Columns.Add("To Water");
+            this.envReleaseTable.Columns.Add("Recycked or Reused");
+            this.envReleaseTable.Columns.Add("Not Specified");
             this.envReleaseTable.Columns.Add("Source Summary");
 
             // controlTechnologyDataGridView.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.Type2, el.SourceSummary });
