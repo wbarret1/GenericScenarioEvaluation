@@ -88,7 +88,6 @@ namespace GenericScenarioEvaluation
         ExposureCollection loadingOccExp = new ExposureCollection();
         ExposureCollection spentOccExp = new ExposureCollection();
         ExposureCollection processOccExp = new ExposureCollection();
-        ExposureCollection OccExpNotCategorized = new ExposureCollection();
         ExposureCollection occExpNotCategorized = new ExposureCollection();
 
 
@@ -125,7 +124,6 @@ namespace GenericScenarioEvaluation
             "Industry Code or Description",
             "Industry Code Type"
         };
-        string accessed = "Accessed";
         GenericScenario[] scenarios;
 
         public Form1()
@@ -143,9 +141,9 @@ namespace GenericScenarioEvaluation
             int count = 0;
 
             var elements = from myElement in dataElements.AsEnumerable()
-                           where myElement.ElementName.Contains("Occupational")
+                           where myElement.ElementName.ToLower().Contains("occupational")
                            && !myElement.ElementName.ToLower().Contains("characterization")
-                           && !myElement.ElementName.Contains("Process Description")
+                           && !myElement.ElementName.ToLower().Contains("process description")
                            select myElement;
 
             foreach (DataElement el in elements)
@@ -248,7 +246,7 @@ namespace GenericScenarioEvaluation
                        where (myElement.ElementName.ToLower().Contains("concentration") ||
                         myElement.ElementName.ToLower().Contains("concentration") ||
                         myElement.ElementName.ToLower().Contains("fraction"))
-               && !myElement.ElementName.Contains("Process Description")
+               && !myElement.ElementName.ToLower().Contains("process description")
                && !myElement.ElementName.ToLower().Contains("characterization")
                        select myElement;
 
@@ -278,7 +276,7 @@ namespace GenericScenarioEvaluation
                         myElement.Type.ToLower().Contains("calculat") ||
                         myElement.Type2.ToLower().Contains("calculat") ||
                         myElement.SourceSummary.ToLower().Contains("calculat")) 
-               && !myElement.ElementName.Contains("Process Description")
+               && !myElement.ElementName.ToLower().Contains("process description")
                && !myElement.ElementName.ToLower().Contains("characterization")
                        select myElement;
 
@@ -307,8 +305,8 @@ namespace GenericScenarioEvaluation
 
 
             elements = from myElement in dataElements.AsEnumerable()
-                       where (myElement.ElementName.Contains("Process Description") ||
-                  myElement.Type.Contains("Process Description") ||
+                       where (myElement.ElementName.ToLower().Contains("process description") ||
+                  myElement.Type.ToLower().Contains("process description") ||
                        myElement.ElementName.ToLower().Contains("characterization"))
                        select myElement;
 
@@ -366,7 +364,7 @@ namespace GenericScenarioEvaluation
                        where myElement.ElementName.Contains("Environmental Release") ||
                        myElement.ElementName.Contains("TRI Releases (lb/yr)") ||
                        myElement.ElementName.Contains("Total Industry Estimated Process Water Discharge Flow")
-                       && !myElement.ElementName.ToLower().Contains("Process Description")
+                       && !myElement.ElementName.ToLower().Contains("process description")
                 && !myElement.ElementName.ToLower().Contains("characterization")
                        select myElement;
 
@@ -825,8 +823,8 @@ namespace GenericScenarioEvaluation
             output = output + "Not Categorized \t"+ occExpNotCategorized.ChemicalOrVapor + "\t" + occExpNotCategorized.ParticulateInhalation + "\t" + occExpNotCategorized.InhalationNotSpecified + "\t" + occExpNotCategorized.TotalInhalation 
                 + "\t" + occExpNotCategorized.DermalLiquid + "\t" + occExpNotCategorized.DermalSolid + "\t" + occExpNotCategorized.DermalNotCategorized + "\t" + occExpNotCategorized.TotalDermal + "\t" + releaseNotCategorized.ToAir + "\t" + releaseNotCategorized.ToLand 
                 + "\t" + releaseNotCategorized.ToWater + "\t" + releaseNotCategorized.NotSpecified + "\t" + releaseNotCategorized.Count + "\n";
-            System.IO.File.WriteAllText(@"C:\Users\wbarr\OneDrive\Desktop\table.txt", output);
-            ExportDataSet(scenarios, genScenarios, @"..\..\output.xlsx");
+            System.IO.File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\table.txt", output);
+            ExportDataSet(scenarios, genScenarios, Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\GenericScenarioOutputs.xlsx");
         }
 
         void SetUpDataTables()
@@ -1037,22 +1035,6 @@ namespace GenericScenarioEvaluation
             genScenarios.Tables.Add(parameterTable);
             genScenarios.Tables.Add(remainingDataTable);
             genScenarios.Tables.Add(sourceTable);
-
-            //            DataTable occExpTable = new DataTable("Occupational Exposure");
-            //            DataTable concentrationTable = new DataTable("Concntrations");
-            //           DataTable calculationTable = new DataTable("Calculations");
-            //           DataTable procDescriptionTable = new DataTable("Process Descriptions");
-            //           DataTable useRateTable = new DataTable("Use Rates");
-            //           DataTable envReleaseTable = new DataTable("Environmental Releases");
-            //           DataTable contolTechTable = new DataTable("Control Technologies");
-            //           DataTable shiftTable = new DataTable("Shifts");
-            //           DataTable operatingDaysTable = new DataTable("Operating Days");
-            //           DataTable workerTable = new DataTable("Workers");
-            //           DataTable siteTable = new DataTable("Number of Sites");
-            //          DataTable ppeTable = new DataTable("PPE");
-            //         DataTable productionRateTable = new DataTable("ProductionRate");
-            //       DataTable parameterTable = new DataTable("Parameters");
-            //     DataTable remainingDataTable = new DataTable("Data Values");
         }
 
         void CleanUpGSNames()
@@ -1322,7 +1304,6 @@ namespace GenericScenarioEvaluation
                     elementsAndDataTable.Columns.Add(GetCellValue(spreadSheetDocument, cell));
                     columns.Add(GetCellValue(spreadSheetDocument, cell));
                 }
-                elementsAndDataTable.Columns.Add(accessed);
 
                 foreach (DocumentFormat.OpenXml.Spreadsheet.Row row in rows) //this will also include your header row...
                 {
@@ -1351,7 +1332,6 @@ namespace GenericScenarioEvaluation
                     infoTable.Columns.Add(GetCellValue(spreadSheetDocument, cell));
                     columns.Add(GetCellValue(spreadSheetDocument, cell));
                 }
-                infoTable.Columns.Add(accessed);
 
                 foreach (DocumentFormat.OpenXml.Spreadsheet.Row row in rows) //this will also include your header row...
                 {

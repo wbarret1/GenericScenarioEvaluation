@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DocumentFormat.OpenXml.Drawing.Diagrams;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -21,7 +22,6 @@ namespace GenericScenarioEvaluation
             Workers = new List<Worker>();
             DataValues = new List<DataValue>();
             Parameters = new List<RemainingValue>();
-            Workers = new List<Worker>();
             Calculations = new List<Calculation>();
             Concentrations = new List<Concentration>();
             OperatingDays = new List<OperatingDay>();
@@ -87,6 +87,8 @@ namespace GenericScenarioEvaluation
                         return this.DataValues.Count.ToString();
                     case "Parameters":
                         return this.Parameters.Count.ToString();
+                    case "References":
+                        return this.Sources.Count.ToString();
                     default:
                         return string.Empty;
                 }
@@ -123,6 +125,7 @@ namespace GenericScenarioEvaluation
                 "Calculations",
                 "Data Values",
                "Parameters",
+               "References"
             };
         }
 
@@ -175,5 +178,181 @@ namespace GenericScenarioEvaluation
         public List<Site> Sites { get; set; }
         public List<Shift> Shifts { get; set; }
         public List<UseRate> UseRates { get; set; }
+        public List<Source> Sources
+        {
+            get
+            {
+                List<Source> retval = new List<Source>();
+                foreach (OccupationalExposure o in this.OccupationalExposures)
+                {
+                    foreach (Source s1 in o.sources)
+                    {
+                        bool contained = false;
+                        foreach (Source s2 in retval)
+                        {
+                            if (s1.ReferenceText == s2.ReferenceText) contained = true;
+                        }
+                        if (!contained) retval.Add(s1);
+                    }
+                }
+                foreach (ProcessDescription pd in this.ProcessDescriptions)
+                {
+                    foreach (Source s1 in pd.sources)
+                    {
+                        bool contained = false;
+                        foreach (Source s2 in retval)
+                        {
+                            if (s1.ReferenceText == s2.ReferenceText) contained = true;
+                        }
+                        if (!contained) retval.Add(s1);
+                    }
+                }
+                foreach (EnvironmentalRelease er in this.EnvironmentalReleases)
+                {
+                    foreach (Source s1 in er.sources)
+                    {
+                        bool contained = false;
+                        foreach (Source s2 in retval)
+                        {
+                            if (s1.ReferenceText == s2.ReferenceText) contained = true;
+                        }
+                        if (!contained) retval.Add(s1);
+                    }
+                }
+                foreach (ProductionRate pr in this.ProductionRates)
+                {
+                    foreach (Source s1 in pr.sources)
+                    {
+                        bool contained = false;
+                        foreach (Source s2 in retval)
+                        {
+                            if (s1.ReferenceText == s2.ReferenceText) contained = true;
+                        }
+                        if (!contained) retval.Add(s1);
+                    }
+                }
+                foreach (Worker w in this.Workers)
+                {
+                    foreach (Source s1 in w.sources)
+                    {
+                        bool contained = false;
+                        foreach (Source s2 in retval)
+                        {
+                            if (s1.ReferenceText == s2.ReferenceText) contained = true;
+                        }
+                        if (!contained) retval.Add(s1);
+                    }
+                }
+                foreach (DataValue dv in this.DataValues)
+                {
+                    foreach (Source s1 in dv.sources)
+                    {
+                        bool contained = false;
+                        foreach (Source s2 in retval)
+                        {
+                            if (s1.ReferenceText == s2.ReferenceText) contained = true;
+                        }
+                        if (!contained) retval.Add(s1);
+                    }
+                }
+                foreach (RemainingValue p in this.Parameters)
+                {
+                    foreach (Source s1 in p.sources)
+                    {
+                        bool contained = false;
+                        foreach (Source s2 in retval)
+                        {
+                            if (s1.ReferenceText == s2.ReferenceText) contained = true;
+                        }
+                        if (!contained) retval.Add(s1);
+                    }
+                }
+                foreach (Calculation c in this.Calculations)
+                {
+                    foreach (Source s1 in c.sources)
+                    {
+                        bool contained = false;
+                        foreach (Source s2 in retval)
+                        {
+                            if (s1.ReferenceText == s2.ReferenceText) contained = true;
+                        }
+                        if (!contained) retval.Add(s1);
+                    }
+                }
+                foreach (Concentration conc in this.Concentrations)
+                {
+                    foreach (Source s1 in conc.sources)
+                    {
+                        bool contained = false;
+                        foreach (Source s2 in retval)
+                        {
+                            if (s1.ReferenceText == s2.ReferenceText) contained = true;
+                        }
+                        if (!contained) retval.Add(s1);
+                    }
+                }
+                foreach (OperatingDay od in this.OperatingDays)
+                {
+                    foreach (Source s1 in od.sources)
+                    {
+                        bool contained = false;
+                        foreach (Source s2 in retval)
+                        {
+                            if (s1.ReferenceText == s2.ReferenceText) contained = true;
+                        }
+                        if (!contained) retval.Add(s1);
+                    }
+                }
+                foreach (PPE ppe in this.PPEs)
+                {
+                    foreach (Source s1 in ppe.sources)
+                    {
+                        bool contained = false;
+                        foreach (Source s2 in retval)
+                        {
+                            if (s1.ReferenceText == s2.ReferenceText) contained = true;
+                        }
+                        if (!contained) retval.Add(s1);
+                    }
+                }
+                foreach (Site s in this.Sites)
+                {
+                    foreach (Source s1 in s.sources)
+                    {
+                        bool contained = false;
+                        foreach (Source s2 in retval)
+                        {
+                            if (s1.ReferenceText == s2.ReferenceText) contained = true;
+                        }
+                        if (!contained) retval.Add(s1);
+                    }
+                }
+                foreach (Shift sh in this.Shifts)
+                {
+                    foreach (Source s1 in sh.sources)
+                    {
+                        bool contained = false;
+                        foreach (Source s2 in retval)
+                        {
+                            if (s1.ReferenceText == s2.ReferenceText) contained = true;
+                        }
+                        if (!contained) retval.Add(s1);
+                    }
+                }
+                foreach (UseRate ur in this.UseRates)
+                {
+                    foreach (Source s1 in ur.sources)
+                    {
+                        bool contained = false;
+                        foreach (Source s2 in retval)
+                        {
+                            if (s1.ReferenceText == s2.ReferenceText) contained = true;
+                        }
+                        if (!contained) retval.Add(s1);
+                    }
+                }
+                return retval;
+            }
+        }
     }
 }
