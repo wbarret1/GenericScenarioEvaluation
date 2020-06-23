@@ -17,5 +17,6 @@ namespace GenericScenarioEvaluation
         public string Type { get; set; }
         public string Type2 { get; set; }
         public string SourceSummary { get; set; }
+        public bool ActivityCategorized { get; set; } = false;
     }
 }

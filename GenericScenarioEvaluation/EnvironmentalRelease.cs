@@ -63,8 +63,10 @@ namespace GenericScenarioEvaluation
         {
             get
             {
-                return this.ToAir && this.ToAir && this.ToWater;
+                return !(this.ToAir || this.ToLand || this.ToWater);
             }
         }
+
+        public bool ActivityCategorized { get; set; } = false;
     }
 }

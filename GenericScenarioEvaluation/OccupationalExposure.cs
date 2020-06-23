@@ -60,8 +60,9 @@ namespace GenericScenarioEvaluation
                 return this.ExposureType.ToLower().Contains("part");
             }
         }
-        public string Activity_Source { get; set; }
+        public string ActivitySource { get; set; }
         public string mediaOfRelease { get; set; }
         public string sourceSummary { get; set; }
+        public bool ActivityCategorized { get; set; } = false;
     }
 }

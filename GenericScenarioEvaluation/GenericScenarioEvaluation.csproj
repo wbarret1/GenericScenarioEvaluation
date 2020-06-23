@@ -62,6 +62,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Calculation.cs" />
+    <Compile Include="ExposureCollection.cs" />
+    <Compile Include="ReleaseCollection.cs" />
     <Compile Include="Concentration.cs" />
     <Compile Include="ControlTechnology.cs" />
     <Compile Include="DataElement.cs" />
