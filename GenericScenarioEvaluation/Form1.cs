@@ -245,7 +245,9 @@ namespace GenericScenarioEvaluation
             elements = from myElement in dataElements.AsEnumerable()
                        where (myElement.ElementName.ToLower().Contains("concentration") ||
                         myElement.ElementName.ToLower().Contains("concentration") ||
-                        myElement.ElementName.ToLower().Contains("fraction"))
+                        myElement.Type.ToLower().Contains("concentration") ||
+                        myElement.ElementName.ToLower().Contains("fraction")||
+                        myElement.ElementName.ToLower().Contains("percent"))
                && !myElement.ElementName.ToLower().Contains("process description")
                && !myElement.ElementName.ToLower().Contains("characterization")
                        select myElement;
@@ -307,6 +309,7 @@ namespace GenericScenarioEvaluation
             elements = from myElement in dataElements.AsEnumerable()
                        where (myElement.ElementName.ToLower().Contains("process description") ||
                   myElement.Type.ToLower().Contains("process description") ||
+                  myElement.ElementName.ToLower().Contains("process summary") ||
                        myElement.ElementName.ToLower().Contains("characterization"))
                        select myElement;
 
@@ -521,7 +524,8 @@ namespace GenericScenarioEvaluation
 
 
             elements = from myElement in dataElements.AsEnumerable()
-                       where myElement.ElementName.Contains("Operating")
+                       where myElement.ElementName.Contains("Operating")||
+                       myElement.Type.Contains("Operating")
                        && !myElement.Type.Contains("Process Description")
                        && !myElement.ElementName.Contains("Use Rate")
                && !myElement.ElementName.ToLower().Contains("characterization")
@@ -550,7 +554,8 @@ namespace GenericScenarioEvaluation
 
 
             elements = from myElement in dataElements.AsEnumerable()
-                       where myElement.ElementName.Contains("Worker")
+                       where myElement.ElementName.ToLower().Contains("worker")||
+                       myElement.ElementName.ToLower().Contains("operator")
                        && !myElement.Type.Contains("Process Description")
                        && !myElement.Type.Contains("Use Rate")
                        select myElement;
@@ -577,8 +582,12 @@ namespace GenericScenarioEvaluation
 
 
             elements = from myElement in dataElements.AsEnumerable()
-                       where myElement.ElementName.Contains("Number of Sites") ||
-                        myElement.Type.Contains("Number of Sites")
+                       where (myElement.ElementName.ToLower().Contains("number") && myElement.ElementName.ToLower().Contains("sites")) ||
+                       (myElement.ElementName.ToLower().Contains("domestic") && myElement.ElementName.ToLower().Contains("sites")) ||
+                       (myElement.ElementName.ToLower().Contains("number") && myElement.ElementName.ToLower().Contains("plants")) ||
+                       (myElement.Type.ToLower().Contains("number") && myElement.Type.ToLower().Contains("sites"))||
+                       (myElement.Type.ToLower().Contains("number") && myElement.Type.ToLower().Contains("plants"))
+                       &&!myElement.Element.ToLower().Contains("worker")
                        select myElement;
 
             foreach (DataElement el in elements)
@@ -629,7 +638,10 @@ namespace GenericScenarioEvaluation
 
 
             elements = from myElement in dataElements.AsEnumerable()
-                       where myElement.ElementName.ToLower().Contains("production rate")
+                       where myElement.ElementName.ToLower().Contains("production rate") ||
+                       myElement.ElementName.ToLower().Contains("production volume") ||
+                       myElement.ElementName.ToLower().Contains("throughput") ||
+                       myElement.ElementName.ToLower().Contains("pv ")
                        && !myElement.Type.Contains("Process Description")
                        select myElement;
 
@@ -677,7 +689,21 @@ namespace GenericScenarioEvaluation
                 el.accessed = true;
                 if (!uniqueDataElements.Contains(el.ElementName)) uniqueDataElements.Add(el.ElementName);
                 if (!uniqueDataSubElements.Contains(el.Type)) uniqueDataSubElements.Add(el.Type);
-                parameterTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
+                parameterTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type,el.Type2, el.SourceSummary });
+                TreeNode node = null;
+                if (treeView1.Nodes.ContainsKey(el.ESD_GS_Name))
+                    node = treeView1.Nodes[el.ESD_GS_Name];
+                else
+                    node = treeView1.Nodes.Add(el.ESD_GS_Name, el.ESD_GS_Name);
+                if (node.Nodes.ContainsKey(el.ElementName))
+                    node = node.Nodes[el.ElementName];
+                else
+                    node = node.Nodes.Add(el.ElementName, el.ElementName);
+                if (!string.IsNullOrEmpty(el.Type)) node = node.Nodes.Add(el.Type, el.Type);
+                if (!string.IsNullOrEmpty(el.Type2)) node = node.Nodes.Add(el.Type2);
+                node.Nodes.Add(el.SourceSummary);
+
+
             }
             dataValueDataGridView.DataSource = parameterTable;
             
@@ -707,7 +733,17 @@ namespace GenericScenarioEvaluation
                 remainingValues.Add(o);
                 if (!uniqueDataElements.Contains(el.ElementName)) uniqueDataElements.Add(el.ElementName);
                 if (!uniqueDataSubElements.Contains(el.Type)) uniqueDataSubElements.Add(el.Type);
-                remainingDataTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
+                remainingDataTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name];
+                if (node == null)
+                    node = treeView1.Nodes.Add(el.ESD_GS_Name, el.ESD_GS_Name);
+                if (node.Nodes.ContainsKey(el.ElementName))
+                        node = node.Nodes[el.ElementName];
+                    else
+                        node = node.Nodes.Add(el.ElementName, el.ElementName);
+                if (!string.IsNullOrEmpty(el.Type)) node.Nodes.Add(el.Type);
+                node.Nodes.Add(el.SourceSummary);
+
             }
             remainingValuesDataGridView.DataSource = remainingDataTable;
             SetColumnWidths();
@@ -834,14 +870,13 @@ namespace GenericScenarioEvaluation
             this.parameterTable.Columns.Add("Scenario Name");
             this.parameterTable.Columns.Add("Element Name");
             this.parameterTable.Columns.Add("Element Type");
+            this.parameterTable.Columns.Add("Element Type2");
             this.parameterTable.Columns.Add("Source Summary");
 
             // remainingValuesDataGridView1.Rows.Add(new string[] { el.Element, el.ElementName, el.Type, el.Type2, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
             this.remainingDataTable.Columns.Add("Element Number");
             this.remainingDataTable.Columns.Add("Scenario Name");
             this.remainingDataTable.Columns.Add("Element Name");
-            this.remainingDataTable.Columns.Add("Element Type");
-            this.remainingDataTable.Columns.Add("Element Type 2");
             this.remainingDataTable.Columns.Add("Activity Source");
             this.remainingDataTable.Columns.Add("Media Of Release");
             this.remainingDataTable.Columns.Add("Source Summary");
