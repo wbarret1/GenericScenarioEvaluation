@@ -760,6 +760,16 @@ namespace GenericScenarioEvaluation
             envReleaseActivities.Sort();
             occActivities.Sort();
 
+            foreach (GenericScenario s in scenarios)
+            {
+                TreeNode node = treeView2.Nodes.Add(s.ESD_GS_Name, s.ESD_GS_Name);
+                TreeNode gsNode = node.Nodes.Add("GSInfo", "GSInfo");
+                gsNode.Nodes.Add(s.Category);
+
+
+            }
+
+
             this.releaseSummaryTable.Columns.Add(new DataColumn("Activity"));
             this.releaseSummaryTable.Columns.Add(new DataColumn("Release to Air"));
             this.releaseSummaryTable.Columns.Add(new DataColumn("Release to Land"));

@@ -30,6 +30,8 @@
         {
             this.remainingValuesDataGridView = new System.Windows.Forms.DataGridView();
             this.tabControl1 = new System.Windows.Forms.TabControl();
+            this.tabPage16 = new System.Windows.Forms.TabPage();
+            this.treeView1 = new System.Windows.Forms.TreeView();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.occupationalExposureDataGridView = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -59,10 +61,11 @@
             this.ConcentrationDataGridView = new System.Windows.Forms.DataGridView();
             this.tabPage15 = new System.Windows.Forms.TabPage();
             this.CalculationdataGridView = new System.Windows.Forms.DataGridView();
-            this.tabPage16 = new System.Windows.Forms.TabPage();
-            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.tabPage17 = new System.Windows.Forms.TabPage();
+            this.treeView2 = new System.Windows.Forms.TreeView();
             ((System.ComponentModel.ISupportInitialize)(this.remainingValuesDataGridView)).BeginInit();
             this.tabControl1.SuspendLayout();
+            this.tabPage16.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.occupationalExposureDataGridView)).BeginInit();
             this.tabPage2.SuspendLayout();
@@ -92,7 +95,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ConcentrationDataGridView)).BeginInit();
             this.tabPage15.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CalculationdataGridView)).BeginInit();
-            this.tabPage16.SuspendLayout();
+            this.tabPage17.SuspendLayout();
             this.SuspendLayout();
             // 
             // remainingValuesDataGridView
@@ -100,7 +103,7 @@
             this.remainingValuesDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.remainingValuesDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.remainingValuesDataGridView.Location = new System.Drawing.Point(2, 2);
-            this.remainingValuesDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.remainingValuesDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.remainingValuesDataGridView.Name = "remainingValuesDataGridView";
             this.remainingValuesDataGridView.RowHeadersWidth = 51;
             this.remainingValuesDataGridView.RowTemplate.Height = 24;
@@ -109,6 +112,7 @@
             // 
             // tabControl1
             // 
+            this.tabControl1.Controls.Add(this.tabPage17);
             this.tabControl1.Controls.Add(this.tabPage16);
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
@@ -127,19 +131,37 @@
             this.tabControl1.Controls.Add(this.tabPage15);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(2);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1019, 551);
             this.tabControl1.TabIndex = 1;
             // 
+            // tabPage16
+            // 
+            this.tabPage16.Controls.Add(this.treeView1);
+            this.tabPage16.Location = new System.Drawing.Point(4, 22);
+            this.tabPage16.Name = "tabPage16";
+            this.tabPage16.Size = new System.Drawing.Size(1011, 525);
+            this.tabPage16.TabIndex = 15;
+            this.tabPage16.Text = "Data Tree";
+            this.tabPage16.UseVisualStyleBackColor = true;
+            // 
+            // treeView1
+            // 
+            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView1.Location = new System.Drawing.Point(0, 0);
+            this.treeView1.Name = "treeView1";
+            this.treeView1.Size = new System.Drawing.Size(1011, 525);
+            this.treeView1.TabIndex = 0;
+            // 
             // tabPage1
             // 
             this.tabPage1.Controls.Add(this.occupationalExposureDataGridView);
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage1.Size = new System.Drawing.Size(1011, 525);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Occupational Exposure";
@@ -150,7 +172,7 @@
             this.occupationalExposureDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.occupationalExposureDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.occupationalExposureDataGridView.Location = new System.Drawing.Point(2, 2);
-            this.occupationalExposureDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.occupationalExposureDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.occupationalExposureDataGridView.Name = "occupationalExposureDataGridView";
             this.occupationalExposureDataGridView.RowHeadersWidth = 51;
             this.occupationalExposureDataGridView.RowTemplate.Height = 24;
@@ -161,9 +183,9 @@
             // 
             this.tabPage2.Controls.Add(this.remainingValuesDataGridView);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
             this.tabPage2.Size = new System.Drawing.Size(1011, 525);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Remaining Data";
@@ -173,7 +195,7 @@
             // 
             this.tabPage3.Controls.Add(this.processDescriptionDataGridView);
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
-            this.tabPage3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage3.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(1011, 525);
             this.tabPage3.TabIndex = 2;
@@ -185,7 +207,7 @@
             this.processDescriptionDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.processDescriptionDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.processDescriptionDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.processDescriptionDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.processDescriptionDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.processDescriptionDataGridView.Name = "processDescriptionDataGridView";
             this.processDescriptionDataGridView.RowHeadersWidth = 51;
             this.processDescriptionDataGridView.RowTemplate.Height = 24;
@@ -196,7 +218,7 @@
             // 
             this.tabPage4.Controls.Add(this.useRateDataGridView);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
-            this.tabPage4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage4.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(1011, 525);
             this.tabPage4.TabIndex = 3;
@@ -208,7 +230,7 @@
             this.useRateDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.useRateDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.useRateDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.useRateDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.useRateDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.useRateDataGridView.Name = "useRateDataGridView";
             this.useRateDataGridView.RowHeadersWidth = 51;
             this.useRateDataGridView.RowTemplate.Height = 24;
@@ -219,7 +241,7 @@
             // 
             this.tabPage5.Controls.Add(this.environmentalReleaseDataGridView);
             this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage5.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Size = new System.Drawing.Size(1011, 525);
             this.tabPage5.TabIndex = 4;
@@ -231,7 +253,7 @@
             this.environmentalReleaseDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.environmentalReleaseDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.environmentalReleaseDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.environmentalReleaseDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.environmentalReleaseDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.environmentalReleaseDataGridView.Name = "environmentalReleaseDataGridView";
             this.environmentalReleaseDataGridView.RowHeadersWidth = 51;
             this.environmentalReleaseDataGridView.RowTemplate.Height = 24;
@@ -242,7 +264,7 @@
             // 
             this.tabPage6.Controls.Add(this.controlTechnologyDataGridView);
             this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage6.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Size = new System.Drawing.Size(1011, 525);
             this.tabPage6.TabIndex = 5;
@@ -254,7 +276,7 @@
             this.controlTechnologyDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.controlTechnologyDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.controlTechnologyDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.controlTechnologyDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.controlTechnologyDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.controlTechnologyDataGridView.Name = "controlTechnologyDataGridView";
             this.controlTechnologyDataGridView.RowHeadersWidth = 51;
             this.controlTechnologyDataGridView.RowTemplate.Height = 24;
@@ -265,7 +287,7 @@
             // 
             this.tabPage7.Controls.Add(this.workersDataGridView);
             this.tabPage7.Location = new System.Drawing.Point(4, 22);
-            this.tabPage7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage7.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Size = new System.Drawing.Size(1011, 525);
             this.tabPage7.TabIndex = 6;
@@ -277,7 +299,7 @@
             this.workersDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.workersDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.workersDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.workersDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.workersDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.workersDataGridView.Name = "workersDataGridView";
             this.workersDataGridView.RowHeadersWidth = 51;
             this.workersDataGridView.RowTemplate.Height = 24;
@@ -288,7 +310,7 @@
             // 
             this.tabPage8.Controls.Add(this.operatingDaysDataGridView);
             this.tabPage8.Location = new System.Drawing.Point(4, 22);
-            this.tabPage8.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage8.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Size = new System.Drawing.Size(1011, 525);
             this.tabPage8.TabIndex = 7;
@@ -300,7 +322,7 @@
             this.operatingDaysDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.operatingDaysDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.operatingDaysDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.operatingDaysDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.operatingDaysDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.operatingDaysDataGridView.Name = "operatingDaysDataGridView";
             this.operatingDaysDataGridView.RowHeadersWidth = 51;
             this.operatingDaysDataGridView.RowTemplate.Height = 24;
@@ -311,7 +333,7 @@
             // 
             this.tabPage9.Controls.Add(this.shiftDataGridView);
             this.tabPage9.Location = new System.Drawing.Point(4, 22);
-            this.tabPage9.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage9.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Size = new System.Drawing.Size(1011, 525);
             this.tabPage9.TabIndex = 8;
@@ -323,7 +345,7 @@
             this.shiftDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.shiftDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.shiftDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.shiftDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.shiftDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.shiftDataGridView.Name = "shiftDataGridView";
             this.shiftDataGridView.RowHeadersWidth = 51;
             this.shiftDataGridView.RowTemplate.Height = 24;
@@ -354,7 +376,7 @@
             // 
             this.tabPage11.Controls.Add(this.ppeDataGridView);
             this.tabPage11.Location = new System.Drawing.Point(4, 22);
-            this.tabPage11.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage11.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Size = new System.Drawing.Size(1011, 525);
             this.tabPage11.TabIndex = 10;
@@ -366,7 +388,7 @@
             this.ppeDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ppeDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ppeDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.ppeDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ppeDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.ppeDataGridView.Name = "ppeDataGridView";
             this.ppeDataGridView.RowHeadersWidth = 51;
             this.ppeDataGridView.RowTemplate.Height = 24;
@@ -377,7 +399,7 @@
             // 
             this.tabPage12.Controls.Add(this.productionRateDataGridView);
             this.tabPage12.Location = new System.Drawing.Point(4, 22);
-            this.tabPage12.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage12.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage12.Name = "tabPage12";
             this.tabPage12.Size = new System.Drawing.Size(1011, 525);
             this.tabPage12.TabIndex = 11;
@@ -389,7 +411,7 @@
             this.productionRateDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.productionRateDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.productionRateDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.productionRateDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.productionRateDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.productionRateDataGridView.Name = "productionRateDataGridView";
             this.productionRateDataGridView.RowHeadersWidth = 51;
             this.productionRateDataGridView.RowTemplate.Height = 24;
@@ -400,7 +422,7 @@
             // 
             this.tabPage13.Controls.Add(this.dataValueDataGridView);
             this.tabPage13.Location = new System.Drawing.Point(4, 22);
-            this.tabPage13.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage13.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage13.Name = "tabPage13";
             this.tabPage13.Size = new System.Drawing.Size(1011, 525);
             this.tabPage13.TabIndex = 12;
@@ -412,7 +434,7 @@
             this.dataValueDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataValueDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataValueDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.dataValueDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.dataValueDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.dataValueDataGridView.Name = "dataValueDataGridView";
             this.dataValueDataGridView.RowHeadersWidth = 51;
             this.dataValueDataGridView.RowTemplate.Height = 24;
@@ -423,7 +445,7 @@
             // 
             this.tabPage14.Controls.Add(this.ConcentrationDataGridView);
             this.tabPage14.Location = new System.Drawing.Point(4, 22);
-            this.tabPage14.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage14.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage14.Name = "tabPage14";
             this.tabPage14.Size = new System.Drawing.Size(1011, 525);
             this.tabPage14.TabIndex = 13;
@@ -435,7 +457,7 @@
             this.ConcentrationDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ConcentrationDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ConcentrationDataGridView.Location = new System.Drawing.Point(0, 0);
-            this.ConcentrationDataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.ConcentrationDataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.ConcentrationDataGridView.Name = "ConcentrationDataGridView";
             this.ConcentrationDataGridView.RowHeadersWidth = 51;
             this.ConcentrationDataGridView.RowTemplate.Height = 24;
@@ -446,7 +468,7 @@
             // 
             this.tabPage15.Controls.Add(this.CalculationdataGridView);
             this.tabPage15.Location = new System.Drawing.Point(4, 22);
-            this.tabPage15.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabPage15.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage15.Name = "tabPage15";
             this.tabPage15.Size = new System.Drawing.Size(1011, 525);
             this.tabPage15.TabIndex = 14;
@@ -458,30 +480,30 @@
             this.CalculationdataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.CalculationdataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.CalculationdataGridView.Location = new System.Drawing.Point(0, 0);
-            this.CalculationdataGridView.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.CalculationdataGridView.Margin = new System.Windows.Forms.Padding(2);
             this.CalculationdataGridView.Name = "CalculationdataGridView";
             this.CalculationdataGridView.RowHeadersWidth = 51;
             this.CalculationdataGridView.RowTemplate.Height = 24;
             this.CalculationdataGridView.Size = new System.Drawing.Size(1011, 525);
             this.CalculationdataGridView.TabIndex = 0;
             // 
-            // tabPage16
+            // tabPage17
             // 
-            this.tabPage16.Controls.Add(this.treeView1);
-            this.tabPage16.Location = new System.Drawing.Point(4, 22);
-            this.tabPage16.Name = "tabPage16";
-            this.tabPage16.Size = new System.Drawing.Size(1011, 525);
-            this.tabPage16.TabIndex = 15;
-            this.tabPage16.Text = "Data Tree";
-            this.tabPage16.UseVisualStyleBackColor = true;
+            this.tabPage17.Controls.Add(this.treeView2);
+            this.tabPage17.Location = new System.Drawing.Point(4, 22);
+            this.tabPage17.Name = "tabPage17";
+            this.tabPage17.Size = new System.Drawing.Size(1011, 525);
+            this.tabPage17.TabIndex = 16;
+            this.tabPage17.Text = "Element Tree";
+            this.tabPage17.UseVisualStyleBackColor = true;
             // 
-            // treeView1
+            // treeView2
             // 
-            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView1.Location = new System.Drawing.Point(0, 0);
-            this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(1011, 525);
-            this.treeView1.TabIndex = 0;
+            this.treeView2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView2.Location = new System.Drawing.Point(0, 0);
+            this.treeView2.Name = "treeView2";
+            this.treeView2.Size = new System.Drawing.Size(1011, 525);
+            this.treeView2.TabIndex = 0;
             // 
             // Form1
             // 
@@ -489,11 +511,12 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1019, 551);
             this.Controls.Add(this.tabControl1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.remainingValuesDataGridView)).EndInit();
             this.tabControl1.ResumeLayout(false);
+            this.tabPage16.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.occupationalExposureDataGridView)).EndInit();
             this.tabPage2.ResumeLayout(false);
@@ -523,7 +546,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.ConcentrationDataGridView)).EndInit();
             this.tabPage15.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.CalculationdataGridView)).EndInit();
-            this.tabPage16.ResumeLayout(false);
+            this.tabPage17.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -563,6 +586,8 @@
         private System.Windows.Forms.DataGridView CalculationdataGridView;
         private System.Windows.Forms.TabPage tabPage16;
         private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.TabPage tabPage17;
+        private System.Windows.Forms.TreeView treeView2;
     }
 }
 
