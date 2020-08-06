@@ -140,6 +140,15 @@ namespace GenericScenarioEvaluation
 
             int count = 0;
 
+            foreach (GenericScenario s in scenarios)
+            {
+                TreeNode node = treeView2.Nodes.Add(s.ESD_GS_Name, s.ESD_GS_Name);
+                TreeNode gsNode = node.Nodes.Add("GSInfo", "GSInfo");
+                gsNode.Nodes.Add("Category: " + s.Category);
+
+
+            }
+
             var elements = from myElement in dataElements.AsEnumerable()
                            where myElement.ElementName.ToLower().Contains("occupational")
                            && !myElement.ElementName.ToLower().Contains("characterization")
@@ -239,6 +248,17 @@ namespace GenericScenarioEvaluation
                 //{
 
                 //}
+
+                String test = "Occupational Exposure";
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test)?treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                node = node.Nodes.ContainsKey("Activity/Source: " + o.ActivitySource) ? node.Nodes["Activity/Source: " + o.ActivitySource] :node.Nodes.Add("Activity/Source: " + o.ActivitySource);
+                node = node.Nodes.Add(o.ExposureType);
+                if (!string.IsNullOrEmpty(el.Type)) node.Nodes.Add(el.Type);
+                if (o.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in o.sources) node.Nodes.Add(s.ReferenceText);
+                }
             }
             occupationalExposureDataGridView.DataSource = occExpTable;
 
@@ -269,6 +289,17 @@ namespace GenericScenarioEvaluation
                 concentrations.Add(o);
                 el.accessed = true;
                 concentrationTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
+
+                String test = "Concentration";
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                node = node.Nodes.ContainsKey(o.ElementName) ? node.Nodes[o.ElementName] : node.Nodes.Add(o.ElementName);
+                node = node.Nodes.Add(o.sourceSummary);
+                if (!string.IsNullOrEmpty(el.Type)) node.Nodes.Add(el.Type);
+                if (o.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in o.sources) node.Nodes.Add(s.ReferenceText);
+                }
             }
             ConcentrationDataGridView.DataSource = concentrationTable;
 
@@ -302,6 +333,18 @@ namespace GenericScenarioEvaluation
                 calculations.Add(o);
                 el.accessed = true;
                 calculationTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.ExposureType, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
+                String test = "Calculations";
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                node = node.Nodes.ContainsKey(o.ElementName) ? node.Nodes[o.ElementName] : node.Nodes.Add(o.ElementName);
+                if (!string.IsNullOrEmpty(o.Activity_Source)) node = node.Nodes.Add("Activity/Source: " + o.Activity_Source);
+                node = node.Nodes.Add(o.sourceSummary);
+                if (!string.IsNullOrEmpty(el.Type)) node.Nodes.Add(el.Type);
+                if (string.IsNullOrEmpty(o.ExposureType)) node.Nodes.Add("Exposure Type: " + o.ExposureType);
+                if (o.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in o.sources) node.Nodes.Add(s.ReferenceText);
+                }
             }
             CalculationdataGridView.DataSource = calculationTable;
 
@@ -331,6 +374,17 @@ namespace GenericScenarioEvaluation
                 de.sources = GetSources(el);
                 el.accessed = true;
                 procDescriptionTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
+                String test = string.Empty;
+                if (de.ElementName.StartsWith("Process Description:")) test = de.ElementName;
+                else if (!string.IsNullOrEmpty(de.Type2)) test = "Process Description: " + el.Type + ": " + el.Type2;
+                else test = "Process Description: " + el.Type;
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test);
+                if (!string.IsNullOrEmpty(de.SourceSummary)) node.Nodes.Add(de.SourceSummary);
+                if (de.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in de.sources) node.Nodes.Add(s.ReferenceText);
+                }
             }
             processDescriptionDataGridView.DataSource = procDescriptionTable;
 
@@ -359,6 +413,16 @@ namespace GenericScenarioEvaluation
                 ur.sources = GetSources(el);
                 el.accessed = true;
                 useRateTable.Rows.Add(new string[] { ur.ElementNumber, el.ESD_GS_Name, ur.ElementName, ur.Type, ur.SourceSummary });
+                String test = "Use Rate";
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test)? treeView2.Nodes[el.ESD_GS_Name].Nodes[test]: treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                node = node.Nodes.Add(ur.ElementName);
+                if (!string.IsNullOrEmpty(ur.Type)) node.Nodes.Add(ur.Type);
+                if (!string.IsNullOrEmpty(ur.SourceSummary)) node.Nodes.Add(ur.SourceSummary);
+                if (ur.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in ur.sources) node.Nodes.Add(s.ReferenceText);
+                }
             }
             useRateDataGridView.DataSource = useRateTable;
 
@@ -464,6 +528,18 @@ namespace GenericScenarioEvaluation
 
                 }
                 envReleaseTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.Activity_Source, el.mediaOfRelease, er.ToAir ? "1" : "0", er.ToLand ? "1" : "0", er.ToWater ? "1" : "0", er.RecycledOrReused ? "1" : "0", er.NotSpecified ? "1" : "0", el.SourceSummary });
+                String test = "Environmental Releases";
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                node = node.Nodes.ContainsKey(er.ActivitySource) ? node.Nodes[er.ActivitySource] : !string.IsNullOrEmpty(er.ActivitySource)?node.Nodes.Add(er.ActivitySource, er.ActivitySource):node;
+                node = node.Nodes.ContainsKey(er.MediaOfRelease) ? node.Nodes[er.MediaOfRelease] : !string.IsNullOrEmpty(er.MediaOfRelease)?node.Nodes.Add(er.MediaOfRelease, er.MediaOfRelease):node;
+                if (!string.IsNullOrEmpty(er.Type)) node.Nodes.Add(er.Type);
+                if (!string.IsNullOrEmpty(er.Type2)) node.Nodes.Add(er.Type2);
+                if (!string.IsNullOrEmpty(er.SourceSummary)) node.Nodes.Add(er.SourceSummary);
+                if (er.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in er.sources) node.Nodes.Add(s.ReferenceText);
+                }
             }
             environmentalReleaseDataGridView.DataSource = envReleaseTable;
 
@@ -491,7 +567,17 @@ namespace GenericScenarioEvaluation
                 controlTech.Add(ct);
                 el.accessed = true;
                 controlTechActivities.Add(ct.SourceSummary);
+                string test = "Control Technologies";
                 contolTechTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                if (!string.IsNullOrEmpty(ct.Type)) node.Nodes.Add(ct.Type);
+                if (!string.IsNullOrEmpty(ct.Type2)) node.Nodes.Add(ct.Type2);
+                if (!string.IsNullOrEmpty(ct.SourceSummary)) node.Nodes.Add(ct.SourceSummary);
+                if (ct.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in ct.sources) node.Nodes.Add(s.ReferenceText);
+                }
             }
             controlTechnologyDataGridView.DataSource = contolTechTable;
 
@@ -519,6 +605,15 @@ namespace GenericScenarioEvaluation
                 shifts.Add(shift);
                 el.accessed = true;
                 shiftTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
+                string test = "Shifts";
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                if (!string.IsNullOrEmpty(shift.Type)) node.Nodes.Add(shift.Type);
+                if (!string.IsNullOrEmpty(shift.SourceSummary)) node.Nodes.Add(shift.SourceSummary);
+                if (shift.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in shift.sources) node.Nodes.Add(s.ReferenceText);
+                }
             }
             shiftDataGridView.DataSource = shiftTable;
 
@@ -549,6 +644,15 @@ namespace GenericScenarioEvaluation
                 el.accessed = true;
                 opDays.Add(day);
                 operatingDaysTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
+                string test = "Operating Days";
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                if (!string.IsNullOrEmpty(day.Type)) node.Nodes.Add(day.Type);
+                if (!string.IsNullOrEmpty(day.SourceSummary)) node.Nodes.Add(day.SourceSummary);
+                if (day.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in day.sources) node.Nodes.Add(s.ReferenceText);
+                }
             }
             operatingDaysDataGridView.DataSource = operatingDaysTable;
 
@@ -577,6 +681,15 @@ namespace GenericScenarioEvaluation
                 workers.Add(worker);
                 workerTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
                 el.accessed = true;
+                string test = "Workers";
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                if (!string.IsNullOrEmpty(worker.Type)) node.Nodes.Add(worker.Type);
+                if (!string.IsNullOrEmpty(worker.SourceSummary)) node.Nodes.Add(worker.SourceSummary);
+                if (worker.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in worker.sources) node.Nodes.Add(s.ReferenceText);
+                }
             }
             workersDataGridView.DataSource = workerTable;
 
@@ -607,6 +720,15 @@ namespace GenericScenarioEvaluation
                 sites.Add(site);
                 siteTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
                 el.accessed = true;
+                string test = "Sites";
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                if (!string.IsNullOrEmpty(site.Type)) node.Nodes.Add(site.Type);
+                if (!string.IsNullOrEmpty(site.SourceSummary)) node.Nodes.Add(site.SourceSummary);
+                if (site.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in site.sources) node.Nodes.Add(s.ReferenceText);
+                }
             }
             sitesDataGridView.DataSource = siteTable;
 
@@ -633,6 +755,15 @@ namespace GenericScenarioEvaluation
                 ppes.Add(pp);
                 ppeTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
                 el.accessed = true;
+                string test = "PPE";
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                if (!string.IsNullOrEmpty(pp.Type)) node.Nodes.Add(pp.Type);
+                if (!string.IsNullOrEmpty(pp.SourceSummary)) node.Nodes.Add(pp.SourceSummary);
+                if (pp.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in pp.sources) node.Nodes.Add(s.ReferenceText);
+                }
             }
             ppeDataGridView.DataSource = ppeTable;
 
@@ -663,6 +794,15 @@ namespace GenericScenarioEvaluation
                 productions.Add(pp);
                 productionRateTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
                 el.accessed = true;
+                string test = "Production Rate";
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                if (!string.IsNullOrEmpty(pp.Type)) node.Nodes.Add(pp.Type);
+                if (!string.IsNullOrEmpty(pp.SourceSummary)) node.Nodes.Add(pp.SourceSummary);
+                if (pp.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in pp.sources) node.Nodes.Add(s.ReferenceText);
+                }
             }
             productionRateDataGridView.DataSource = productionRateTable;
 
@@ -702,8 +842,19 @@ namespace GenericScenarioEvaluation
                 if (!string.IsNullOrEmpty(el.Type)) node = node.Nodes.Add(el.Type, el.Type);
                 if (!string.IsNullOrEmpty(el.Type2)) node = node.Nodes.Add(el.Type2);
                 node.Nodes.Add(el.SourceSummary);
-
-
+                string test = "Data Values";
+                node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                if (node.Nodes.ContainsKey(el.ElementName))
+                    node = node.Nodes[el.ElementName];
+                else
+                    node = node.Nodes.Add(el.ElementName, el.ElementName);
+                if (!string.IsNullOrEmpty(el.Type)) node = node.Nodes.Add(el.Type, el.Type);
+                if (!string.IsNullOrEmpty(el.Type2)) node = node.Nodes.Add(el.Type2);
+                if (o.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in o.sources) node.Nodes.Add(s.ReferenceText);
+                }
             }
             dataValueDataGridView.DataSource = parameterTable;
             
@@ -743,6 +894,19 @@ namespace GenericScenarioEvaluation
                         node = node.Nodes.Add(el.ElementName, el.ElementName);
                 if (!string.IsNullOrEmpty(el.Type)) node.Nodes.Add(el.Type);
                 node.Nodes.Add(el.SourceSummary);
+                string test = "Data Values";
+                node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                if (node.Nodes.ContainsKey(el.ElementName))
+                    node = node.Nodes[el.ElementName];
+                else
+                    node = node.Nodes.Add(el.ElementName, el.ElementName);
+                if (!string.IsNullOrEmpty(el.Type)) node = node.Nodes.Add(el.Type, el.Type);
+                if (!string.IsNullOrEmpty(el.Type2)) node = node.Nodes.Add(el.Type2);
+                if (o.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in o.sources) node.Nodes.Add(s.ReferenceText);
+                }
 
             }
             remainingValuesDataGridView.DataSource = remainingDataTable;
@@ -760,14 +924,6 @@ namespace GenericScenarioEvaluation
             envReleaseActivities.Sort();
             occActivities.Sort();
 
-            foreach (GenericScenario s in scenarios)
-            {
-                TreeNode node = treeView2.Nodes.Add(s.ESD_GS_Name, s.ESD_GS_Name);
-                TreeNode gsNode = node.Nodes.Add("GSInfo", "GSInfo");
-                gsNode.Nodes.Add(s.Category);
-
-
-            }
 
 
             this.releaseSummaryTable.Columns.Add(new DataColumn("Activity"));
@@ -1330,7 +1486,7 @@ namespace GenericScenarioEvaluation
 
         void ProcessExcel()
         {
-            using (DocumentFormat.OpenXml.Packaging.SpreadsheetDocument spreadSheetDocument = DocumentFormat.OpenXml.Packaging.SpreadsheetDocument.Open(@"..\..\Revised Data Element Comparison Draft_2.19.2020_To EPA_with review notes.xlsx", false))
+            using (DocumentFormat.OpenXml.Packaging.SpreadsheetDocument spreadSheetDocument = System.IO.File.Exists(@"..\..\Revised Data Element Comparison Draft_2.19.2020_To EPA_with review notes.xlsx")?DocumentFormat.OpenXml.Packaging.SpreadsheetDocument.Open(@"..\..\Revised Data Element Comparison Draft_2.19.2020_To EPA_with review notes.xlsx", false): DocumentFormat.OpenXml.Packaging.SpreadsheetDocument.Open(@"Revised Data Element Comparison Draft_2.19.2020_To EPA_with review notes.xlsx", false))
             {
                 // DataElementsTable
                 DocumentFormat.OpenXml.Packaging.WorkbookPart workbookPart = spreadSheetDocument.WorkbookPart;
