@@ -41,7 +41,7 @@ namespace GenericScenarioEvaluation
         List<Source> sources = new List<Source>();
         ExposureCollection expsoures = new ExposureCollection();
         List<string> occActivities = new List<string>();
-            
+
         List<Concentration> concentrations = new List<Concentration>();
         List<Calculation> calculations = new List<Calculation>();
         List<ProcessDescription> processDescriptions = new List<ProcessDescription>();
@@ -150,10 +150,48 @@ namespace GenericScenarioEvaluation
             }
 
             var elements = from myElement in dataElements.AsEnumerable()
-                           where myElement.ElementName.ToLower().Contains("occupational")
-                           && !myElement.ElementName.ToLower().Contains("characterization")
-                           && !myElement.ElementName.ToLower().Contains("process description")
+                           where (myElement.ElementName.ToLower().Contains("process description") ||
+                           myElement.Type.ToLower().Contains("process description") ||
+                           myElement.ElementName.ToLower().Contains("process summary") ||
+                           myElement.ElementName.ToLower().Contains("characterization"))
                            select myElement;
+
+            foreach (DataElement el in elements)
+            {
+                count++;
+                ProcessDescription de = new ProcessDescription()
+                {
+                    ScenarioName = el.ESD_GS_Name,
+                    ElementName = el.ElementName,
+                    ElementNumber = el.Element,
+                    Type = el.Type,
+                    Type2 = el.Type2,
+                    SourceSummary = el.SourceSummary
+                };
+                processDescriptions.Add(de);
+                de.GenericScenario = GetScenario(el.ESD_GS_Name);
+                de.GenericScenario.ProcessDescriptions.Add(de);
+                de.sources = GetSources(el);
+                el.accessed = true;
+                procDescriptionTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
+                String test = string.Empty;
+                if (de.ElementName.StartsWith("Process Description:")) test = de.ElementName;
+                else if (!string.IsNullOrEmpty(de.Type2)) test = "Process Description: " + el.Type + ": " + el.Type2;
+                else test = "Process Description: " + el.Type;
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test);
+                if (!string.IsNullOrEmpty(de.SourceSummary)) node.Nodes.Add(de.SourceSummary);
+                if (de.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in de.sources) node.Nodes.Add(s.ReferenceText);
+                }
+            }
+            processDescriptionDataGridView.DataSource = procDescriptionTable;
+
+            elements = from myElement in dataElements.AsEnumerable()
+                       where myElement.ElementName.ToLower().Contains("occupational")
+                       && !myElement.accessed
+                       select myElement;
 
             foreach (DataElement el in elements)
             {
@@ -244,14 +282,9 @@ namespace GenericScenarioEvaluation
                     processOccExp.Add(o);
                     rCategorized.Add(o.ActivitySource);
                 }
-                //if (!(o.RecycledOrReused || er.ToAir || er.ToLand || er.ToWater))
-                //{
-
-                //}
-
                 String test = "Occupational Exposure";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test)?treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
-                node = node.Nodes.ContainsKey("Activity/Source: " + o.ActivitySource) ? node.Nodes["Activity/Source: " + o.ActivitySource] :node.Nodes.Add("Activity/Source: " + o.ActivitySource);
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                node = node.Nodes.ContainsKey("Activity/Source: " + o.ActivitySource) ? node.Nodes["Activity/Source: " + o.ActivitySource] : node.Nodes.Add("Activity/Source: " + o.ActivitySource);
                 node = node.Nodes.Add(o.ExposureType);
                 if (!string.IsNullOrEmpty(el.Type)) node.Nodes.Add(el.Type);
                 if (o.sources.Length > 0)
@@ -263,176 +296,10 @@ namespace GenericScenarioEvaluation
             occupationalExposureDataGridView.DataSource = occExpTable;
 
             elements = from myElement in dataElements.AsEnumerable()
-                       where (myElement.ElementName.ToLower().Contains("concentration") ||
-                        myElement.ElementName.ToLower().Contains("concentration") ||
-                        myElement.Type.ToLower().Contains("concentration") ||
-                        myElement.ElementName.ToLower().Contains("fraction")||
-                        myElement.ElementName.ToLower().Contains("percent"))
-               && !myElement.ElementName.ToLower().Contains("process description")
-               && !myElement.ElementName.ToLower().Contains("characterization")
-                       select myElement;
-
-            foreach (DataElement el in elements)
-            {
-                count++;
-                Concentration o = new Concentration()
-                {
-                    ScenarioName = el.ESD_GS_Name,
-                    ElementName = el.ElementName,
-                    ElementNumber = el.Element,
-                    Type = el.Type,
-                    sourceSummary = el.SourceSummary
-                };
-                o.GenericScenario = GetScenario(o.ScenarioName);
-                o.GenericScenario.Concentrations.Add(o);
-                o.sources = GetSources(el);
-                concentrations.Add(o);
-                el.accessed = true;
-                concentrationTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
-
-                String test = "Concentration";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
-                node = node.Nodes.ContainsKey(o.ElementName) ? node.Nodes[o.ElementName] : node.Nodes.Add(o.ElementName);
-                node = node.Nodes.Add(o.sourceSummary);
-                if (!string.IsNullOrEmpty(el.Type)) node.Nodes.Add(el.Type);
-                if (o.sources.Length > 0)
-                {
-                    node = node.Nodes.Add("Sources", "Sources");
-                    foreach (Source s in o.sources) node.Nodes.Add(s.ReferenceText);
-                }
-            }
-            ConcentrationDataGridView.DataSource = concentrationTable;
-
-
-            elements = from myElement in dataElements.AsEnumerable()
-                       where (myElement.ElementName.ToLower().Contains("calculat") ||
-                        myElement.Type.ToLower().Contains("calculat") ||
-                        myElement.Type2.ToLower().Contains("calculat") ||
-                        myElement.SourceSummary.ToLower().Contains("calculat")) 
-               && !myElement.ElementName.ToLower().Contains("process description")
-               && !myElement.ElementName.ToLower().Contains("characterization")
-                       select myElement;
-
-            foreach (DataElement el in elements)
-            {
-                count++;
-                Calculation o = new Calculation()
-                {
-                    ScenarioName = el.ESD_GS_Name,
-                    ElementName = el.ElementName,
-                    ElementNumber = el.Element,
-                    Type = el.Type,
-                    ExposureType = el.ExposureType,
-                    Activity_Source = el.Activity_Source,
-                    mediaOfRelease = el.mediaOfRelease,
-                    sourceSummary = el.SourceSummary
-                };
-                o.GenericScenario = GetScenario(el.ESD_GS_Name);
-                o.GenericScenario.Calculations.Add(o);
-                o.sources = GetSources(el);
-                calculations.Add(o);
-                el.accessed = true;
-                calculationTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.ExposureType, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
-                String test = "Calculations";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
-                node = node.Nodes.ContainsKey(o.ElementName) ? node.Nodes[o.ElementName] : node.Nodes.Add(o.ElementName);
-                if (!string.IsNullOrEmpty(o.Activity_Source)) node = node.Nodes.Add("Activity/Source: " + o.Activity_Source);
-                node = node.Nodes.Add(o.sourceSummary);
-                if (!string.IsNullOrEmpty(el.Type)) node.Nodes.Add(el.Type);
-                if (string.IsNullOrEmpty(o.ExposureType)) node.Nodes.Add("Exposure Type: " + o.ExposureType);
-                if (o.sources.Length > 0)
-                {
-                    node = node.Nodes.Add("Sources", "Sources");
-                    foreach (Source s in o.sources) node.Nodes.Add(s.ReferenceText);
-                }
-            }
-            CalculationdataGridView.DataSource = calculationTable;
-
-
-            elements = from myElement in dataElements.AsEnumerable()
-                       where (myElement.ElementName.ToLower().Contains("process description") ||
-                  myElement.Type.ToLower().Contains("process description") ||
-                  myElement.ElementName.ToLower().Contains("process summary") ||
-                       myElement.ElementName.ToLower().Contains("characterization"))
-                       select myElement;
-
-            foreach (DataElement el in elements)
-            {
-                count++;
-                ProcessDescription de = new ProcessDescription()
-                {
-                    ScenarioName = el.ESD_GS_Name,
-                    ElementName = el.ElementName,
-                    ElementNumber = el.Element,
-                    Type = el.Type,
-                    Type2 = el.Type2,
-                    SourceSummary = el.SourceSummary
-                };
-                processDescriptions.Add(de);
-                de.GenericScenario = GetScenario(el.ESD_GS_Name);
-                de.GenericScenario.ProcessDescriptions.Add(de);
-                de.sources = GetSources(el);
-                el.accessed = true;
-                procDescriptionTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
-                String test = string.Empty;
-                if (de.ElementName.StartsWith("Process Description:")) test = de.ElementName;
-                else if (!string.IsNullOrEmpty(de.Type2)) test = "Process Description: " + el.Type + ": " + el.Type2;
-                else test = "Process Description: " + el.Type;
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test);
-                if (!string.IsNullOrEmpty(de.SourceSummary)) node.Nodes.Add(de.SourceSummary);
-                if (de.sources.Length > 0)
-                {
-                    node = node.Nodes.Add("Sources", "Sources");
-                    foreach (Source s in de.sources) node.Nodes.Add(s.ReferenceText);
-                }
-            }
-            processDescriptionDataGridView.DataSource = procDescriptionTable;
-
-
-            elements = from myElement in dataElements.AsEnumerable()
-                       where myElement.ElementName.ToLower().Contains("use rate") ||
-                       myElement.Type.ToLower().Contains("use rate") ||
-                       myElement.ElementName.ToLower().Contains("daily use") ||
-                       myElement.ElementName.ToLower().Contains("annual use")
-                       select myElement;
-
-            foreach (DataElement el in elements)
-            {
-                count++;
-                UseRate ur = new UseRate()
-                {
-                    ElementNumber = el.Element,
-                    ScenarioName = el.ESD_GS_Name,
-                    ElementName = el.ElementName,
-                    Type = el.Type,
-                    SourceSummary = el.SourceSummary
-                };
-                useRates.Add(ur);
-                ur.GenericScenario = GetScenario(el.ESD_GS_Name);
-                ur.GenericScenario.UseRates.Add(ur);
-                ur.sources = GetSources(el);
-                el.accessed = true;
-                useRateTable.Rows.Add(new string[] { ur.ElementNumber, el.ESD_GS_Name, ur.ElementName, ur.Type, ur.SourceSummary });
-                String test = "Use Rate";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test)? treeView2.Nodes[el.ESD_GS_Name].Nodes[test]: treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
-                node = node.Nodes.Add(ur.ElementName);
-                if (!string.IsNullOrEmpty(ur.Type)) node.Nodes.Add(ur.Type);
-                if (!string.IsNullOrEmpty(ur.SourceSummary)) node.Nodes.Add(ur.SourceSummary);
-                if (ur.sources.Length > 0)
-                {
-                    node = node.Nodes.Add("Sources", "Sources");
-                    foreach (Source s in ur.sources) node.Nodes.Add(s.ReferenceText);
-                }
-            }
-            useRateDataGridView.DataSource = useRateTable;
-
-
-            elements = from myElement in dataElements.AsEnumerable()
-                       where myElement.ElementName.Contains("Environmental Release") ||
+                       where (myElement.ElementName.Contains("Environmental Release") ||
                        myElement.ElementName.Contains("TRI Releases (lb/yr)") ||
-                       myElement.ElementName.Contains("Total Industry Estimated Process Water Discharge Flow")
-                       && !myElement.ElementName.ToLower().Contains("process description")
-                && !myElement.ElementName.ToLower().Contains("characterization")
+                       myElement.ElementName.Contains("Total Industry Estimated Process Water Discharge Flow"))
+                       && !myElement.accessed
                        select myElement;
 
             foreach (DataElement el in elements)
@@ -454,7 +321,7 @@ namespace GenericScenarioEvaluation
                 er.GenericScenario.EnvironmentalReleases.Add(er);
                 envRelease.Add(er);
                 el.accessed = true;
-                if (!envReleaseActivities.Contains(er.ActivitySource))envReleaseActivities.Add(er.ActivitySource);
+                if (!envReleaseActivities.Contains(er.ActivitySource)) envReleaseActivities.Add(er.ActivitySource);
                 if (er.ActivitySource.ToLower().Contains("cleaning"))
                 {
                     cleaningReleases.Add(er);
@@ -521,7 +388,7 @@ namespace GenericScenarioEvaluation
                 if (!er.ActivityCategorized && !string.IsNullOrEmpty(er.ActivitySource))
                 {
                     processReleases.Add(er);
-//                    releaseNotCategorized.Add(er);
+                    //                    releaseNotCategorized.Add(er);
                 }
                 if (!(er.RecycledOrReused || er.ToAir || er.ToLand || er.ToWater))
                 {
@@ -530,8 +397,8 @@ namespace GenericScenarioEvaluation
                 envReleaseTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.Activity_Source, el.mediaOfRelease, er.ToAir ? "1" : "0", er.ToLand ? "1" : "0", er.ToWater ? "1" : "0", er.RecycledOrReused ? "1" : "0", er.NotSpecified ? "1" : "0", el.SourceSummary });
                 String test = "Environmental Releases";
                 TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
-                node = node.Nodes.ContainsKey(er.ActivitySource) ? node.Nodes[er.ActivitySource] : !string.IsNullOrEmpty(er.ActivitySource)?node.Nodes.Add(er.ActivitySource, er.ActivitySource):node;
-                node = node.Nodes.ContainsKey(er.MediaOfRelease) ? node.Nodes[er.MediaOfRelease] : !string.IsNullOrEmpty(er.MediaOfRelease)?node.Nodes.Add(er.MediaOfRelease, er.MediaOfRelease):node;
+                node = node.Nodes.ContainsKey(er.ActivitySource) ? node.Nodes[er.ActivitySource] : !string.IsNullOrEmpty(er.ActivitySource) ? node.Nodes.Add(er.ActivitySource, er.ActivitySource) : node;
+                node = node.Nodes.ContainsKey(er.MediaOfRelease) ? node.Nodes[er.MediaOfRelease] : !string.IsNullOrEmpty(er.MediaOfRelease) ? node.Nodes.Add(er.MediaOfRelease, er.MediaOfRelease) : node;
                 if (!string.IsNullOrEmpty(er.Type)) node.Nodes.Add(er.Type);
                 if (!string.IsNullOrEmpty(er.Type2)) node.Nodes.Add(er.Type2);
                 if (!string.IsNullOrEmpty(er.SourceSummary)) node.Nodes.Add(er.SourceSummary);
@@ -543,10 +410,10 @@ namespace GenericScenarioEvaluation
             }
             environmentalReleaseDataGridView.DataSource = envReleaseTable;
 
-
             elements = from myElement in dataElements.AsEnumerable()
-                       where myElement.ElementName.Contains("Control Technologies") ||
-                       myElement.ElementName.Contains("Treatment Technology")
+                       where (myElement.ElementName.Contains("Control Technologies") ||
+                       myElement.ElementName.Contains("Treatment Technology"))
+                       && !myElement.accessed
                        select myElement;
 
             foreach (DataElement el in elements)
@@ -581,10 +448,131 @@ namespace GenericScenarioEvaluation
             }
             controlTechnologyDataGridView.DataSource = contolTechTable;
 
+            elements = from myElement in dataElements.AsEnumerable()
+                       where (myElement.ElementName.ToLower().Contains("concentration") ||
+                       myElement.ElementName.ToLower().Contains("concentration") ||
+                       myElement.Type.ToLower().Contains("concentration") ||
+                       myElement.ElementName.ToLower().Contains("fraction") ||
+                       myElement.ElementName.ToLower().Contains("percent"))
+                       && !myElement.accessed
+                       select myElement;
+
+            foreach (DataElement el in elements)
+            {
+                count++;
+                Concentration o = new Concentration()
+                {
+                    ScenarioName = el.ESD_GS_Name,
+                    ElementName = el.ElementName,
+                    ElementNumber = el.Element,
+                    Type = el.Type,
+                    sourceSummary = el.SourceSummary
+                };
+                o.GenericScenario = GetScenario(o.ScenarioName);
+                o.GenericScenario.Concentrations.Add(o);
+                o.sources = GetSources(el);
+                concentrations.Add(o);
+                el.accessed = true;
+                concentrationTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
+
+                String test = "Concentration";
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                node = node.Nodes.ContainsKey(o.ElementName) ? node.Nodes[o.ElementName] : node.Nodes.Add(o.ElementName);
+                node = node.Nodes.Add(o.sourceSummary);
+                if (!string.IsNullOrEmpty(el.Type)) node.Nodes.Add(el.Type);
+                if (o.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in o.sources) node.Nodes.Add(s.ReferenceText);
+                }
+            }
+            ConcentrationDataGridView.DataSource = concentrationTable;
 
             elements = from myElement in dataElements.AsEnumerable()
-                       where myElement.ElementName.Contains("Shift") ||
-                       myElement.Type.Contains("Shift")
+                       where (myElement.ElementName.ToLower().Contains("calculat") ||
+                       myElement.Type.ToLower().Contains("calculat") ||
+                       myElement.Type2.ToLower().Contains("calculat") ||
+                       myElement.SourceSummary.ToLower().Contains("calculat"))
+                       && !myElement.accessed
+                       select myElement;
+
+            foreach (DataElement el in elements)
+            {
+                count++;
+                Calculation o = new Calculation()
+                {
+                    ScenarioName = el.ESD_GS_Name,
+                    ElementName = el.ElementName,
+                    ElementNumber = el.Element,
+                    Type = el.Type,
+                    ExposureType = el.ExposureType,
+                    Activity_Source = el.Activity_Source,
+                    mediaOfRelease = el.mediaOfRelease,
+                    sourceSummary = el.SourceSummary
+                };
+                o.GenericScenario = GetScenario(el.ESD_GS_Name);
+                o.GenericScenario.Calculations.Add(o);
+                o.sources = GetSources(el);
+                calculations.Add(o);
+                el.accessed = true;
+                calculationTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.ExposureType, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
+                String test = "Calculations";
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                node = node.Nodes.ContainsKey(o.ElementName) ? node.Nodes[o.ElementName] : node.Nodes.Add(o.ElementName);
+                if (!string.IsNullOrEmpty(o.Activity_Source)) node = node.Nodes.Add("Activity/Source: " + o.Activity_Source);
+                node = node.Nodes.Add(o.sourceSummary);
+                if (!string.IsNullOrEmpty(el.Type)) node.Nodes.Add(el.Type);
+                if (string.IsNullOrEmpty(o.ExposureType)) node.Nodes.Add("Exposure Type: " + o.ExposureType);
+                if (o.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in o.sources) node.Nodes.Add(s.ReferenceText);
+                }
+            }
+            CalculationdataGridView.DataSource = calculationTable;
+
+            elements = from myElement in dataElements.AsEnumerable()
+                       where (myElement.ElementName.ToLower().Contains("use rate") ||
+                       myElement.Type.ToLower().Contains("use rate") ||
+                       myElement.ElementName.ToLower().Contains("daily use") ||
+                       myElement.ElementName.ToLower().Contains("annual use"))
+                       && !myElement.accessed
+                       select myElement;
+
+            foreach (DataElement el in elements)
+            {
+                count++;
+                UseRate ur = new UseRate()
+                {
+                    ElementNumber = el.Element,
+                    ScenarioName = el.ESD_GS_Name,
+                    ElementName = el.ElementName,
+                    Type = el.Type,
+                    SourceSummary = el.SourceSummary
+                };
+                useRates.Add(ur);
+                ur.GenericScenario = GetScenario(el.ESD_GS_Name);
+                ur.GenericScenario.UseRates.Add(ur);
+                ur.sources = GetSources(el);
+                el.accessed = true;
+                useRateTable.Rows.Add(new string[] { ur.ElementNumber, el.ESD_GS_Name, ur.ElementName, ur.Type, ur.SourceSummary });
+                String test = "Use Rate";
+                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                node = node.Nodes.Add(ur.ElementName);
+                if (!string.IsNullOrEmpty(ur.Type)) node.Nodes.Add(ur.Type);
+                if (!string.IsNullOrEmpty(ur.SourceSummary)) node.Nodes.Add(ur.SourceSummary);
+                if (ur.sources.Length > 0)
+                {
+                    node = node.Nodes.Add("Sources", "Sources");
+                    foreach (Source s in ur.sources) node.Nodes.Add(s.ReferenceText);
+                }
+            }
+            useRateDataGridView.DataSource = useRateTable;
+
+            elements = from myElement in dataElements.AsEnumerable()
+                       where (myElement.ElementName.Contains("Shift") ||
+                       myElement.Type.Contains("Shift"))
+                       && !myElement.accessed
                        select myElement;
 
             foreach (DataElement el in elements)
@@ -619,11 +607,9 @@ namespace GenericScenarioEvaluation
 
 
             elements = from myElement in dataElements.AsEnumerable()
-                       where myElement.ElementName.Contains("Operating")||
-                       myElement.Type.Contains("Operating")
-                       && !myElement.Type.Contains("Process Description")
-                       && !myElement.ElementName.Contains("Use Rate")
-               && !myElement.ElementName.ToLower().Contains("characterization")
+                       where (myElement.ElementName.Contains("Operating") ||
+                       myElement.Type.Contains("Operating"))
+                       && !myElement.accessed
                        select myElement;
 
             foreach (DataElement el in elements)
@@ -656,12 +642,10 @@ namespace GenericScenarioEvaluation
             }
             operatingDaysDataGridView.DataSource = operatingDaysTable;
 
-
             elements = from myElement in dataElements.AsEnumerable()
-                       where myElement.ElementName.ToLower().Contains("worker")||
-                       myElement.ElementName.ToLower().Contains("operator")
-                       && !myElement.Type.Contains("Process Description")
-                       && !myElement.Type.Contains("Use Rate")
+                       where (myElement.ElementName.ToLower().Contains("worker") ||
+                       myElement.ElementName.ToLower().Contains("operator"))
+                       && !myElement.accessed
                        select myElement;
 
             foreach (DataElement el in elements)
@@ -695,12 +679,12 @@ namespace GenericScenarioEvaluation
 
 
             elements = from myElement in dataElements.AsEnumerable()
-                       where (myElement.ElementName.ToLower().Contains("number") && myElement.ElementName.ToLower().Contains("sites")) ||
+                       where ((myElement.ElementName.ToLower().Contains("number") && myElement.ElementName.ToLower().Contains("sites")) ||
                        (myElement.ElementName.ToLower().Contains("domestic") && myElement.ElementName.ToLower().Contains("sites")) ||
                        (myElement.ElementName.ToLower().Contains("number") && myElement.ElementName.ToLower().Contains("plants")) ||
-                       (myElement.Type.ToLower().Contains("number") && myElement.Type.ToLower().Contains("sites"))||
-                       (myElement.Type.ToLower().Contains("number") && myElement.Type.ToLower().Contains("plants"))
-                       &&!myElement.Element.ToLower().Contains("worker")
+                       (myElement.Type.ToLower().Contains("number") && myElement.Type.ToLower().Contains("sites")) ||
+                       (myElement.Type.ToLower().Contains("number") && myElement.Type.ToLower().Contains("plants")))
+                       && !myElement.accessed
                        select myElement;
 
             foreach (DataElement el in elements)
@@ -734,8 +718,9 @@ namespace GenericScenarioEvaluation
 
 
             elements = from myElement in dataElements.AsEnumerable()
-                       where myElement.ElementName.Contains("PPE") ||
-                        myElement.Type.Contains("PPE")
+                       where (myElement.ElementName.Contains("PPE") ||
+                       myElement.Type.Contains("PPE"))
+                       && !myElement.accessed
                        select myElement;
 
             foreach (DataElement el in elements)
@@ -767,13 +752,12 @@ namespace GenericScenarioEvaluation
             }
             ppeDataGridView.DataSource = ppeTable;
 
-
             elements = from myElement in dataElements.AsEnumerable()
-                       where myElement.ElementName.ToLower().Contains("production rate") ||
+                       where (myElement.ElementName.ToLower().Contains("production rate") ||
                        myElement.ElementName.ToLower().Contains("production volume") ||
                        myElement.ElementName.ToLower().Contains("throughput") ||
-                       myElement.ElementName.ToLower().Contains("pv ")
-                       && !myElement.Type.Contains("Process Description")
+                       myElement.ElementName.ToLower().Contains("pv "))
+                       && !myElement.accessed
                        select myElement;
 
             foreach (DataElement el in elements)
@@ -806,7 +790,6 @@ namespace GenericScenarioEvaluation
             }
             productionRateDataGridView.DataSource = productionRateTable;
 
-            
             elements = from myElement in dataElements.AsEnumerable()
                        where !string.IsNullOrEmpty(myElement.Type)
                        && !myElement.accessed
@@ -829,7 +812,7 @@ namespace GenericScenarioEvaluation
                 el.accessed = true;
                 if (!uniqueDataElements.Contains(el.ElementName)) uniqueDataElements.Add(el.ElementName);
                 if (!uniqueDataSubElements.Contains(el.Type)) uniqueDataSubElements.Add(el.Type);
-                parameterTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type,el.Type2, el.SourceSummary });
+                parameterTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
                 TreeNode node = null;
                 if (treeView1.Nodes.ContainsKey(el.ESD_GS_Name))
                     node = treeView1.Nodes[el.ESD_GS_Name];
@@ -857,8 +840,7 @@ namespace GenericScenarioEvaluation
                 }
             }
             dataValueDataGridView.DataSource = parameterTable;
-            
-            
+
             elements = from myElement in dataElements.AsEnumerable()
                        where !myElement.accessed
                        select myElement;
@@ -878,6 +860,7 @@ namespace GenericScenarioEvaluation
                     mediaOfRelease = el.mediaOfRelease,
                     SourceSummary = el.SourceSummary
                 };
+                el.accessed = true;
                 o.GenericScenario = GetScenario(el.ESD_GS_Name);
                 o.GenericScenario.Parameters.Add(o);
                 o.sources = GetSources(el);
@@ -889,9 +872,9 @@ namespace GenericScenarioEvaluation
                 if (node == null)
                     node = treeView1.Nodes.Add(el.ESD_GS_Name, el.ESD_GS_Name);
                 if (node.Nodes.ContainsKey(el.ElementName))
-                        node = node.Nodes[el.ElementName];
-                    else
-                        node = node.Nodes.Add(el.ElementName, el.ElementName);
+                    node = node.Nodes[el.ElementName];
+                else
+                    node = node.Nodes.Add(el.ElementName, el.ElementName);
                 if (!string.IsNullOrEmpty(el.Type)) node.Nodes.Add(el.Type);
                 node.Nodes.Add(el.SourceSummary);
                 string test = "Data Values";
@@ -916,10 +899,6 @@ namespace GenericScenarioEvaluation
             {
                 numrows = numrows + table.Rows.Count;
             }
-
-            var els = from myEl in remainingValues.AsEnumerable<RemainingValue>()
-                       where myEl.SourceSummary.ToLower().Contains("calculat")
-                       select myEl;
 
             envReleaseActivities.Sort();
             occActivities.Sort();
@@ -955,7 +934,7 @@ namespace GenericScenarioEvaluation
             this.occExposureSummaryTable.Columns.Add(new DataColumn("Solid Dermal"));
             this.occExposureSummaryTable.Columns.Add(new DataColumn("Dermal Not Categorized"));
             this.occExposureSummaryTable.Columns.Add(new DataColumn("Total Dermal"));
-            this.occExposureSummaryTable.Rows.Add(new string[] { "Cleaning", cleaningOccExp.ChemicalOrVapor.ToString(), cleaningOccExp.ParticulateInhalation.ToString(), cleaningOccExp.InhalationNotSpecified.ToString(), cleaningOccExp.TotalInhalation.ToString(),  
+            this.occExposureSummaryTable.Rows.Add(new string[] { "Cleaning", cleaningOccExp.ChemicalOrVapor.ToString(), cleaningOccExp.ParticulateInhalation.ToString(), cleaningOccExp.InhalationNotSpecified.ToString(), cleaningOccExp.TotalInhalation.ToString(),
                 cleaningOccExp.DermalLiquid.ToString(), cleaningOccExp.DermalSolid.ToString(), cleaningOccExp.DermalNotCategorized.ToString(), cleaningOccExp.TotalDermal.ToString()});
             this.occExposureSummaryTable.Rows.Add(new string[] { "Dumping", dumpingOccExp.ChemicalOrVapor.ToString(), dumpingOccExp.ParticulateInhalation.ToString(), dumpingOccExp.InhalationNotSpecified.ToString(), dumpingOccExp.TotalInhalation.ToString(),
                 dumpingOccExp.DermalLiquid.ToString(), dumpingOccExp.DermalSolid.ToString(), dumpingOccExp.DermalNotCategorized.ToString(), dumpingOccExp.TotalDermal.ToString()});
@@ -986,44 +965,44 @@ namespace GenericScenarioEvaluation
 
             string output = "Activity\tChemical Vapor Inhalation\tParticulate Inhalation\tInhalation NotSpecified\tTotal Inhalation\tLiquid Dermal\tSolid Dermal\tDermal Not Categorized\tTotal Dermal\t";
             output = output + "Release to Air\tReleases to Land\tReleases To Water\tRelease Not Specified\tTotal Releases\n";
-            output = output + "Cleaning \t" + cleaningOccExp.ChemicalOrVapor + "\t" + cleaningOccExp.ParticulateInhalation + "\t" + cleaningOccExp.InhalationNotSpecified + "\t" +  cleaningOccExp.TotalInhalation 
-                + "\t" + cleaningOccExp.DermalLiquid + "\t" + cleaningOccExp.DermalSolid + "\t" + cleaningOccExp.DermalNotCategorized + "\t" + cleaningOccExp.TotalDermal + "\t" + cleaningReleases.ToAir 
+            output = output + "Cleaning \t" + cleaningOccExp.ChemicalOrVapor + "\t" + cleaningOccExp.ParticulateInhalation + "\t" + cleaningOccExp.InhalationNotSpecified + "\t" + cleaningOccExp.TotalInhalation
+                + "\t" + cleaningOccExp.DermalLiquid + "\t" + cleaningOccExp.DermalSolid + "\t" + cleaningOccExp.DermalNotCategorized + "\t" + cleaningOccExp.TotalDermal + "\t" + cleaningReleases.ToAir
                 + "\t" + cleaningReleases.ToLand + "\t" + cleaningReleases.ToWater + "\t" + cleaningReleases.NotSpecified + "\t" + cleaningReleases.Count + "\n";
-            output = output + "Dumping \t"+ dumpingOccExp.ChemicalOrVapor + "\t" + dumpingOccExp.ParticulateInhalation + "\t" + dumpingOccExp.InhalationNotSpecified + "\t" + +dumpingOccExp.TotalInhalation 
-                + "\t" + dumpingOccExp.DermalLiquid + "\t" + dumpingOccExp.DermalSolid + "\t" + dumpingOccExp.DermalNotCategorized + "\t" + dumpingOccExp.TotalDermal + "\t" + dumpingReleases.ToAir 
+            output = output + "Dumping \t" + dumpingOccExp.ChemicalOrVapor + "\t" + dumpingOccExp.ParticulateInhalation + "\t" + dumpingOccExp.InhalationNotSpecified + "\t" + +dumpingOccExp.TotalInhalation
+                + "\t" + dumpingOccExp.DermalLiquid + "\t" + dumpingOccExp.DermalSolid + "\t" + dumpingOccExp.DermalNotCategorized + "\t" + dumpingOccExp.TotalDermal + "\t" + dumpingReleases.ToAir
                 + "\t" + dumpingReleases.ToLand + "\t" + dumpingReleases.ToWater + "\t" + dumpingReleases.NotSpecified + "\t" + dumpingReleases.Count + "\n";
-            output = output + "Drying \t"+ dryingOccExp.ChemicalOrVapor + "\t" + dryingOccExp.ParticulateInhalation + "\t" + dryingOccExp.InhalationNotSpecified + "\t" + +dryingOccExp.TotalInhalation 
+            output = output + "Drying \t" + dryingOccExp.ChemicalOrVapor + "\t" + dryingOccExp.ParticulateInhalation + "\t" + dryingOccExp.InhalationNotSpecified + "\t" + +dryingOccExp.TotalInhalation
                 + "\t" + dryingOccExp.DermalLiquid + "\t" + dryingOccExp.DermalSolid + "\t" + dryingOccExp.DermalNotCategorized + "\t" + dryingOccExp.TotalDermal + "\t" + dryingReleases.ToAir
                 + "\t" + dryingReleases.ToLand + "\t" + dryingReleases.ToWater + "\t" + dryingReleases.NotSpecified + "\t" + dryingReleases.Count + "\n";
-            output = output + "Evaporating \t"+ evaporatingOccExp.ChemicalOrVapor + "\t" + evaporatingOccExp.ParticulateInhalation + "\t" + evaporatingOccExp.InhalationNotSpecified + "\t" + evaporatingOccExp.TotalInhalation 
-                + "\t" + evaporatingOccExp.DermalLiquid + "\t" + evaporatingOccExp.DermalSolid + "\t" + evaporatingOccExp.DermalNotCategorized + "\t" + evaporatingOccExp.TotalDermal + "\t" + evaporatingReleases.ToAir 
+            output = output + "Evaporating \t" + evaporatingOccExp.ChemicalOrVapor + "\t" + evaporatingOccExp.ParticulateInhalation + "\t" + evaporatingOccExp.InhalationNotSpecified + "\t" + evaporatingOccExp.TotalInhalation
+                + "\t" + evaporatingOccExp.DermalLiquid + "\t" + evaporatingOccExp.DermalSolid + "\t" + evaporatingOccExp.DermalNotCategorized + "\t" + evaporatingOccExp.TotalDermal + "\t" + evaporatingReleases.ToAir
                 + "\t" + evaporatingReleases.ToLand + "\t" + evaporatingReleases.ToWater + "\t" + evaporatingReleases.NotSpecified + "\t" + evaporatingReleases.Count + "\n";
-            output = output + "Fugitive \t"+ fugitiveOccExp.ChemicalOrVapor + "\t" + fugitiveOccExp.ParticulateInhalation + "\t" + fugitiveOccExp.InhalationNotSpecified + "\t" +fugitiveOccExp.TotalInhalation 
-                + "\t" + fugitiveOccExp.DermalLiquid + "\t" + fugitiveOccExp.DermalSolid + "\t" + fugitiveOccExp.DermalNotCategorized + "\t" + fugitiveOccExp.TotalDermal + "\t" + fugitiveReleases.ToAir 
+            output = output + "Fugitive \t" + fugitiveOccExp.ChemicalOrVapor + "\t" + fugitiveOccExp.ParticulateInhalation + "\t" + fugitiveOccExp.InhalationNotSpecified + "\t" + fugitiveOccExp.TotalInhalation
+                + "\t" + fugitiveOccExp.DermalLiquid + "\t" + fugitiveOccExp.DermalSolid + "\t" + fugitiveOccExp.DermalNotCategorized + "\t" + fugitiveOccExp.TotalDermal + "\t" + fugitiveReleases.ToAir
                 + "\t" + fugitiveReleases.ToLand + "\t" + fugitiveReleases.ToWater + "\t" + fugitiveReleases.NotSpecified + "\t" + fugitiveReleases.Count + "\n";
-            output = output + "Disposal \t"+ disposalOccExp.ChemicalOrVapor + "\t" + disposalOccExp.ParticulateInhalation + "\t"+ disposalOccExp.InhalationNotSpecified + "\t" + disposalOccExp.TotalInhalation 
-                + "\t" + disposalOccExp.DermalLiquid + "\t" + disposalOccExp.DermalSolid + "\t" + disposalOccExp.DermalNotCategorized + "\t" + disposalOccExp.TotalDermal + "\t" + disposalReleases.ToAir 
+            output = output + "Disposal \t" + disposalOccExp.ChemicalOrVapor + "\t" + disposalOccExp.ParticulateInhalation + "\t" + disposalOccExp.InhalationNotSpecified + "\t" + disposalOccExp.TotalInhalation
+                + "\t" + disposalOccExp.DermalLiquid + "\t" + disposalOccExp.DermalSolid + "\t" + disposalOccExp.DermalNotCategorized + "\t" + disposalOccExp.TotalDermal + "\t" + disposalReleases.ToAir
                 + "\t" + disposalReleases.ToLand + "\t" + disposalReleases.ToWater + "\t" + disposalReleases.NotSpecified + "\t" + disposalReleases.Count + "\n";
-            output = output + "Residual \t"+ residualOccExp.ChemicalOrVapor + "\t" + residualOccExp.ParticulateInhalation + "\t" + residualOccExp.InhalationNotSpecified + "\t" + residualOccExp.TotalInhalation 
-                + "\t" + residualOccExp.DermalLiquid + "\t" + residualOccExp.DermalSolid + "\t" + residualOccExp.DermalNotCategorized + "\t" + residualOccExp.TotalDermal + "\t" + residualReleases.ToAir 
+            output = output + "Residual \t" + residualOccExp.ChemicalOrVapor + "\t" + residualOccExp.ParticulateInhalation + "\t" + residualOccExp.InhalationNotSpecified + "\t" + residualOccExp.TotalInhalation
+                + "\t" + residualOccExp.DermalLiquid + "\t" + residualOccExp.DermalSolid + "\t" + residualOccExp.DermalNotCategorized + "\t" + residualOccExp.TotalDermal + "\t" + residualReleases.ToAir
                 + "\t" + residualReleases.ToLand + "\t" + residualReleases.ToWater + "\t" + residualReleases.NotSpecified + "\t" + residualReleases.Count + "\n";
-            output = output + "Particulate \t"+ particulateOccExp.ChemicalOrVapor + "\t" + particulateOccExp.ParticulateInhalation + "\t" + particulateOccExp.InhalationNotSpecified + "\t" + particulateOccExp.TotalInhalation 
-                + "\t" + particulateOccExp.DermalLiquid + "\t" + particulateOccExp.DermalSolid + "\t" + particulateOccExp.DermalNotCategorized + "\t" + particulateOccExp.TotalDermal + "\t" + particulateReleases.ToAir 
+            output = output + "Particulate \t" + particulateOccExp.ChemicalOrVapor + "\t" + particulateOccExp.ParticulateInhalation + "\t" + particulateOccExp.InhalationNotSpecified + "\t" + particulateOccExp.TotalInhalation
+                + "\t" + particulateOccExp.DermalLiquid + "\t" + particulateOccExp.DermalSolid + "\t" + particulateOccExp.DermalNotCategorized + "\t" + particulateOccExp.TotalDermal + "\t" + particulateReleases.ToAir
                 + "\t" + particulateReleases.ToLand + "\t" + particulateReleases.ToWater + "\t" + particulateReleases.NotSpecified + "\t" + particulateReleases.Count + "\n";
-            output = output + "Sampling \t"+ samplingOccExp.ChemicalOrVapor + "\t" + samplingOccExp.ParticulateInhalation + "\t" + samplingOccExp.InhalationNotSpecified + "\t" + samplingOccExp.TotalInhalation 
+            output = output + "Sampling \t" + samplingOccExp.ChemicalOrVapor + "\t" + samplingOccExp.ParticulateInhalation + "\t" + samplingOccExp.InhalationNotSpecified + "\t" + samplingOccExp.TotalInhalation
                 + "\t" + samplingOccExp.DermalLiquid + "\t" + samplingOccExp.DermalSolid + "\t" + samplingOccExp.DermalNotCategorized + "\t" + samplingOccExp.TotalDermal + "\t" + samplingReleases.ToAir
                 + "\t" + samplingReleases.ToLand + "\t" + samplingReleases.ToWater + "\t" + samplingReleases.NotSpecified + "\t" + samplingReleases.Count + "\n";
-            output = output + "Loading \t"+ loadingOccExp.ChemicalOrVapor + "\t" + loadingOccExp.ParticulateInhalation + "\t" + loadingOccExp.InhalationNotSpecified + "\t" +loadingOccExp.TotalInhalation 
-                + "\t" + loadingOccExp.DermalLiquid + "\t" + loadingOccExp.DermalSolid + "\t" + loadingOccExp.DermalNotCategorized + "\t" + loadingOccExp.TotalDermal + "\t" + loadingReleases.ToAir 
+            output = output + "Loading \t" + loadingOccExp.ChemicalOrVapor + "\t" + loadingOccExp.ParticulateInhalation + "\t" + loadingOccExp.InhalationNotSpecified + "\t" + loadingOccExp.TotalInhalation
+                + "\t" + loadingOccExp.DermalLiquid + "\t" + loadingOccExp.DermalSolid + "\t" + loadingOccExp.DermalNotCategorized + "\t" + loadingOccExp.TotalDermal + "\t" + loadingReleases.ToAir
                 + "\t" + loadingReleases.ToLand + "\t" + loadingReleases.ToWater + "\t" + loadingReleases.NotSpecified + "\t" + loadingReleases.Count + "\n";
-            output = output + "Spent Materials \t"+ spentOccExp.ChemicalOrVapor + "\t" + spentOccExp.ParticulateInhalation + "\t"+ spentOccExp.InhalationNotSpecified + "\t" + spentOccExp.TotalInhalation 
-                + "\t" + spentOccExp.DermalLiquid + "\t" + spentOccExp.DermalSolid + "\t" + spentOccExp.DermalNotCategorized + "\t" + spentOccExp.TotalDermal + "\t" + spentReleases.ToAir 
+            output = output + "Spent Materials \t" + spentOccExp.ChemicalOrVapor + "\t" + spentOccExp.ParticulateInhalation + "\t" + spentOccExp.InhalationNotSpecified + "\t" + spentOccExp.TotalInhalation
+                + "\t" + spentOccExp.DermalLiquid + "\t" + spentOccExp.DermalSolid + "\t" + spentOccExp.DermalNotCategorized + "\t" + spentOccExp.TotalDermal + "\t" + spentReleases.ToAir
                 + "\t" + spentReleases.ToLand + "\t" + spentReleases.ToWater + "\t" + spentReleases.NotSpecified + "\t" + spentReleases.Count + "\n";
-            output = output + "Process \t"+ processOccExp.ChemicalOrVapor + "\t" + processOccExp.ParticulateInhalation + "\t" + processOccExp.InhalationNotSpecified + "\t" + processOccExp.TotalInhalation 
-                + "\t" + processOccExp.DermalLiquid + "\t" + processOccExp.DermalSolid + "\t" + processOccExp.DermalNotCategorized + "\t" + processOccExp.TotalDermal + "\t" + processReleases.ToAir 
+            output = output + "Process \t" + processOccExp.ChemicalOrVapor + "\t" + processOccExp.ParticulateInhalation + "\t" + processOccExp.InhalationNotSpecified + "\t" + processOccExp.TotalInhalation
+                + "\t" + processOccExp.DermalLiquid + "\t" + processOccExp.DermalSolid + "\t" + processOccExp.DermalNotCategorized + "\t" + processOccExp.TotalDermal + "\t" + processReleases.ToAir
                 + "\t" + processReleases.ToLand + "\t" + processReleases.ToWater + "\t" + processReleases.NotSpecified + "\t" + cleaningReleases.Count + "\n";
-            output = output + "Not Categorized \t"+ occExpNotCategorized.ChemicalOrVapor + "\t" + occExpNotCategorized.ParticulateInhalation + "\t" + occExpNotCategorized.InhalationNotSpecified + "\t" + occExpNotCategorized.TotalInhalation 
-                + "\t" + occExpNotCategorized.DermalLiquid + "\t" + occExpNotCategorized.DermalSolid + "\t" + occExpNotCategorized.DermalNotCategorized + "\t" + occExpNotCategorized.TotalDermal + "\t" + releaseNotCategorized.ToAir + "\t" + releaseNotCategorized.ToLand 
+            output = output + "Not Categorized \t" + occExpNotCategorized.ChemicalOrVapor + "\t" + occExpNotCategorized.ParticulateInhalation + "\t" + occExpNotCategorized.InhalationNotSpecified + "\t" + occExpNotCategorized.TotalInhalation
+                + "\t" + occExpNotCategorized.DermalLiquid + "\t" + occExpNotCategorized.DermalSolid + "\t" + occExpNotCategorized.DermalNotCategorized + "\t" + occExpNotCategorized.TotalDermal + "\t" + releaseNotCategorized.ToAir + "\t" + releaseNotCategorized.ToLand
                 + "\t" + releaseNotCategorized.ToWater + "\t" + releaseNotCategorized.NotSpecified + "\t" + releaseNotCategorized.Count + "\n";
             System.IO.File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\table.txt", output);
             ExportDataSet(scenarios, genScenarios, Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\GenericScenarioOutputs.xlsx");
@@ -1165,8 +1144,8 @@ namespace GenericScenarioEvaluation
 
         }
 
-        void SetColumnWidths() 
-        { 
+        void SetColumnWidths()
+        {
 
             // format data grid views
             for (int i = 0; i < dataValueDataGridView.Columns.Count; i++)
@@ -1468,7 +1447,7 @@ namespace GenericScenarioEvaluation
 
             this.sourceTable.Columns.Add("Generic Scenario");
             this.sourceTable.Columns.Add("Reference");
-            foreach(Source s in sources)
+            foreach (Source s in sources)
             {
                 this.sourceTable.Rows.Add(new string[] { s.ScenarioName, s.ReferenceText });
             }
@@ -1486,7 +1465,7 @@ namespace GenericScenarioEvaluation
 
         void ProcessExcel()
         {
-            using (DocumentFormat.OpenXml.Packaging.SpreadsheetDocument spreadSheetDocument = System.IO.File.Exists(@"..\..\Revised Data Element Comparison Draft_2.19.2020_To EPA_with review notes.xlsx")?DocumentFormat.OpenXml.Packaging.SpreadsheetDocument.Open(@"..\..\Revised Data Element Comparison Draft_2.19.2020_To EPA_with review notes.xlsx", false): DocumentFormat.OpenXml.Packaging.SpreadsheetDocument.Open(@"Revised Data Element Comparison Draft_2.19.2020_To EPA_with review notes.xlsx", false))
+            using (DocumentFormat.OpenXml.Packaging.SpreadsheetDocument spreadSheetDocument = System.IO.File.Exists(@"..\..\Revised Data Element Comparison Draft_2.19.2020_To EPA_with review notes.xlsx") ? DocumentFormat.OpenXml.Packaging.SpreadsheetDocument.Open(@"..\..\Revised Data Element Comparison Draft_2.19.2020_To EPA_with review notes.xlsx", false) : DocumentFormat.OpenXml.Packaging.SpreadsheetDocument.Open(@"Revised Data Element Comparison Draft_2.19.2020_To EPA_with review notes.xlsx", false))
             {
                 // DataElementsTable
                 DocumentFormat.OpenXml.Packaging.WorkbookPart workbookPart = spreadSheetDocument.WorkbookPart;
@@ -1591,7 +1570,7 @@ namespace GenericScenarioEvaluation
             }
         }
 
-        private void ExportDataSet(GenericScenario[] gs ,DataSet ds, string destination)
+        private void ExportDataSet(GenericScenario[] gs, DataSet ds, string destination)
         {
             using (var workbook = DocumentFormat.OpenXml.Packaging.SpreadsheetDocument.Create(destination, DocumentFormat.OpenXml.SpreadsheetDocumentType.Workbook))
             {
@@ -1612,7 +1591,7 @@ namespace GenericScenarioEvaluation
                         sheets.Elements<DocumentFormat.OpenXml.Spreadsheet.Sheet>().Select(s => s.SheetId.Value).Max() + 1;
                 }
 
-                DocumentFormat.OpenXml.Spreadsheet.Sheet sheet = new DocumentFormat.OpenXml.Spreadsheet.Sheet() { Id = relationshipId, SheetId = sheetId, Name = "Data Element Types"};
+                DocumentFormat.OpenXml.Spreadsheet.Sheet sheet = new DocumentFormat.OpenXml.Spreadsheet.Sheet() { Id = relationshipId, SheetId = sheetId, Name = "Data Element Types" };
                 sheets.Append(sheet);
 
                 DocumentFormat.OpenXml.Spreadsheet.Row headerRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
