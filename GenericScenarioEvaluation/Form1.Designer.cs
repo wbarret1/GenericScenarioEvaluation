@@ -30,8 +30,6 @@
         {
             this.remainingValuesDataGridView = new System.Windows.Forms.DataGridView();
             this.tabControl1 = new System.Windows.Forms.TabControl();
-            this.tabPage17 = new System.Windows.Forms.TabPage();
-            this.treeView2 = new System.Windows.Forms.TreeView();
             this.tabPage16 = new System.Windows.Forms.TabPage();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -65,7 +63,6 @@
             this.CalculationdataGridView = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.remainingValuesDataGridView)).BeginInit();
             this.tabControl1.SuspendLayout();
-            this.tabPage17.SuspendLayout();
             this.tabPage16.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.occupationalExposureDataGridView)).BeginInit();
@@ -112,7 +109,6 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Controls.Add(this.tabPage17);
             this.tabControl1.Controls.Add(this.tabPage16);
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
@@ -136,24 +132,6 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(1019, 551);
             this.tabControl1.TabIndex = 1;
-            // 
-            // tabPage17
-            // 
-            this.tabPage17.Controls.Add(this.treeView2);
-            this.tabPage17.Location = new System.Drawing.Point(4, 22);
-            this.tabPage17.Name = "tabPage17";
-            this.tabPage17.Size = new System.Drawing.Size(1011, 525);
-            this.tabPage17.TabIndex = 16;
-            this.tabPage17.Text = "Element Tree";
-            this.tabPage17.UseVisualStyleBackColor = true;
-            // 
-            // treeView2
-            // 
-            this.treeView2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.treeView2.Location = new System.Drawing.Point(0, 0);
-            this.treeView2.Name = "treeView2";
-            this.treeView2.Size = new System.Drawing.Size(1011, 525);
-            this.treeView2.TabIndex = 0;
             // 
             // tabPage16
             // 
@@ -516,7 +494,6 @@
             this.Text = "Generic Scenario Data";
             ((System.ComponentModel.ISupportInitialize)(this.remainingValuesDataGridView)).EndInit();
             this.tabControl1.ResumeLayout(false);
-            this.tabPage17.ResumeLayout(false);
             this.tabPage16.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.occupationalExposureDataGridView)).EndInit();
@@ -586,8 +563,6 @@
         private System.Windows.Forms.DataGridView CalculationdataGridView;
         private System.Windows.Forms.TabPage tabPage16;
         private System.Windows.Forms.TreeView treeView1;
-        private System.Windows.Forms.TabPage tabPage17;
-        private System.Windows.Forms.TreeView treeView2;
     }
 }
 

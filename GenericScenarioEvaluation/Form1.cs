@@ -142,7 +142,7 @@ namespace GenericScenarioEvaluation
 
             foreach (GenericScenario s in scenarios)
             {
-                TreeNode node = treeView2.Nodes.Add(s.ESD_GS_Name, s.ESD_GS_Name);
+                TreeNode node = treeView1.Nodes.Add(s.ESD_GS_Name, s.ESD_GS_Name);
                 TreeNode gsNode = node.Nodes.Add("GSInfo", "GSInfo");
                 gsNode.Nodes.Add("Category: " + s.Category);
 
@@ -178,7 +178,7 @@ namespace GenericScenarioEvaluation
                 if (de.ElementName.StartsWith("Process Description:")) test = de.ElementName;
                 else if (!string.IsNullOrEmpty(de.Type2)) test = "Process Description: " + el.Type + ": " + el.Type2;
                 else test = "Process Description: " + el.Type;
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test);
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test);
                 if (!string.IsNullOrEmpty(de.SourceSummary)) node.Nodes.Add(de.SourceSummary);
                 if (de.sources.Length > 0)
                 {
@@ -283,9 +283,9 @@ namespace GenericScenarioEvaluation
                     rCategorized.Add(o.ActivitySource);
                 }
                 String test = "Occupational Exposure";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
-                node = node.Nodes.ContainsKey("Activity/Source: " + o.ActivitySource) ? node.Nodes["Activity/Source: " + o.ActivitySource] : node.Nodes.Add("Activity/Source: " + o.ActivitySource);
-                node = node.Nodes.Add(o.ExposureType);
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView1.Nodes[el.ESD_GS_Name].Nodes[test] : treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                node = node.Nodes.ContainsKey(o.ExposureType) ? node.Nodes[o.ExposureType] : node.Nodes.Add(o.ExposureType, o.ExposureType);
+                node = node.Nodes.ContainsKey("Activity/Source: " + o.ActivitySource) ? node.Nodes["Activity/Source: " + o.ActivitySource] : node.Nodes.Add("Activity/Source: " + o.ActivitySource, "Activity/Source: " + o.ActivitySource);
                 if (!string.IsNullOrEmpty(el.Type)) node.Nodes.Add(el.Type);
                 if (o.sources.Length > 0)
                 {
@@ -396,9 +396,9 @@ namespace GenericScenarioEvaluation
                 }
                 envReleaseTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.Activity_Source, el.mediaOfRelease, er.ToAir ? "1" : "0", er.ToLand ? "1" : "0", er.ToWater ? "1" : "0", er.RecycledOrReused ? "1" : "0", er.NotSpecified ? "1" : "0", el.SourceSummary });
                 String test = "Environmental Releases";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
-                node = node.Nodes.ContainsKey(er.ActivitySource) ? node.Nodes[er.ActivitySource] : !string.IsNullOrEmpty(er.ActivitySource) ? node.Nodes.Add(er.ActivitySource, er.ActivitySource) : node;
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView1.Nodes[el.ESD_GS_Name].Nodes[test] : treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
                 node = node.Nodes.ContainsKey(er.MediaOfRelease) ? node.Nodes[er.MediaOfRelease] : !string.IsNullOrEmpty(er.MediaOfRelease) ? node.Nodes.Add(er.MediaOfRelease, er.MediaOfRelease) : node;
+                node = node.Nodes.ContainsKey(er.ActivitySource) ? node.Nodes[er.ActivitySource] : !string.IsNullOrEmpty(er.ActivitySource) ? node.Nodes.Add(er.ActivitySource, er.ActivitySource) : node;
                 if (!string.IsNullOrEmpty(er.Type)) node.Nodes.Add(er.Type);
                 if (!string.IsNullOrEmpty(er.Type2)) node.Nodes.Add(er.Type2);
                 if (!string.IsNullOrEmpty(er.SourceSummary)) node.Nodes.Add(er.SourceSummary);
@@ -436,7 +436,7 @@ namespace GenericScenarioEvaluation
                 controlTechActivities.Add(ct.SourceSummary);
                 string test = "Control Technologies";
                 contolTechTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView1.Nodes[el.ESD_GS_Name].Nodes[test] : treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
                 if (!string.IsNullOrEmpty(ct.Type)) node.Nodes.Add(ct.Type);
                 if (!string.IsNullOrEmpty(ct.Type2)) node.Nodes.Add(ct.Type2);
                 if (!string.IsNullOrEmpty(ct.SourceSummary)) node.Nodes.Add(ct.SourceSummary);
@@ -476,7 +476,7 @@ namespace GenericScenarioEvaluation
                 concentrationTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
 
                 String test = "Concentration";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView1.Nodes[el.ESD_GS_Name].Nodes[test] : treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
                 node = node.Nodes.ContainsKey(o.ElementName) ? node.Nodes[o.ElementName] : node.Nodes.Add(o.ElementName);
                 node = node.Nodes.Add(o.sourceSummary);
                 if (!string.IsNullOrEmpty(el.Type)) node.Nodes.Add(el.Type);
@@ -517,7 +517,7 @@ namespace GenericScenarioEvaluation
                 el.accessed = true;
                 calculationTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.ExposureType, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
                 String test = "Calculations";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView1.Nodes[el.ESD_GS_Name].Nodes[test] : treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
                 node = node.Nodes.ContainsKey(o.ElementName) ? node.Nodes[o.ElementName] : node.Nodes.Add(o.ElementName);
                 if (!string.IsNullOrEmpty(o.Activity_Source)) node = node.Nodes.Add("Activity/Source: " + o.Activity_Source);
                 node = node.Nodes.Add(o.sourceSummary);
@@ -557,7 +557,7 @@ namespace GenericScenarioEvaluation
                 el.accessed = true;
                 useRateTable.Rows.Add(new string[] { ur.ElementNumber, el.ESD_GS_Name, ur.ElementName, ur.Type, ur.SourceSummary });
                 String test = "Use Rate";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView1.Nodes[el.ESD_GS_Name].Nodes[test] : treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
                 node = node.Nodes.Add(ur.ElementName);
                 if (!string.IsNullOrEmpty(ur.Type)) node.Nodes.Add(ur.Type);
                 if (!string.IsNullOrEmpty(ur.SourceSummary)) node.Nodes.Add(ur.SourceSummary);
@@ -594,7 +594,7 @@ namespace GenericScenarioEvaluation
                 el.accessed = true;
                 shiftTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
                 string test = "Shifts";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView1.Nodes[el.ESD_GS_Name].Nodes[test] : treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
                 if (!string.IsNullOrEmpty(shift.Type)) node.Nodes.Add(shift.Type);
                 if (!string.IsNullOrEmpty(shift.SourceSummary)) node.Nodes.Add(shift.SourceSummary);
                 if (shift.sources.Length > 0)
@@ -631,7 +631,7 @@ namespace GenericScenarioEvaluation
                 opDays.Add(day);
                 operatingDaysTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
                 string test = "Operating Days";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView1.Nodes[el.ESD_GS_Name].Nodes[test] : treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
                 if (!string.IsNullOrEmpty(day.Type)) node.Nodes.Add(day.Type);
                 if (!string.IsNullOrEmpty(day.SourceSummary)) node.Nodes.Add(day.SourceSummary);
                 if (day.sources.Length > 0)
@@ -666,7 +666,7 @@ namespace GenericScenarioEvaluation
                 workerTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
                 el.accessed = true;
                 string test = "Workers";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView1.Nodes[el.ESD_GS_Name].Nodes[test] : treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
                 if (!string.IsNullOrEmpty(worker.Type)) node.Nodes.Add(worker.Type);
                 if (!string.IsNullOrEmpty(worker.SourceSummary)) node.Nodes.Add(worker.SourceSummary);
                 if (worker.sources.Length > 0)
@@ -705,7 +705,7 @@ namespace GenericScenarioEvaluation
                 siteTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
                 el.accessed = true;
                 string test = "Sites";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView1.Nodes[el.ESD_GS_Name].Nodes[test] : treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
                 if (!string.IsNullOrEmpty(site.Type)) node.Nodes.Add(site.Type);
                 if (!string.IsNullOrEmpty(site.SourceSummary)) node.Nodes.Add(site.SourceSummary);
                 if (site.sources.Length > 0)
@@ -741,7 +741,7 @@ namespace GenericScenarioEvaluation
                 ppeTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
                 el.accessed = true;
                 string test = "PPE";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView1.Nodes[el.ESD_GS_Name].Nodes[test] : treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
                 if (!string.IsNullOrEmpty(pp.Type)) node.Nodes.Add(pp.Type);
                 if (!string.IsNullOrEmpty(pp.SourceSummary)) node.Nodes.Add(pp.SourceSummary);
                 if (pp.sources.Length > 0)
@@ -779,7 +779,7 @@ namespace GenericScenarioEvaluation
                 productionRateTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.SourceSummary });
                 el.accessed = true;
                 string test = "Production Rate";
-                TreeNode node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView1.Nodes[el.ESD_GS_Name].Nodes[test] : treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
                 if (!string.IsNullOrEmpty(pp.Type)) node.Nodes.Add(pp.Type);
                 if (!string.IsNullOrEmpty(pp.SourceSummary)) node.Nodes.Add(pp.SourceSummary);
                 if (pp.sources.Length > 0)
@@ -813,20 +813,8 @@ namespace GenericScenarioEvaluation
                 if (!uniqueDataElements.Contains(el.ElementName)) uniqueDataElements.Add(el.ElementName);
                 if (!uniqueDataSubElements.Contains(el.Type)) uniqueDataSubElements.Add(el.Type);
                 parameterTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Type, el.Type2, el.SourceSummary });
-                TreeNode node = null;
-                if (treeView1.Nodes.ContainsKey(el.ESD_GS_Name))
-                    node = treeView1.Nodes[el.ESD_GS_Name];
-                else
-                    node = treeView1.Nodes.Add(el.ESD_GS_Name, el.ESD_GS_Name);
-                if (node.Nodes.ContainsKey(el.ElementName))
-                    node = node.Nodes[el.ElementName];
-                else
-                    node = node.Nodes.Add(el.ElementName, el.ElementName);
-                if (!string.IsNullOrEmpty(el.Type)) node = node.Nodes.Add(el.Type, el.Type);
-                if (!string.IsNullOrEmpty(el.Type2)) node = node.Nodes.Add(el.Type2);
-                node.Nodes.Add(el.SourceSummary);
                 string test = "Data Values";
-                node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView1.Nodes[el.ESD_GS_Name].Nodes[test] : treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
                 if (node.Nodes.ContainsKey(el.ElementName))
                     node = node.Nodes[el.ElementName];
                 else
@@ -868,17 +856,8 @@ namespace GenericScenarioEvaluation
                 if (!uniqueDataElements.Contains(el.ElementName)) uniqueDataElements.Add(el.ElementName);
                 if (!uniqueDataSubElements.Contains(el.Type)) uniqueDataSubElements.Add(el.Type);
                 remainingDataTable.Rows.Add(new string[] { el.Element, el.ESD_GS_Name, el.ElementName, el.Activity_Source, el.mediaOfRelease, el.SourceSummary });
-                TreeNode node = treeView1.Nodes[el.ESD_GS_Name];
-                if (node == null)
-                    node = treeView1.Nodes.Add(el.ESD_GS_Name, el.ESD_GS_Name);
-                if (node.Nodes.ContainsKey(el.ElementName))
-                    node = node.Nodes[el.ElementName];
-                else
-                    node = node.Nodes.Add(el.ElementName, el.ElementName);
-                if (!string.IsNullOrEmpty(el.Type)) node.Nodes.Add(el.Type);
-                node.Nodes.Add(el.SourceSummary);
                 string test = "Data Values";
-                node = treeView2.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView2.Nodes[el.ESD_GS_Name].Nodes[test] : treeView2.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
+                TreeNode node = treeView1.Nodes[el.ESD_GS_Name].Nodes.ContainsKey(test) ? treeView1.Nodes[el.ESD_GS_Name].Nodes[test] : treeView1.Nodes[el.ESD_GS_Name].Nodes.Add(test, test);
                 if (node.Nodes.ContainsKey(el.ElementName))
                     node = node.Nodes[el.ElementName];
                 else
@@ -961,51 +940,164 @@ namespace GenericScenarioEvaluation
             this.occExposureSummaryTable.Rows.Add(new string[] { "Not Specified", occExpNotCategorized.ChemicalOrVapor.ToString(), occExpNotCategorized.ParticulateInhalation.ToString(), occExpNotCategorized.InhalationNotSpecified.ToString(), occExpNotCategorized.TotalInhalation.ToString(),
                 occExpNotCategorized.DermalLiquid.ToString(), occExpNotCategorized.DermalSolid.ToString(), occExpNotCategorized.DermalNotCategorized.ToString(), occExpNotCategorized.TotalDermal.ToString()});
 
+            string output = "Activity\tExposure Type\tModel\tGeneric Scenario\tActitivy Source\tReference" + System.Environment.NewLine;
+            foreach (OccupationalExposure occ in cleaningOccExp)
+            {
+                output = output + "Cleaning\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+            }
+            foreach (OccupationalExposure occ in dumpingOccExp)
+            {
+                output = output + "Dumping\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+            }
+            foreach (OccupationalExposure occ in dryingOccExp)
+            {
+                output = output + "Drying\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+            }
+            foreach (OccupationalExposure occ in evaporatingOccExp)
+            {
+                output = output + "Evaporating\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+            }
+            foreach (OccupationalExposure occ in fugitiveOccExp)
+            {
+                output = output + "Fugitive\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+            }
+            foreach (OccupationalExposure occ in disposalOccExp)
+            {
+                output = output + "Disposal\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+            }
+            foreach (OccupationalExposure occ in residualOccExp)
+            {
+                output = output + "Residual\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+            }
+            foreach (OccupationalExposure occ in particulateOccExp)
+            {
+                output = output + "Particulate\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+            }
+            foreach (OccupationalExposure occ in samplingOccExp)
+            {
+                output = output + "Sampling\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+            }
+            foreach (OccupationalExposure occ in loadingOccExp)
+            {
+                output = output + "Loading\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+            }
+            foreach (OccupationalExposure occ in spentOccExp)
+            {
+                output = output + "Spent Materials\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+            }
+            foreach (OccupationalExposure occ in processOccExp)
+            {
+                output = output + "Process\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+            }
+            foreach (OccupationalExposure occ in occExpNotCategorized)
+            {
+                output = output + "Not Specified\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+            }
+            System.IO.File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\exposures.txt", output);
 
 
-            string output = "Activity\tChemical Vapor Inhalation\tParticulate Inhalation\tInhalation NotSpecified\tTotal Inhalation\tLiquid Dermal\tSolid Dermal\tDermal Not Categorized\tTotal Dermal\t";
-            output = output + "Release to Air\tReleases to Land\tReleases To Water\tRelease Not Specified\tTotal Releases\n";
-            output = output + "Cleaning \t" + cleaningOccExp.ChemicalOrVapor + "\t" + cleaningOccExp.ParticulateInhalation + "\t" + cleaningOccExp.InhalationNotSpecified + "\t" + cleaningOccExp.TotalInhalation
-                + "\t" + cleaningOccExp.DermalLiquid + "\t" + cleaningOccExp.DermalSolid + "\t" + cleaningOccExp.DermalNotCategorized + "\t" + cleaningOccExp.TotalDermal + "\t" + cleaningReleases.ToAir
-                + "\t" + cleaningReleases.ToLand + "\t" + cleaningReleases.ToWater + "\t" + cleaningReleases.NotSpecified + "\t" + cleaningReleases.Count + "\n";
-            output = output + "Dumping \t" + dumpingOccExp.ChemicalOrVapor + "\t" + dumpingOccExp.ParticulateInhalation + "\t" + dumpingOccExp.InhalationNotSpecified + "\t" + +dumpingOccExp.TotalInhalation
-                + "\t" + dumpingOccExp.DermalLiquid + "\t" + dumpingOccExp.DermalSolid + "\t" + dumpingOccExp.DermalNotCategorized + "\t" + dumpingOccExp.TotalDermal + "\t" + dumpingReleases.ToAir
-                + "\t" + dumpingReleases.ToLand + "\t" + dumpingReleases.ToWater + "\t" + dumpingReleases.NotSpecified + "\t" + dumpingReleases.Count + "\n";
-            output = output + "Drying \t" + dryingOccExp.ChemicalOrVapor + "\t" + dryingOccExp.ParticulateInhalation + "\t" + dryingOccExp.InhalationNotSpecified + "\t" + +dryingOccExp.TotalInhalation
-                + "\t" + dryingOccExp.DermalLiquid + "\t" + dryingOccExp.DermalSolid + "\t" + dryingOccExp.DermalNotCategorized + "\t" + dryingOccExp.TotalDermal + "\t" + dryingReleases.ToAir
-                + "\t" + dryingReleases.ToLand + "\t" + dryingReleases.ToWater + "\t" + dryingReleases.NotSpecified + "\t" + dryingReleases.Count + "\n";
-            output = output + "Evaporating \t" + evaporatingOccExp.ChemicalOrVapor + "\t" + evaporatingOccExp.ParticulateInhalation + "\t" + evaporatingOccExp.InhalationNotSpecified + "\t" + evaporatingOccExp.TotalInhalation
-                + "\t" + evaporatingOccExp.DermalLiquid + "\t" + evaporatingOccExp.DermalSolid + "\t" + evaporatingOccExp.DermalNotCategorized + "\t" + evaporatingOccExp.TotalDermal + "\t" + evaporatingReleases.ToAir
-                + "\t" + evaporatingReleases.ToLand + "\t" + evaporatingReleases.ToWater + "\t" + evaporatingReleases.NotSpecified + "\t" + evaporatingReleases.Count + "\n";
-            output = output + "Fugitive \t" + fugitiveOccExp.ChemicalOrVapor + "\t" + fugitiveOccExp.ParticulateInhalation + "\t" + fugitiveOccExp.InhalationNotSpecified + "\t" + fugitiveOccExp.TotalInhalation
-                + "\t" + fugitiveOccExp.DermalLiquid + "\t" + fugitiveOccExp.DermalSolid + "\t" + fugitiveOccExp.DermalNotCategorized + "\t" + fugitiveOccExp.TotalDermal + "\t" + fugitiveReleases.ToAir
-                + "\t" + fugitiveReleases.ToLand + "\t" + fugitiveReleases.ToWater + "\t" + fugitiveReleases.NotSpecified + "\t" + fugitiveReleases.Count + "\n";
-            output = output + "Disposal \t" + disposalOccExp.ChemicalOrVapor + "\t" + disposalOccExp.ParticulateInhalation + "\t" + disposalOccExp.InhalationNotSpecified + "\t" + disposalOccExp.TotalInhalation
-                + "\t" + disposalOccExp.DermalLiquid + "\t" + disposalOccExp.DermalSolid + "\t" + disposalOccExp.DermalNotCategorized + "\t" + disposalOccExp.TotalDermal + "\t" + disposalReleases.ToAir
-                + "\t" + disposalReleases.ToLand + "\t" + disposalReleases.ToWater + "\t" + disposalReleases.NotSpecified + "\t" + disposalReleases.Count + "\n";
-            output = output + "Residual \t" + residualOccExp.ChemicalOrVapor + "\t" + residualOccExp.ParticulateInhalation + "\t" + residualOccExp.InhalationNotSpecified + "\t" + residualOccExp.TotalInhalation
-                + "\t" + residualOccExp.DermalLiquid + "\t" + residualOccExp.DermalSolid + "\t" + residualOccExp.DermalNotCategorized + "\t" + residualOccExp.TotalDermal + "\t" + residualReleases.ToAir
-                + "\t" + residualReleases.ToLand + "\t" + residualReleases.ToWater + "\t" + residualReleases.NotSpecified + "\t" + residualReleases.Count + "\n";
-            output = output + "Particulate \t" + particulateOccExp.ChemicalOrVapor + "\t" + particulateOccExp.ParticulateInhalation + "\t" + particulateOccExp.InhalationNotSpecified + "\t" + particulateOccExp.TotalInhalation
-                + "\t" + particulateOccExp.DermalLiquid + "\t" + particulateOccExp.DermalSolid + "\t" + particulateOccExp.DermalNotCategorized + "\t" + particulateOccExp.TotalDermal + "\t" + particulateReleases.ToAir
-                + "\t" + particulateReleases.ToLand + "\t" + particulateReleases.ToWater + "\t" + particulateReleases.NotSpecified + "\t" + particulateReleases.Count + "\n";
-            output = output + "Sampling \t" + samplingOccExp.ChemicalOrVapor + "\t" + samplingOccExp.ParticulateInhalation + "\t" + samplingOccExp.InhalationNotSpecified + "\t" + samplingOccExp.TotalInhalation
-                + "\t" + samplingOccExp.DermalLiquid + "\t" + samplingOccExp.DermalSolid + "\t" + samplingOccExp.DermalNotCategorized + "\t" + samplingOccExp.TotalDermal + "\t" + samplingReleases.ToAir
-                + "\t" + samplingReleases.ToLand + "\t" + samplingReleases.ToWater + "\t" + samplingReleases.NotSpecified + "\t" + samplingReleases.Count + "\n";
-            output = output + "Loading \t" + loadingOccExp.ChemicalOrVapor + "\t" + loadingOccExp.ParticulateInhalation + "\t" + loadingOccExp.InhalationNotSpecified + "\t" + loadingOccExp.TotalInhalation
-                + "\t" + loadingOccExp.DermalLiquid + "\t" + loadingOccExp.DermalSolid + "\t" + loadingOccExp.DermalNotCategorized + "\t" + loadingOccExp.TotalDermal + "\t" + loadingReleases.ToAir
-                + "\t" + loadingReleases.ToLand + "\t" + loadingReleases.ToWater + "\t" + loadingReleases.NotSpecified + "\t" + loadingReleases.Count + "\n";
-            output = output + "Spent Materials \t" + spentOccExp.ChemicalOrVapor + "\t" + spentOccExp.ParticulateInhalation + "\t" + spentOccExp.InhalationNotSpecified + "\t" + spentOccExp.TotalInhalation
-                + "\t" + spentOccExp.DermalLiquid + "\t" + spentOccExp.DermalSolid + "\t" + spentOccExp.DermalNotCategorized + "\t" + spentOccExp.TotalDermal + "\t" + spentReleases.ToAir
-                + "\t" + spentReleases.ToLand + "\t" + spentReleases.ToWater + "\t" + spentReleases.NotSpecified + "\t" + spentReleases.Count + "\n";
-            output = output + "Process \t" + processOccExp.ChemicalOrVapor + "\t" + processOccExp.ParticulateInhalation + "\t" + processOccExp.InhalationNotSpecified + "\t" + processOccExp.TotalInhalation
-                + "\t" + processOccExp.DermalLiquid + "\t" + processOccExp.DermalSolid + "\t" + processOccExp.DermalNotCategorized + "\t" + processOccExp.TotalDermal + "\t" + processReleases.ToAir
-                + "\t" + processReleases.ToLand + "\t" + processReleases.ToWater + "\t" + processReleases.NotSpecified + "\t" + cleaningReleases.Count + "\n";
-            output = output + "Not Categorized \t" + occExpNotCategorized.ChemicalOrVapor + "\t" + occExpNotCategorized.ParticulateInhalation + "\t" + occExpNotCategorized.InhalationNotSpecified + "\t" + occExpNotCategorized.TotalInhalation
-                + "\t" + occExpNotCategorized.DermalLiquid + "\t" + occExpNotCategorized.DermalSolid + "\t" + occExpNotCategorized.DermalNotCategorized + "\t" + occExpNotCategorized.TotalDermal + "\t" + releaseNotCategorized.ToAir + "\t" + releaseNotCategorized.ToLand
-                + "\t" + releaseNotCategorized.ToWater + "\t" + releaseNotCategorized.NotSpecified + "\t" + releaseNotCategorized.Count + "\n";
-            System.IO.File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\table.txt", output);
-            ExportDataSet(scenarios, genScenarios, Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\GenericScenarioOutputs.xlsx");
+            output = "Activity\tMedia of Release\tModel\tGeneric Scenario\tActitivy Source\tReference" + System.Environment.NewLine;
+            foreach (EnvironmentalRelease env in cleaningReleases)
+            {
+                output = output + "Cleaning\t" + env.MediaOfRelease + "\t" + env.SourceSummary + "\t" + env.ScenarioName + "\t" + env.ActivitySource + env.ActivitySource + "\t" + (env.sources.Length > 0 ? env.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
+            }
+            foreach (EnvironmentalRelease env in dumpingReleases)
+            {
+                output = output + "Dumping\t" + env.MediaOfRelease + "\t" + env.SourceSummary + "\t" + env.ScenarioName + "\t" + env.ActivitySource + "\t" + (env.sources.Length > 0 ? env.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
+            }
+            foreach (EnvironmentalRelease env in dryingReleases)
+            {
+                output = output + "Cleaning\t" + env.MediaOfRelease + "\t" + env.SourceSummary + "\t" + env.ScenarioName + "\t" + env.ActivitySource + "\t" + (env.sources.Length > 0 ? env.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
+            }
+            foreach (EnvironmentalRelease env in evaporatingReleases)
+            {
+                output = output + "Evaporating\t" + env.MediaOfRelease + "\t" + env.SourceSummary + "\t" + env.ScenarioName + "\t" + env.ActivitySource + "\t" + (env.sources.Length > 0 ? env.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
+            }
+            foreach (EnvironmentalRelease env in fugitiveReleases)
+            {
+                output = output + "Fugitive\t" + env.MediaOfRelease + "\t" + env.SourceSummary + "\t" + env.ScenarioName + "\t" + env.ActivitySource + "\t" + (env.sources.Length > 0 ? env.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
+            }
+            foreach (EnvironmentalRelease env in disposalReleases)
+            {
+                output = output + "Disposal\t" + env.MediaOfRelease + "\t" + env.SourceSummary + "\t" + env.ScenarioName + "\t" + env.ActivitySource + "\t" + (env.sources.Length > 0 ? env.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
+            }
+            foreach (EnvironmentalRelease env in residualReleases)
+            {
+                output = output + "Residual\t" + env.MediaOfRelease + "\t" + env.SourceSummary + "\t" + env.ScenarioName + "\t" + env.ActivitySource + "\t" + (env.sources.Length > 0 ? env.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
+            }
+            foreach (EnvironmentalRelease env in particulateReleases)
+            {
+                output = output + "Particulate\t" + env.MediaOfRelease + "\t" + env.SourceSummary + "\t" + env.ScenarioName + "\t" + env.ActivitySource + "\t" + (env.sources.Length > 0 ? env.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
+            }
+            foreach (EnvironmentalRelease env in samplingReleases)
+            {
+                output = output + "Sampling\t" + env.MediaOfRelease + "\t" + env.SourceSummary + "\t" + env.ScenarioName + "\t" + env.ActivitySource + "\t" + (env.sources.Length > 0 ? env.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
+            }
+            foreach (EnvironmentalRelease env in loadingReleases)
+            {
+                output = output + "Loading\t" + env.MediaOfRelease + "\t" + env.SourceSummary + "\t" + env.ScenarioName + "\t" + env.ActivitySource + "\t" + (env.sources.Length > 0 ? env.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
+            }
+            foreach (EnvironmentalRelease env in spentReleases)
+            {
+                output = output + "Spent Materials\t" + env.MediaOfRelease + "\t" + env.SourceSummary + "\t" + env.ScenarioName + "\t" + env.ActivitySource + "\t" + (env.sources.Length > 0 ? env.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
+            }
+            foreach (EnvironmentalRelease env in processReleases)
+            {
+                output = output + "Process\t" + env.MediaOfRelease + "\t" + env.SourceSummary + "\t" + env.ScenarioName + "\t" + env.ActivitySource + "\t" + (env.sources.Length > 0 ? env.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
+            }
+            foreach (EnvironmentalRelease env in releaseNotCategorized)
+            {
+                output = output + "Not Specified\t" + env.MediaOfRelease + "\t" + env.SourceSummary + "\t" + env.ScenarioName + "\t" + env.ActivitySource + "\t" + (env.sources.Length > 0 ? env.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
+            }
+            System.IO.File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\releases.txt", output);
+
+            //string output = "Activity\tChemical Vapor Inhalation\tParticulate Inhalation\tInhalation NotSpecified\tTotal Inhalation\tLiquid Dermal\tSolid Dermal\tDermal Not Categorized\tTotal Dermal\t";
+            //output = output + "Release to Air\tReleases to Land\tReleases To Water\tRelease Not Specified\tTotal Releases\n";
+            //output = output + "Cleaning \t" + cleaningOccExp.ChemicalOrVapor + "\t" + cleaningOccExp.ParticulateInhalation + "\t" + cleaningOccExp.InhalationNotSpecified + "\t" + cleaningOccExp.TotalInhalation
+            //    + "\t" + cleaningOccExp.DermalLiquid + "\t" + cleaningOccExp.DermalSolid + "\t" + cleaningOccExp.DermalNotCategorized + "\t" + cleaningOccExp.TotalDermal + "\t" + cleaningReleases.ToAir
+            //    + "\t" + cleaningReleases.ToLand + "\t" + cleaningReleases.ToWater + "\t" + cleaningReleases.NotSpecified + "\t" + cleaningReleases.Count + "\n";
+            //output = output + "Dumping \t" + dumpingOccExp.ChemicalOrVapor + "\t" + dumpingOccExp.ParticulateInhalation + "\t" + dumpingOccExp.InhalationNotSpecified + "\t" + +dumpingOccExp.TotalInhalation
+            //    + "\t" + dumpingOccExp.DermalLiquid + "\t" + dumpingOccExp.DermalSolid + "\t" + dumpingOccExp.DermalNotCategorized + "\t" + dumpingOccExp.TotalDermal + "\t" + dumpingReleases.ToAir
+            //    + "\t" + dumpingReleases.ToLand + "\t" + dumpingReleases.ToWater + "\t" + dumpingReleases.NotSpecified + "\t" + dumpingReleases.Count + "\n";
+            //output = output + "Drying \t" + dryingOccExp.ChemicalOrVapor + "\t" + dryingOccExp.ParticulateInhalation + "\t" + dryingOccExp.InhalationNotSpecified + "\t" + +dryingOccExp.TotalInhalation
+            //    + "\t" + dryingOccExp.DermalLiquid + "\t" + dryingOccExp.DermalSolid + "\t" + dryingOccExp.DermalNotCategorized + "\t" + dryingOccExp.TotalDermal + "\t" + dryingReleases.ToAir
+            //    + "\t" + dryingReleases.ToLand + "\t" + dryingReleases.ToWater + "\t" + dryingReleases.NotSpecified + "\t" + dryingReleases.Count + "\n";
+            //output = output + "Evaporating \t" + evaporatingOccExp.ChemicalOrVapor + "\t" + evaporatingOccExp.ParticulateInhalation + "\t" + evaporatingOccExp.InhalationNotSpecified + "\t" + evaporatingOccExp.TotalInhalation
+            //    + "\t" + evaporatingOccExp.DermalLiquid + "\t" + evaporatingOccExp.DermalSolid + "\t" + evaporatingOccExp.DermalNotCategorized + "\t" + evaporatingOccExp.TotalDermal + "\t" + evaporatingReleases.ToAir
+            //    + "\t" + evaporatingReleases.ToLand + "\t" + evaporatingReleases.ToWater + "\t" + evaporatingReleases.NotSpecified + "\t" + evaporatingReleases.Count + "\n";
+            //output = output + "Fugitive \t" + fugitiveOccExp.ChemicalOrVapor + "\t" + fugitiveOccExp.ParticulateInhalation + "\t" + fugitiveOccExp.InhalationNotSpecified + "\t" + fugitiveOccExp.TotalInhalation
+            //    + "\t" + fugitiveOccExp.DermalLiquid + "\t" + fugitiveOccExp.DermalSolid + "\t" + fugitiveOccExp.DermalNotCategorized + "\t" + fugitiveOccExp.TotalDermal + "\t" + fugitiveReleases.ToAir
+            //    + "\t" + fugitiveReleases.ToLand + "\t" + fugitiveReleases.ToWater + "\t" + fugitiveReleases.NotSpecified + "\t" + fugitiveReleases.Count + "\n";
+            //output = output + "Disposal \t" + disposalOccExp.ChemicalOrVapor + "\t" + disposalOccExp.ParticulateInhalation + "\t" + disposalOccExp.InhalationNotSpecified + "\t" + disposalOccExp.TotalInhalation
+            //    + "\t" + disposalOccExp.DermalLiquid + "\t" + disposalOccExp.DermalSolid + "\t" + disposalOccExp.DermalNotCategorized + "\t" + disposalOccExp.TotalDermal + "\t" + disposalReleases.ToAir
+            //    + "\t" + disposalReleases.ToLand + "\t" + disposalReleases.ToWater + "\t" + disposalReleases.NotSpecified + "\t" + disposalReleases.Count + "\n";
+            //output = output + "Residual \t" + residualOccExp.ChemicalOrVapor + "\t" + residualOccExp.ParticulateInhalation + "\t" + residualOccExp.InhalationNotSpecified + "\t" + residualOccExp.TotalInhalation
+            //    + "\t" + residualOccExp.DermalLiquid + "\t" + residualOccExp.DermalSolid + "\t" + residualOccExp.DermalNotCategorized + "\t" + residualOccExp.TotalDermal + "\t" + residualReleases.ToAir
+            //    + "\t" + residualReleases.ToLand + "\t" + residualReleases.ToWater + "\t" + residualReleases.NotSpecified + "\t" + residualReleases.Count + "\n";
+            //output = output + "Particulate \t" + particulateOccExp.ChemicalOrVapor + "\t" + particulateOccExp.ParticulateInhalation + "\t" + particulateOccExp.InhalationNotSpecified + "\t" + particulateOccExp.TotalInhalation
+            //    + "\t" + particulateOccExp.DermalLiquid + "\t" + particulateOccExp.DermalSolid + "\t" + particulateOccExp.DermalNotCategorized + "\t" + particulateOccExp.TotalDermal + "\t" + particulateReleases.ToAir
+            //    + "\t" + particulateReleases.ToLand + "\t" + particulateReleases.ToWater + "\t" + particulateReleases.NotSpecified + "\t" + particulateReleases.Count + "\n";
+            //output = output + "Sampling \t" + samplingOccExp.ChemicalOrVapor + "\t" + samplingOccExp.ParticulateInhalation + "\t" + samplingOccExp.InhalationNotSpecified + "\t" + samplingOccExp.TotalInhalation
+            //    + "\t" + samplingOccExp.DermalLiquid + "\t" + samplingOccExp.DermalSolid + "\t" + samplingOccExp.DermalNotCategorized + "\t" + samplingOccExp.TotalDermal + "\t" + samplingReleases.ToAir
+            //    + "\t" + samplingReleases.ToLand + "\t" + samplingReleases.ToWater + "\t" + samplingReleases.NotSpecified + "\t" + samplingReleases.Count + "\n";
+            //output = output + "Loading \t" + loadingOccExp.ChemicalOrVapor + "\t" + loadingOccExp.ParticulateInhalation + "\t" + loadingOccExp.InhalationNotSpecified + "\t" + loadingOccExp.TotalInhalation
+            //    + "\t" + loadingOccExp.DermalLiquid + "\t" + loadingOccExp.DermalSolid + "\t" + loadingOccExp.DermalNotCategorized + "\t" + loadingOccExp.TotalDermal + "\t" + loadingReleases.ToAir
+            //    + "\t" + loadingReleases.ToLand + "\t" + loadingReleases.ToWater + "\t" + loadingReleases.NotSpecified + "\t" + loadingReleases.Count + "\n";
+            //output = output + "Spent Materials \t" + spentOccExp.ChemicalOrVapor + "\t" + spentOccExp.ParticulateInhalation + "\t" + spentOccExp.InhalationNotSpecified + "\t" + spentOccExp.TotalInhalation
+            //    + "\t" + spentOccExp.DermalLiquid + "\t" + spentOccExp.DermalSolid + "\t" + spentOccExp.DermalNotCategorized + "\t" + spentOccExp.TotalDermal + "\t" + spentReleases.ToAir
+            //    + "\t" + spentReleases.ToLand + "\t" + spentReleases.ToWater + "\t" + spentReleases.NotSpecified + "\t" + spentReleases.Count + "\n";
+            //output = output + "Process \t" + processOccExp.ChemicalOrVapor + "\t" + processOccExp.ParticulateInhalation + "\t" + processOccExp.InhalationNotSpecified + "\t" + processOccExp.TotalInhalation
+            //    + "\t" + processOccExp.DermalLiquid + "\t" + processOccExp.DermalSolid + "\t" + processOccExp.DermalNotCategorized + "\t" + processOccExp.TotalDermal + "\t" + processReleases.ToAir
+            //    + "\t" + processReleases.ToLand + "\t" + processReleases.ToWater + "\t" + processReleases.NotSpecified + "\t" + cleaningReleases.Count + "\n";
+            //output = output + "Not Categorized \t" + occExpNotCategorized.ChemicalOrVapor + "\t" + occExpNotCategorized.ParticulateInhalation + "\t" + occExpNotCategorized.InhalationNotSpecified + "\t" + occExpNotCategorized.TotalInhalation
+            //    + "\t" + occExpNotCategorized.DermalLiquid + "\t" + occExpNotCategorized.DermalSolid + "\t" + occExpNotCategorized.DermalNotCategorized + "\t" + occExpNotCategorized.TotalDermal + "\t" + releaseNotCategorized.ToAir + "\t" + releaseNotCategorized.ToLand
+            //    + "\t" + releaseNotCategorized.ToWater + "\t" + releaseNotCategorized.NotSpecified + "\t" + releaseNotCategorized.Count + "\n";
+            //System.IO.File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\table.txt", output);
+            try
+            {
+                ExportDataSet(scenarios, genScenarios, Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\GenericScenarioOutputs.xlsx");
+            }
+            catch(System.Exception ex) { }
         }
 
         void SetUpDataTables()
@@ -1086,7 +1178,7 @@ namespace GenericScenarioEvaluation
             this.envReleaseTable.Columns.Add("To Air");
             this.envReleaseTable.Columns.Add("To Land");
             this.envReleaseTable.Columns.Add("To Water");
-            this.envReleaseTable.Columns.Add("Recycked or Reused");
+            this.envReleaseTable.Columns.Add("Recycled or Reused");
             this.envReleaseTable.Columns.Add("Not Specified");
             this.envReleaseTable.Columns.Add("Source Summary");
 
