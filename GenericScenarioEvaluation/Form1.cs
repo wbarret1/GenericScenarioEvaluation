@@ -193,6 +193,7 @@ namespace GenericScenarioEvaluation
                        && !myElement.accessed
                        select myElement;
 
+            List<string> occModels = new List<string>();
             foreach (DataElement el in elements)
             {
                 count++;
@@ -207,6 +208,7 @@ namespace GenericScenarioEvaluation
                     mediaOfRelease = el.mediaOfRelease,
                     sourceSummary = el.SourceSummary
                 };
+                if (!occModels.Contains(el.SourceSummary)) occModels.Add(el.SourceSummary);
                 o.GenericScenario = GetScenario(o.ScenarioName);
                 o.GenericScenario.OccupationalExposures.Add(o);
                 o.sources = GetSources(el);
@@ -294,6 +296,7 @@ namespace GenericScenarioEvaluation
                 }
             }
             occupationalExposureDataGridView.DataSource = occExpTable;
+            occModels.Sort();
 
             elements = from myElement in dataElements.AsEnumerable()
                        where (myElement.ElementName.Contains("Environmental Release") ||
@@ -301,6 +304,8 @@ namespace GenericScenarioEvaluation
                        myElement.ElementName.Contains("Total Industry Estimated Process Water Discharge Flow"))
                        && !myElement.accessed
                        select myElement;
+
+            List<string> releaseModel = new List<string>();
 
             foreach (DataElement el in elements)
             {
@@ -316,6 +321,7 @@ namespace GenericScenarioEvaluation
                     MediaOfRelease = el.mediaOfRelease,
                     SourceSummary = el.SourceSummary,
                 };
+                if (!releaseModel.Contains(el.SourceSummary)) releaseModel.Add(el.SourceSummary);
                 er.GenericScenario = GetScenario(el.ESD_GS_Name);
                 er.sources = GetSources(el);
                 er.GenericScenario.EnvironmentalReleases.Add(er);
@@ -408,6 +414,7 @@ namespace GenericScenarioEvaluation
                     foreach (Source s in er.sources) node.Nodes.Add(s.ReferenceText);
                 }
             }
+            releaseModel.Sort();
             environmentalReleaseDataGridView.DataSource = envReleaseTable;
 
             elements = from myElement in dataElements.AsEnumerable()
