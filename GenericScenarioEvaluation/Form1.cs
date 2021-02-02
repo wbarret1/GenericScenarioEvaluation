@@ -13,9 +13,43 @@ using System.Windows.Forms;
 
 namespace GenericScenarioEvaluation
 {
+
+    public class releaseInfo
+    {
+        public releaseInfo(string Scenario, string Activity, string Media, string Summary)
+        {
+            sourceSummary = Summary;
+            scenarioName = Scenario;
+            activity = Activity;
+            media = Media;
+        }
+
+        public string scenarioName { get; }
+        public string activity { get; }
+        public string media { get; }
+        public string sourceSummary { get; }
+    }
+
+    public class exposureInfo
+    {
+        public exposureInfo(string Scenario, string Activity, string Type, string Summary)
+        {
+            sourceSummary = Summary;
+            scenarioName = Scenario;
+            activity = Activity;
+            type = Type;
+        }
+
+        public string scenarioName { get; }
+        public string activity { get; }
+        public string type { get; }
+        public string sourceSummary { get; }
+    }
+
     public partial class Form1 : Form
     {
         DataSet genScenarios = new DataSet();
+        DataSet exposures = new DataSet();
         DataTable elementsAndDataTable = new DataTable();
         DataTable infoTable = new DataTable("GS Details");
         DataTable occExpTable = new DataTable("Occupational Exposure");
@@ -36,6 +70,30 @@ namespace GenericScenarioEvaluation
         DataTable sourceTable = new DataTable("Sources");
         DataTable releaseSummaryTable = new DataTable("Release Summary");
         DataTable occExposureSummaryTable = new DataTable("Occupational Exposure Summary");
+
+        DataSet releases = new DataSet();
+        DataTable releaseTable = new DataTable("Others");
+        DataTable lossFractionReleaseTable = new DataTable("Loss Fraction");
+        DataTable throughputReleaseTable = new DataTable("Throughput");
+        DataTable ap42ReleaseTable = new DataTable("AP-42");
+        DataTable pmnReleaseTable = new DataTable("PMN");
+        DataTable opptReleaseTable = new DataTable("OPPT Models");
+        DataTable asssumedReleaseTable = new DataTable("Assumed Releases");
+        DataTable calculatedReleaseTable = new DataTable("Calculated");
+        DataTable agencyReleaseTable = new DataTable("Agency Model");
+        DataTable industryReleaseTable = new DataTable("Industry");
+
+        DataSet exposureData = new DataSet();
+        DataTable exposureTable = new DataTable("Others");
+        DataTable nioshOshaTable = new DataTable("NIOSH-OSHA");
+        //DataTable throughputReleaseTable = new DataTable("Throughput");
+        //DataTable ap42ReleaseTable = new DataTable("AP-42");
+        DataTable pmnExposureTable = new DataTable("PMN");
+        DataTable opptExposureTable = new DataTable("OPPT Models");
+        DataTable asssumedExpsoureTable = new DataTable("Assumed Releases");
+        DataTable calculatedExposureTable = new DataTable("Calculated");
+        DataTable agencyExpsoureTable = new DataTable("Agency Model");
+        DataTable industryExpsoureTable = new DataTable("Industry");
 
         List<DataElement> dataElements = new List<DataElement>();
         List<Source> sources = new List<Source>();
@@ -124,6 +182,12 @@ namespace GenericScenarioEvaluation
             "Industry Code or Description",
             "Industry Code Type"
         };
+        string[] releaseInfoColumns = new string[]{
+            "ESD/GS Name",
+            "Activity",
+            "Model",
+            "Media",
+        };
         GenericScenario[] scenarios;
 
         public Form1()
@@ -208,6 +272,108 @@ namespace GenericScenarioEvaluation
                     mediaOfRelease = el.mediaOfRelease,
                     sourceSummary = el.SourceSummary
                 };
+                exposureInfo ri = new exposureInfo(el.ESD_GS_Name, el.Activity_Source, el.ExposureType, el.SourceSummary);
+
+                if (el.SourceSummary.ToLower().Contains("niosh") || el.SourceSummary.ToLower().Contains("osha"))
+                {
+                    //lossFractionReleaseModel.Add(ri);
+                    DataRow row = nioshOshaTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Type"] = el.ExposureType;
+                    row["Summary"] = el.SourceSummary;
+                    nioshOshaTable.Rows.Add(row);
+                }
+                //else if (el.SourceSummary.ToLower().Contains("throughput") || el.SourceSummary.ToLower().Contains("production volume") || el.SourceSummary.ToLower().Contains("pv"))
+                //{
+                //    //throughputReleaseModel.Add(ri);
+                //    DataRow row = throughputReleaseTable.NewRow();
+                //    row["Generic Scenario"] = el.ESD_GS_Name;
+                //    row["Activity"] = el.Activity_Source;
+                //    row["Type"] = el.TypeOfRelease;
+                //    row["Summary"] = el.SourceSummary;
+                //    throughputReleaseTable.Rows.Add(row);
+                //}
+                else if (el.SourceSummary.ToLower().Contains("pmn"))
+                {
+                    //pmnReleaseModel.Add(ri);
+                    DataRow row = pmnExposureTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Type"] = el.ExposureType;
+                    row["Summary"] = el.SourceSummary;
+                    pmnExposureTable.Rows.Add(row);
+                }
+                else if (el.SourceSummary.ToLower().Contains("tec") || el.SourceSummary.ToLower().Contains("industry"))
+                {
+                    //industryExpsoureTable.Add(ri);
+                    DataRow row = industryExpsoureTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Type"] = el.ExposureType;
+                    row["Summary"] = el.SourceSummary;
+                    industryExpsoureTable.Rows.Add(row);
+                }
+                //else if (el.SourceSummary.ToLower().Contains("ap") && el.SourceSummary.ToLower().Contains("42"))
+                //{
+                //    ap42ReleaseModel.Add(ri);
+                //    DataRow row = ap42ReleaseTable.NewRow();
+                //    row["Generic Scenario"] = el.ESD_GS_Name;
+                //    row["Activity"] = el.Activity_Source;
+                //    row["Type"] = el.ExposureType;
+                //    row["Summary"] = el.SourceSummary;
+                //    ap42ReleaseTable.Rows.Add(row);
+                //}
+                else if (el.SourceSummary.ToLower().Contains("oppt") || el.SourceSummary.ToLower().Contains("ceb"))
+                {
+                    //opptReleaseModel.Add(ri);
+                    DataRow row = opptExposureTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Type"] = el.ExposureType;
+                    row["Summary"] = el.SourceSummary;
+                    opptExposureTable.Rows.Add(row);
+                }
+                else if (el.SourceSummary.ToLower().Contains("epa") || el.SourceSummary.ToLower().Contains("eu") || el.SourceSummary.ToLower().Contains("oecd") || el.SourceSummary.ToLower().Contains("environment canada"))
+                {
+                    //agencyReleaseModel.Add(ri);
+                    DataRow row = agencyExpsoureTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Type"] = el.ExposureType;
+                    row["Summary"] = el.SourceSummary;
+                    agencyExpsoureTable.Rows.Add(row);
+                }
+                else if (el.SourceSummary.ToLower().Contains("calcul"))
+                {
+                    //calculatedRelease.Add(ri);
+                    DataRow row = calculatedExposureTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Type"] = el.ExposureType;
+                    row["Summary"] = el.SourceSummary;
+                    calculatedExposureTable.Rows.Add(row);
+                }
+                else if (el.SourceSummary.ToLower().Contains("assum"))
+                {
+                    //asssumedExpsoureTable.Add(ri);
+                    DataRow row = asssumedExpsoureTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Type"] = el.ExposureType;
+                    row["Summary"] = el.SourceSummary;
+                    asssumedExpsoureTable.Rows.Add(row);
+                }
+                else
+                {
+                    //releaseModel.Add(ri);
+                    DataRow row = exposureTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Type"] = el.ExposureType;
+                    row["Summary"] = el.SourceSummary;
+                    exposureTable.Rows.Add(row);
+                }
                 if (!occModels.Contains(el.SourceSummary)) occModels.Add(el.SourceSummary);
                 o.GenericScenario = GetScenario(o.ScenarioName);
                 o.GenericScenario.OccupationalExposures.Add(o);
@@ -305,7 +471,16 @@ namespace GenericScenarioEvaluation
                        && !myElement.accessed
                        select myElement;
 
-            List<string> releaseModel = new List<string>();
+            List<releaseInfo> releaseModel = new List<releaseInfo>();
+            List<releaseInfo> lossFractionReleaseModel = new List<releaseInfo>();
+            List<releaseInfo> throughputReleaseModel = new List<releaseInfo>();
+            List<releaseInfo> ap42ReleaseModel = new List<releaseInfo>();
+            List<releaseInfo> pmnReleaseModel = new List<releaseInfo>();
+            List<releaseInfo> opptReleaseModel = new List<releaseInfo>();
+            List<releaseInfo> asssumedReleaseModel = new List<releaseInfo>();
+            List<releaseInfo> calculatedRelease = new List<releaseInfo>();
+            List<releaseInfo> agencyReleaseModel = new List<releaseInfo>();
+            List<releaseInfo> industryReleaseModel = new List<releaseInfo>();
 
             foreach (DataElement el in elements)
             {
@@ -321,7 +496,108 @@ namespace GenericScenarioEvaluation
                     MediaOfRelease = el.mediaOfRelease,
                     SourceSummary = el.SourceSummary,
                 };
-                if (!releaseModel.Contains(el.SourceSummary)) releaseModel.Add(el.SourceSummary);
+                releaseInfo ri = new releaseInfo(el.ESD_GS_Name, el.Activity_Source, el.mediaOfRelease, el.SourceSummary);
+
+                if (el.SourceSummary.ToLower().Contains("pmn"))
+                {
+                    pmnReleaseModel.Add(ri);
+                    DataRow row = pmnReleaseTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Media"] = el.mediaOfRelease;
+                    row["Summary"] = el.SourceSummary;
+                    pmnReleaseTable.Rows.Add(row);
+                }
+                else if (el.SourceSummary.ToLower().Contains("ilma") || el.SourceSummary.ToLower().Contains("semiconductor") || el.SourceSummary.ToLower().Contains("industry"))
+                {
+                    industryReleaseModel.Add(ri);
+                    DataRow row = industryReleaseTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Media"] = el.mediaOfRelease;
+                    row["Summary"] = el.SourceSummary;
+                    industryReleaseTable.Rows.Add(row);
+                }
+                else if (el.SourceSummary.ToLower().Contains("ap") && el.SourceSummary.ToLower().Contains("42"))
+                {
+                    ap42ReleaseModel.Add(ri);
+                    DataRow row = ap42ReleaseTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Media"] = el.mediaOfRelease;
+                    row["Summary"] = el.SourceSummary;
+                    ap42ReleaseTable.Rows.Add(row);
+                }
+                else if (el.SourceSummary.ToLower().Contains("oppt") || (el.SourceSummary.ToLower().Contains("ceb")) && !(el.SourceSummary.ToLower().Contains("loss fraction")))
+                {
+                    opptReleaseModel.Add(ri);
+                    DataRow row = opptReleaseTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Media"] = el.mediaOfRelease;
+                    row["Summary"] = el.SourceSummary;
+                    opptReleaseTable.Rows.Add(row);
+                }
+                else if (el.SourceSummary.ToLower().Contains("epa") || el.SourceSummary.ToLower().Contains("neshap") || el.SourceSummary.ToLower().Contains("eu") || el.SourceSummary.ToLower().Contains("oecd") || el.SourceSummary.ToLower().Contains("environment canada"))
+                {
+                    agencyReleaseModel.Add(ri);
+                    DataRow row = agencyReleaseTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Media"] = el.mediaOfRelease;
+                    row["Summary"] = el.SourceSummary;
+                    agencyReleaseTable.Rows.Add(row);
+                }
+                else if (el.SourceSummary.ToLower().Contains("loss") || el.SourceSummary.ToLower().Contains("fraction"))
+                {
+                    lossFractionReleaseModel.Add(ri);
+                    DataRow row = lossFractionReleaseTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Media"] = el.mediaOfRelease;
+                    row["Summary"] = el.SourceSummary;
+                    lossFractionReleaseTable.Rows.Add(row);
+                }
+                else if (el.SourceSummary.ToLower().Contains("throughput") || el.SourceSummary.ToLower().Contains("production volume") || el.SourceSummary.ToLower().Contains("pv"))
+                {
+                    throughputReleaseModel.Add(ri);
+                    DataRow row = throughputReleaseTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Media"] = el.mediaOfRelease;
+                    row["Summary"] = el.SourceSummary;
+                    throughputReleaseTable.Rows.Add(row);
+                }
+                else if (el.SourceSummary.ToLower().Contains("calcul"))
+                {
+                    calculatedRelease.Add(ri);
+                    DataRow row = calculatedReleaseTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Media"] = el.mediaOfRelease;
+                    row["Summary"] = el.SourceSummary;
+                    calculatedReleaseTable.Rows.Add(row);
+                }
+                else if (el.SourceSummary.ToLower().Contains("assum"))
+                {
+                    asssumedReleaseModel.Add(ri);
+                    DataRow row = asssumedReleaseTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Media"] = el.mediaOfRelease;
+                    row["Summary"] = el.SourceSummary;
+                    asssumedReleaseTable.Rows.Add(row);
+                }
+                else
+                {
+                    releaseModel.Add(ri);
+                    DataRow row = releaseTable.NewRow();
+                    row["Generic Scenario"] = el.ESD_GS_Name;
+                    row["Activity"] = el.Activity_Source;
+                    row["Media"] = el.mediaOfRelease;
+                    row["Summary"] = el.SourceSummary;
+                    releaseTable.Rows.Add(row);
+                }
                 er.GenericScenario = GetScenario(el.ESD_GS_Name);
                 er.sources = GetSources(el);
                 er.GenericScenario.EnvironmentalReleases.Add(er);
@@ -414,7 +690,6 @@ namespace GenericScenarioEvaluation
                     foreach (Source s in er.sources) node.Nodes.Add(s.ReferenceText);
                 }
             }
-            releaseModel.Sort();
             environmentalReleaseDataGridView.DataSource = envReleaseTable;
 
             elements = from myElement in dataElements.AsEnumerable()
@@ -950,55 +1225,55 @@ namespace GenericScenarioEvaluation
             string output = "Activity\tExposure Type\tModel\tGeneric Scenario\tActitivy Source\tReference" + System.Environment.NewLine;
             foreach (OccupationalExposure occ in cleaningOccExp)
             {
-                output = output + "Cleaning\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+                output = output + "Cleaning\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0 ? occ.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
             }
             foreach (OccupationalExposure occ in dumpingOccExp)
             {
-                output = output + "Dumping\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+                output = output + "Dumping\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0 ? occ.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
             }
             foreach (OccupationalExposure occ in dryingOccExp)
             {
-                output = output + "Drying\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+                output = output + "Drying\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0 ? occ.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
             }
             foreach (OccupationalExposure occ in evaporatingOccExp)
             {
-                output = output + "Evaporating\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+                output = output + "Evaporating\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0 ? occ.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
             }
             foreach (OccupationalExposure occ in fugitiveOccExp)
             {
-                output = output + "Fugitive\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+                output = output + "Fugitive\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0 ? occ.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
             }
             foreach (OccupationalExposure occ in disposalOccExp)
             {
-                output = output + "Disposal\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+                output = output + "Disposal\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0 ? occ.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
             }
             foreach (OccupationalExposure occ in residualOccExp)
             {
-                output = output + "Residual\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+                output = output + "Residual\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0 ? occ.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
             }
             foreach (OccupationalExposure occ in particulateOccExp)
             {
-                output = output + "Particulate\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+                output = output + "Particulate\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0 ? occ.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
             }
             foreach (OccupationalExposure occ in samplingOccExp)
             {
-                output = output + "Sampling\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+                output = output + "Sampling\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0 ? occ.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
             }
             foreach (OccupationalExposure occ in loadingOccExp)
             {
-                output = output + "Loading\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+                output = output + "Loading\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0 ? occ.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
             }
             foreach (OccupationalExposure occ in spentOccExp)
             {
-                output = output + "Spent Materials\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+                output = output + "Spent Materials\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0 ? occ.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
             }
             foreach (OccupationalExposure occ in processOccExp)
             {
-                output = output + "Process\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+                output = output + "Process\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0 ? occ.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
             }
             foreach (OccupationalExposure occ in occExpNotCategorized)
             {
-                output = output + "Not Specified\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0? occ.sources[0].ReferenceText:string.Empty) + System.Environment.NewLine;
+                output = output + "Not Specified\t" + occ.ExposureType + "\t" + occ.sourceSummary + "\t" + occ.ScenarioName + "\t" + occ.ActivitySource + "\t" + (occ.sources.Length > 0 ? occ.sources[0].ReferenceText : string.Empty) + System.Environment.NewLine;
             }
             System.IO.File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\exposures.txt", output);
 
@@ -1103,8 +1378,10 @@ namespace GenericScenarioEvaluation
             try
             {
                 ExportDataSet(scenarios, genScenarios, Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\GenericScenarioOutputs.xlsx");
+                ExportDataSet(null, releases, Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\ReleasesOutputs.xlsx");
+                ExportDataSet(null, exposureData, Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\ExposureOutputs.xlsx");
             }
-            catch(System.Exception ex) { }
+            catch (System.Exception ex) { }
         }
 
         void SetUpDataTables()
@@ -1241,6 +1518,106 @@ namespace GenericScenarioEvaluation
             this.productionRateTable.Columns.Add("Element Type");
             this.productionRateTable.Columns.Add("Source Summary");
 
+            this.releaseTable.Columns.Add("Generic Scenario");
+            this.releaseTable.Columns.Add("Activity");
+            this.releaseTable.Columns.Add("Media");
+            this.releaseTable.Columns.Add("Summary");
+
+            this.lossFractionReleaseTable.Columns.Add("Generic Scenario");
+            this.lossFractionReleaseTable.Columns.Add("Activity");
+            this.lossFractionReleaseTable.Columns.Add("Media");
+            this.lossFractionReleaseTable.Columns.Add("Summary");
+
+            this.throughputReleaseTable.Columns.Add("Generic Scenario");
+            this.throughputReleaseTable.Columns.Add("Activity");
+            this.throughputReleaseTable.Columns.Add("Media");
+            this.throughputReleaseTable.Columns.Add("Summary");
+
+            this.ap42ReleaseTable.Columns.Add("Generic Scenario");
+            this.ap42ReleaseTable.Columns.Add("Activity");
+            this.ap42ReleaseTable.Columns.Add("Media");
+            this.ap42ReleaseTable.Columns.Add("Summary");
+
+            this.pmnReleaseTable.Columns.Add("Generic Scenario");
+            this.pmnReleaseTable.Columns.Add("Activity");
+            this.pmnReleaseTable.Columns.Add("Media");
+            this.pmnReleaseTable.Columns.Add("Summary");
+
+            this.opptReleaseTable.Columns.Add("Generic Scenario");
+            this.opptReleaseTable.Columns.Add("Activity");
+            this.opptReleaseTable.Columns.Add("Media");
+            this.opptReleaseTable.Columns.Add("Summary");
+
+            this.asssumedReleaseTable.Columns.Add("Generic Scenario");
+            this.asssumedReleaseTable.Columns.Add("Activity");
+            this.asssumedReleaseTable.Columns.Add("Media");
+            this.asssumedReleaseTable.Columns.Add("Summary");
+
+            this.calculatedReleaseTable.Columns.Add("Generic Scenario");
+            this.calculatedReleaseTable.Columns.Add("Activity");
+            this.calculatedReleaseTable.Columns.Add("Media");
+            this.calculatedReleaseTable.Columns.Add("Summary");
+
+            this.agencyReleaseTable.Columns.Add("Generic Scenario");
+            this.agencyReleaseTable.Columns.Add("Activity");
+            this.agencyReleaseTable.Columns.Add("Media");
+            this.agencyReleaseTable.Columns.Add("Summary");
+
+            this.industryReleaseTable.Columns.Add("Generic Scenario");
+            this.industryReleaseTable.Columns.Add("Activity");
+            this.industryReleaseTable.Columns.Add("Media");
+            this.industryReleaseTable.Columns.Add("Summary");
+
+            this.exposureTable.Columns.Add("Generic Scenario");
+            this.exposureTable.Columns.Add("Activity");
+            this.exposureTable.Columns.Add("Type");
+            this.exposureTable.Columns.Add("Summary");
+
+            //this.lossFractionReleaseTable.Columns.Add("Generic Scenario");
+            //this.lossFractionReleaseTable.Columns.Add("Activity");
+            //this.lossFractionReleaseTable.Columns.Add("Type");
+            //this.lossFractionReleaseTable.Columns.Add("Summary");
+
+            //this.throughputReleaseTable.Columns.Add("Generic Scenario");
+            //this.throughputReleaseTable.Columns.Add("Activity");
+            //this.throughputReleaseTable.Columns.Add("Type");
+            //this.throughputReleaseTable.Columns.Add("Summary");
+
+            this.nioshOshaTable.Columns.Add("Generic Scenario");
+            this.nioshOshaTable.Columns.Add("Activity");
+            this.nioshOshaTable.Columns.Add("Type");
+            this.nioshOshaTable.Columns.Add("Summary");
+
+            this.pmnExposureTable.Columns.Add("Generic Scenario");
+            this.pmnExposureTable.Columns.Add("Activity");
+            this.pmnExposureTable.Columns.Add("Type");
+            this.pmnExposureTable.Columns.Add("Summary");
+
+            this.opptExposureTable.Columns.Add("Generic Scenario");
+            this.opptExposureTable.Columns.Add("Activity");
+            this.opptExposureTable.Columns.Add("Type");
+            this.opptExposureTable.Columns.Add("Summary");
+
+            this.asssumedExpsoureTable.Columns.Add("Generic Scenario");
+            this.asssumedExpsoureTable.Columns.Add("Activity");
+            this.asssumedExpsoureTable.Columns.Add("Type");
+            this.asssumedExpsoureTable.Columns.Add("Summary");
+
+            this.calculatedExposureTable.Columns.Add("Generic Scenario");
+            this.calculatedExposureTable.Columns.Add("Activity");
+            this.calculatedExposureTable.Columns.Add("Type");
+            this.calculatedExposureTable.Columns.Add("Summary");
+
+            this.agencyExpsoureTable.Columns.Add("Generic Scenario");
+            this.agencyExpsoureTable.Columns.Add("Activity");
+            this.agencyExpsoureTable.Columns.Add("Type");
+            this.agencyExpsoureTable.Columns.Add("Summary");
+
+            this.industryExpsoureTable.Columns.Add("Generic Scenario");
+            this.industryExpsoureTable.Columns.Add("Activity");
+            this.industryExpsoureTable.Columns.Add("Type");
+            this.industryExpsoureTable.Columns.Add("Summary");
+
         }
 
         void SetColumnWidths()
@@ -1314,6 +1691,28 @@ namespace GenericScenarioEvaluation
             genScenarios.Tables.Add(parameterTable);
             genScenarios.Tables.Add(remainingDataTable);
             genScenarios.Tables.Add(sourceTable);
+
+            releases.Tables.Add(releaseTable);
+            releases.Tables.Add(lossFractionReleaseTable);
+            releases.Tables.Add(throughputReleaseTable);
+            releases.Tables.Add(ap42ReleaseTable);
+            releases.Tables.Add(pmnReleaseTable);
+            releases.Tables.Add(opptReleaseTable);
+            releases.Tables.Add(asssumedReleaseTable);
+            releases.Tables.Add(calculatedReleaseTable);
+            releases.Tables.Add(agencyReleaseTable);
+            releases.Tables.Add(industryReleaseTable);
+
+            exposureData.Tables.Add(exposureTable);
+            exposureData.Tables.Add(nioshOshaTable);
+            //exposureData.Tables.Add(throughputReleaseTable);
+            //exposureData.Tables.Add(ap42ReleaseTable);
+            exposureData.Tables.Add(pmnExposureTable);
+            exposureData.Tables.Add(opptExposureTable);
+            exposureData.Tables.Add(asssumedExpsoureTable);
+            exposureData.Tables.Add(calculatedExposureTable);
+            exposureData.Tables.Add(agencyExpsoureTable);
+            exposureData.Tables.Add(industryExpsoureTable);
         }
 
         void CleanUpGSNames()
@@ -1689,38 +2088,40 @@ namespace GenericScenarioEvaluation
                     sheetId =
                         sheets.Elements<DocumentFormat.OpenXml.Spreadsheet.Sheet>().Select(s => s.SheetId.Value).Max() + 1;
                 }
-
-                DocumentFormat.OpenXml.Spreadsheet.Sheet sheet = new DocumentFormat.OpenXml.Spreadsheet.Sheet() { Id = relationshipId, SheetId = sheetId, Name = "Data Element Types" };
-                sheets.Append(sheet);
-
-                DocumentFormat.OpenXml.Spreadsheet.Row headerRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
-
-                List<String> columns = new List<string>();
-                foreach (string column in gs[0].GetColumns())
+                DocumentFormat.OpenXml.Spreadsheet.Sheet sheet;
+                DocumentFormat.OpenXml.Spreadsheet.Row headerRow;
+                List<String> columns;
+                columns = new List<string>();
+                if (gs != null)
                 {
-                    columns.Add(column);
-                    DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
-                    cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-                    cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(column);
-                    headerRow.AppendChild(cell);
-                }
-
-                sheetData.AppendChild(headerRow);
-
-                foreach (GenericScenario g in gs)
-                {
-                    DocumentFormat.OpenXml.Spreadsheet.Row newRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
-                    foreach (String col in columns)
+                    sheet = new DocumentFormat.OpenXml.Spreadsheet.Sheet() { Id = relationshipId, SheetId = sheetId, Name = "Data Element Types" };
+                    sheets.Append(sheet);
+                    headerRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
+                    foreach (string column in gs[0].GetColumns())
                     {
+                        columns.Add(column);
                         DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
                         cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
-                        if (Int32.TryParse(g[col], out int temp)) cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.Number;
-                        cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(g[col]); //
-                        newRow.AppendChild(cell);
+                        cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(column);
+                        headerRow.AppendChild(cell);
                     }
-                    sheetData.AppendChild(newRow);
-                }
 
+                    sheetData.AppendChild(headerRow);
+
+                    foreach (GenericScenario g in gs)
+                    {
+                        DocumentFormat.OpenXml.Spreadsheet.Row newRow = new DocumentFormat.OpenXml.Spreadsheet.Row();
+                        foreach (String col in columns)
+                        {
+                            DocumentFormat.OpenXml.Spreadsheet.Cell cell = new DocumentFormat.OpenXml.Spreadsheet.Cell();
+                            cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.String;
+                            if (Int32.TryParse(g[col], out int temp)) cell.DataType = DocumentFormat.OpenXml.Spreadsheet.CellValues.Number;
+                            cell.CellValue = new DocumentFormat.OpenXml.Spreadsheet.CellValue(g[col]); //
+                            newRow.AppendChild(cell);
+                        }
+                        sheetData.AppendChild(newRow);
+                    }
+                }
 
                 foreach (System.Data.DataTable table in ds.Tables)
                 {
