@@ -61,6 +61,7 @@
             this.ConcentrationDataGridView = new System.Windows.Forms.DataGridView();
             this.tabPage15 = new System.Windows.Forms.TabPage();
             this.CalculationdataGridView = new System.Windows.Forms.DataGridView();
+            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.remainingValuesDataGridView)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage16.SuspendLayout();
@@ -136,6 +137,7 @@
             // tabPage16
             // 
             this.tabPage16.Controls.Add(this.treeView1);
+            this.tabPage16.Controls.Add(this.propertyGrid1);
             this.tabPage16.Location = new System.Drawing.Point(4, 22);
             this.tabPage16.Name = "tabPage16";
             this.tabPage16.Size = new System.Drawing.Size(1011, 525);
@@ -483,6 +485,13 @@
             this.CalculationdataGridView.Size = new System.Drawing.Size(1011, 525);
             this.CalculationdataGridView.TabIndex = 0;
             // 
+            // propertyGrid1
+            // 
+            this.propertyGrid1.Location = new System.Drawing.Point(263, 73);
+            this.propertyGrid1.Name = "propertyGrid1";
+            this.propertyGrid1.Size = new System.Drawing.Size(130, 130);
+            this.propertyGrid1.TabIndex = 1;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -563,6 +572,7 @@
         private System.Windows.Forms.DataGridView CalculationdataGridView;
         private System.Windows.Forms.TabPage tabPage16;
         private System.Windows.Forms.TreeView treeView1;
+        private System.Windows.Forms.PropertyGrid propertyGrid1;
     }
 }
 

@@ -9,6 +9,28 @@ using System.Windows.Markup;
 
 namespace GenericScenarioEvaluation
 {
+    class GenericScenarioTypeConverter : System.ComponentModel.ExpandableObjectConverter
+    {
+        public override bool CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType)
+        {
+            if ((typeof(string)).IsAssignableFrom(destinationType))
+                return true;
+
+            return base.CanConvertTo(context, destinationType);
+        }
+
+        public override Object ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, Object value, System.Type destinationType)
+        {
+            if ((typeof(System.String)).IsAssignableFrom(destinationType) && (typeof(GenericScenario).IsAssignableFrom(value.GetType())))
+            {
+                return ((GenericScenario)value).ESD_GS_Name;
+            }
+
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    };
+
+    [System.ComponentModel.TypeConverter(typeof(GenericScenarioTypeConverter))]
     public class GenericScenario
     {
         public GenericScenario()
@@ -16,11 +38,12 @@ namespace GenericScenarioEvaluation
             IndustryCodes = new List<string>();
             OccupationalExposures = new List<OccupationalExposure>();
             ProcessDescriptions = new List<ProcessDescription>();
+            Activities = new List<Activity>();
             EnvironmentalReleases = new List<EnvironmentalRelease>();
             ControlTechnologies = new List<ControlTechnology>();
             ProductionRates = new List<ProductionRate>();
             Workers = new List<Worker>();
-            DataValues = new List<DataValue>();
+            Values = new List<DataValue>();
             Parameters = new List<RemainingValue>();
             Calculations = new List<Calculation>();
             Concentrations = new List<Concentration>();
@@ -29,6 +52,7 @@ namespace GenericScenarioEvaluation
             Sites = new List<Site>();
             Shifts = new List<Shift>();
             UseRates = new List<UseRate>();
+            DataValues = new List<IDataValue>();
         }
 
         public string this[string index]
@@ -84,7 +108,7 @@ namespace GenericScenarioEvaluation
                     case "Use Rates":
                         return this.UseRates.Count.ToString();
                     case "Data Values":
-                        return this.DataValues.Count.ToString();
+                        return this.Values.Count.ToString();
                     case "Parameters":
                         return this.Parameters.Count.ToString();
                     case "References":
@@ -161,14 +185,15 @@ namespace GenericScenarioEvaluation
             }             
         }
         public string IndustryCodeType { get; set; }
-
+        public List<IDataValue> DataValues { get; set; }
         public List<string> IndustryCodes { get; set; }
+        public List<Activity> Activities { get; set; }
         public List<ProcessDescription> ProcessDescriptions { get; set; }
         public List<OccupationalExposure> OccupationalExposures { get; set; }
         public List<ControlTechnology> ControlTechnologies { get; set; }
         public List<EnvironmentalRelease> EnvironmentalReleases { get; set; }
         public List<ProductionRate> ProductionRates { get; set; }
-        public List<DataValue> DataValues { get; set; }
+        public List<DataValue> Values { get; set; }
         public List<RemainingValue> Parameters { get; set; }
         public List<Worker> Workers { get; set; }
         public List<Calculation> Calculations { get; set; }
@@ -221,7 +246,7 @@ namespace GenericScenarioEvaluation
                 }
                 foreach (ProductionRate pr in this.ProductionRates)
                 {
-                    foreach (Source s1 in pr.sources)
+                    foreach (Source s1 in pr.Sources)
                     {
                         bool contained = false;
                         foreach (Source s2 in retval)
@@ -233,7 +258,7 @@ namespace GenericScenarioEvaluation
                 }
                 foreach (Worker w in this.Workers)
                 {
-                    foreach (Source s1 in w.sources)
+                    foreach (Source s1 in w.Sources)
                     {
                         bool contained = false;
                         foreach (Source s2 in retval)
@@ -243,9 +268,9 @@ namespace GenericScenarioEvaluation
                         if (!contained) retval.Add(s1);
                     }
                 }
-                foreach (DataValue dv in this.DataValues)
+                foreach (DataValue dv in this.Values)
                 {
-                    foreach (Source s1 in dv.sources)
+                    foreach (Source s1 in dv.Sources)
                     {
                         bool contained = false;
                         foreach (Source s2 in retval)
@@ -257,7 +282,7 @@ namespace GenericScenarioEvaluation
                 }
                 foreach (RemainingValue p in this.Parameters)
                 {
-                    foreach (Source s1 in p.sources)
+                    foreach (Source s1 in p.Sources)
                     {
                         bool contained = false;
                         foreach (Source s2 in retval)
@@ -269,7 +294,7 @@ namespace GenericScenarioEvaluation
                 }
                 foreach (Calculation c in this.Calculations)
                 {
-                    foreach (Source s1 in c.sources)
+                    foreach (Source s1 in c.Sources)
                     {
                         bool contained = false;
                         foreach (Source s2 in retval)
@@ -281,7 +306,7 @@ namespace GenericScenarioEvaluation
                 }
                 foreach (Concentration conc in this.Concentrations)
                 {
-                    foreach (Source s1 in conc.sources)
+                    foreach (Source s1 in conc.Sources)
                     {
                         bool contained = false;
                         foreach (Source s2 in retval)
@@ -293,7 +318,7 @@ namespace GenericScenarioEvaluation
                 }
                 foreach (OperatingDay od in this.OperatingDays)
                 {
-                    foreach (Source s1 in od.sources)
+                    foreach (Source s1 in od.Sources)
                     {
                         bool contained = false;
                         foreach (Source s2 in retval)
@@ -305,7 +330,7 @@ namespace GenericScenarioEvaluation
                 }
                 foreach (PPE ppe in this.PPEs)
                 {
-                    foreach (Source s1 in ppe.sources)
+                    foreach (Source s1 in ppe.Sources)
                     {
                         bool contained = false;
                         foreach (Source s2 in retval)
@@ -317,7 +342,7 @@ namespace GenericScenarioEvaluation
                 }
                 foreach (Site s in this.Sites)
                 {
-                    foreach (Source s1 in s.sources)
+                    foreach (Source s1 in s.Sources)
                     {
                         bool contained = false;
                         foreach (Source s2 in retval)
@@ -329,7 +354,7 @@ namespace GenericScenarioEvaluation
                 }
                 foreach (Shift sh in this.Shifts)
                 {
-                    foreach (Source s1 in sh.sources)
+                    foreach (Source s1 in sh.Sources)
                     {
                         bool contained = false;
                         foreach (Source s2 in retval)
@@ -341,7 +366,7 @@ namespace GenericScenarioEvaluation
                 }
                 foreach (UseRate ur in this.UseRates)
                 {
-                    foreach (Source s1 in ur.sources)
+                    foreach (Source s1 in ur.Sources)
                     {
                         bool contained = false;
                         foreach (Source s2 in retval)

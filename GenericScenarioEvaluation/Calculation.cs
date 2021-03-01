@@ -6,17 +6,18 @@ using System.Threading.Tasks;
 
 namespace GenericScenarioEvaluation
 {
-    public class Calculation
+    public class Calculation : IDataValue
     {
-        public GenericScenario GenericScenario;
-        public Source[] sources;
-        public string ScenarioName;
-        public string ElementNumber;
-        public string ElementName;
-        public string Type;
-        public string ExposureType;
-        public string Activity_Source;
-        public string mediaOfRelease;
-        public string sourceSummary;
+        public GenericScenario GenericScenario { get; set; }
+        public Source[] Sources { get; set; }
+        public string ScenarioName { get; set; }
+        public int ElementNumber { get; set; }
+        public string ElementName { get; set; }
+        public string Type { get; set; }
+        public string Type2 { get; set; }
+        public string ExposureType { get; set; }
+        public string Activity { get; set; }
+        public string mediaOfRelease { get; set; }
+        public string SourceSummary { get; set; }
     }
 }

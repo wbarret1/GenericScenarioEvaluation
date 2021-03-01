@@ -6,6 +6,28 @@ using System.Threading.Tasks;
 
 namespace GenericScenarioEvaluation
 {
+    class ReleaseCollectionTypeConverter : System.ComponentModel.ExpandableObjectConverter
+    {
+        public override bool CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType)
+        {
+            if ((typeof(ReleaseCollectionTypeConverter)).IsAssignableFrom(destinationType))
+                return true;
+
+            return base.CanConvertTo(context, destinationType);
+        }
+
+        public override Object ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, Object value, System.Type destinationType)
+        {
+            if ((typeof(System.String)).IsAssignableFrom(destinationType) && (typeof(ReleaseCollectionTypeConverter).IsAssignableFrom(value.GetType())))
+            {
+                return string.Empty;
+                //return ((FunctionalGroupCollection)value).AtomList;
+            }
+
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    };
+    [System.ComponentModel.TypeConverter(typeof(ReleaseCollectionTypeConverter))]
     public class ReleaseCollection :List<EnvironmentalRelease>
     {
         public int ToAir

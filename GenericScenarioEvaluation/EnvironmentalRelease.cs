@@ -6,12 +6,34 @@ using System.Threading.Tasks;
 
 namespace GenericScenarioEvaluation
 {
+    class EnvironmentalReleaseTypeConverter : System.ComponentModel.ExpandableObjectConverter
+    {
+        public override bool CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType)
+        {
+            if ((typeof(string)).IsAssignableFrom(destinationType))
+                return true;
+
+            return base.CanConvertTo(context, destinationType);
+        }
+
+        public override Object ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, Object value, System.Type destinationType)
+        {
+            if ((typeof(System.String)).IsAssignableFrom(destinationType) && (typeof(EnvironmentalRelease).IsAssignableFrom(value.GetType())))
+            {
+                return ((EnvironmentalRelease)value).Type;
+            }
+
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    };
+
+    [System.ComponentModel.TypeConverter(typeof(EnvironmentalReleaseTypeConverter))]
     public class EnvironmentalRelease
     {
         public int Id { get; set; }
         public GenericScenario GenericScenario { get; set; }
         public Source[] sources { get; set; }
-        public string ElementNumber { get; set; }
+        public int ElementNumber { get; set; }
         public string ScenarioName { get; set; }
         public string ElementName { get; set; }
         public string Type { get; set; }
@@ -66,7 +88,5 @@ namespace GenericScenarioEvaluation
                 return !(this.ToAir || this.ToLand || this.ToWater);
             }
         }
-
-        public bool ActivityCategorized { get; set; } = false;
     }
 }

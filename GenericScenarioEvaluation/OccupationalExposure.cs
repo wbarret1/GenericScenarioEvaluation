@@ -6,13 +6,35 @@ using System.Threading.Tasks;
 
 namespace GenericScenarioEvaluation
 {
+    class OccupationalExposureTypeConverter : System.ComponentModel.ExpandableObjectConverter
+    {
+        public override bool CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType)
+        {
+            if ((typeof(string)).IsAssignableFrom(destinationType))
+                return true;
+
+            return base.CanConvertTo(context, destinationType);
+        }
+
+        public override Object ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, Object value, System.Type destinationType)
+        {
+            if ((typeof(System.String)).IsAssignableFrom(destinationType) && (typeof(OccupationalExposure).IsAssignableFrom(value.GetType())))
+            {
+                return ((OccupationalExposure)value).Type;
+            }
+
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+    };
+
+    [System.ComponentModel.TypeConverter(typeof(OccupationalExposureTypeConverter))]
     public class OccupationalExposure
     {
         public int Id { get; set; }
         public GenericScenario GenericScenario { get; set; }
         public Source[] sources { get; set; }
         public string ScenarioName { get; set; }
-        public string ElementNumber { get; set; }
+        public int ElementNumber { get; set; }
         public string ElementName { get; set; }
         public string Type { get; set; }
         public string ExposureType { get; set; }
@@ -62,7 +84,6 @@ namespace GenericScenarioEvaluation
         }
         public string ActivitySource { get; set; }
         public string mediaOfRelease { get; set; }
-        public string sourceSummary { get; set; }
-        public bool ActivityCategorized { get; set; } = false;
+        public string SourceSummary { get; set; }
     }
 }
