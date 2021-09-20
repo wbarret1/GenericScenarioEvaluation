@@ -146,6 +146,12 @@ namespace GenericScenarioEvaluation
         readonly DataTable processExposureTable = new DataTable("Process");
         readonly DataTable expsoureNotCategorizedTable = new DataTable("NotCategorized");
 
+        readonly DataSet epaReview = new DataSet();
+        readonly DataTable generalInfo = new DataTable("GeneralInfo");
+        readonly DataTable activityInfo = new DataTable("GeneralInfo");
+        readonly DataTable equationInfo = new DataTable("GeneralInfo");
+
+
         readonly string[] scenarioElements = new string[]{
             "Element #",
             "ESD/GS Name",
@@ -185,16 +191,237 @@ namespace GenericScenarioEvaluation
         {
             InitializeComponent();
             SetUpDataTables();
-            ProcessExcel();
-            NullsToString();
-            ExtractSources();
-            AddTablesToSet();
-            CreateElements();
-            scenarios = ProcessScenarios();
-            CategorizeScenarios();
-            CleanUpGSNames();
-            BuildTree();
-            this.propertyGrid1.SelectedObject = this.scenarios;
+            //ProcessExcel();
+            //NullsToString();
+            //ExtractSources();
+            //AddTablesToSet();
+            //CreateElements();
+            //scenarios = ProcessScenarios();
+            //CategorizeScenarios();
+            //CleanUpGSNames();
+            //BuildTree();
+            //this.propertyGrid1.SelectedObject = this.scenarios;
+
+            ProcessReviews();
+        }
+
+        void ProcessReviews()
+        {
+            foreach (string dir in System.IO.Directory.EnumerateDirectories(@"..\..\Reviewed Scenarios"))
+            {
+                foreach (string fileName in System.IO.Directory.EnumerateFiles(dir))
+                {
+                    using (DocumentFormat.OpenXml.Packaging.SpreadsheetDocument spreadSheetDocument = DocumentFormat.OpenXml.Packaging.SpreadsheetDocument.Open(fileName, false))
+                    {
+                        // DataElementsTable
+                        DocumentFormat.OpenXml.Packaging.WorkbookPart workbookPart = spreadSheetDocument.WorkbookPart;
+                        IEnumerable<DocumentFormat.OpenXml.Spreadsheet.Sheet> sheets = spreadSheetDocument.WorkbookPart.Workbook.GetFirstChild<DocumentFormat.OpenXml.Spreadsheet.Sheets>().Elements<DocumentFormat.OpenXml.Spreadsheet.Sheet>();
+
+                        // Get General Information
+
+                        DocumentFormat.OpenXml.Spreadsheet.Sheet sheet = sheets.ElementAt(0);
+                        string relationshipId = sheet.Id.Value;
+                        DocumentFormat.OpenXml.Packaging.WorksheetPart worksheetPart = (DocumentFormat.OpenXml.Packaging.WorksheetPart)spreadSheetDocument.WorkbookPart.GetPartById(relationshipId);
+                        DocumentFormat.OpenXml.Spreadsheet.Worksheet workSheet = worksheetPart.Worksheet;
+                        DocumentFormat.OpenXml.Spreadsheet.SheetData sheetData = workSheet.GetFirstChild<DocumentFormat.OpenXml.Spreadsheet.SheetData>();
+                        IEnumerable<DocumentFormat.OpenXml.Spreadsheet.Row> rows = sheetData.Descendants<DocumentFormat.OpenXml.Spreadsheet.Row>();
+                        string name = string.Empty;
+                        string reviewer = string.Empty;
+                        string date = string.Empty;
+                        DataRow r = generalInfo.NewRow();
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(1))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D")) reviewer = GetCellValue(spreadSheetDocument, (DocumentFormat.OpenXml.Spreadsheet.Cell)rows.ElementAt(1).ElementAt(2));
+                            r["reviewer"] = reviewer;
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(2))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                name = GetCellValue(spreadSheetDocument, cell);
+                                r["name"] = name;
+                            }
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(3))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                string temp = GetCellValue(spreadSheetDocument, cell);
+                                System.DateTime temp1 = new System.DateTime(1900, 1, 1).AddDays(Double.Parse(temp));
+                                date = temp1.Year > 1990 ? temp1.Year.ToString() : temp;
+                                r["year"] = date;
+                            }
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(4))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D")) r["description"] = GetCellValue(spreadSheetDocument, cell);
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(5))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D")) r["flowDiagram"] = GetCellValue(spreadSheetDocument, cell);
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(6))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D")) r["numActvities"] = GetCellValue(spreadSheetDocument, cell);
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(7))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D")) r["numSources"] = GetCellValue(spreadSheetDocument, cell);
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(8))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D")) r["throughput"] = GetCellValue(spreadSheetDocument, cell);
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(9))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D")) r["concCOI"] = GetCellValue(spreadSheetDocument, cell);
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(10))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D")) r["batchSize"] = GetCellValue(spreadSheetDocument, cell);
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(11))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D")) r["batchDuration"] = GetCellValue(spreadSheetDocument, cell);
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(12))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D")) r["batchPerDay"] = GetCellValue(spreadSheetDocument, cell);
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(13))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D")) r["daysOp"] = GetCellValue(spreadSheetDocument, cell);
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(14))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D")) r["NAICS"] = GetCellValue(spreadSheetDocument, cell);
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(15))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D")) r["facSize"] = GetCellValue(spreadSheetDocument, cell);
+                        }
+                        foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(16))
+                        {
+                            if (cell.CellReference.ToString().StartsWith("D")) r["MarketShare"] = GetCellValue(spreadSheetDocument, cell);
+                        }
+                        generalInfo.Rows.Add(r);
+
+                        // Get Activity Information
+
+                        sheet = sheets.ElementAt(1);
+                        relationshipId = sheet.Id.Value;
+                        worksheetPart = (DocumentFormat.OpenXml.Packaging.WorksheetPart)spreadSheetDocument.WorkbookPart.GetPartById(relationshipId);
+                        workSheet = worksheetPart.Worksheet;
+                        sheetData = workSheet.GetFirstChild<DocumentFormat.OpenXml.Spreadsheet.SheetData>();
+                        rows = sheetData.Descendants<DocumentFormat.OpenXml.Spreadsheet.Row>();
+                        for (int i = 1; i < rows.Count(); i++)
+                        {
+                            string activity = string.Empty;
+                            string chemSteerActivity = string.Empty;
+                            string Description = string.Empty;
+                            string ExposureType = string.Empty;
+                            string exposureValue = string.Empty;
+                            string expsoureValueUnits = string.Empty;
+                            string modeled = string.Empty;
+                            string dataSource = string.Empty;
+                            string modelName = string.Empty;
+                            string modelReference = string.Empty;
+                            foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(i))
+                            {
+                                string reference = cell.CellReference;
+                                if (reference.StartsWith("A")) activity = GetCellValue(spreadSheetDocument, cell);
+                                if (reference.StartsWith("B")) chemSteerActivity = GetCellValue(spreadSheetDocument, cell);
+                                if (reference.StartsWith("C")) Description = GetCellValue(spreadSheetDocument, cell);
+                                if (reference.StartsWith("D")) ExposureType = GetCellValue(spreadSheetDocument, cell);
+                                if (reference.StartsWith("E")) exposureValue = GetCellValue(spreadSheetDocument, cell);
+                                if (reference.StartsWith("F")) expsoureValueUnits = GetCellValue(spreadSheetDocument, cell);
+                                if (reference.StartsWith("G")) modeled = GetCellValue(spreadSheetDocument, cell);
+                                if (reference.StartsWith("H")) dataSource = GetCellValue(spreadSheetDocument, cell);
+                                if (reference.StartsWith("I")) modelName = GetCellValue(spreadSheetDocument, cell);
+                                if (reference.StartsWith("J")) modelReference = GetCellValue(spreadSheetDocument, cell);
+                            }
+                            DataRow r1 = activityInfo.NewRow();
+                            r1["name"] = name;
+                            r1["year"] = date;
+                            r1["reviewer"] = reviewer;
+                            r1["activity"] = activity;
+                            r1["chemSteerActivity"] = chemSteerActivity;
+                            r1["Description"] = Description;
+                            r1["ExposureType"] = ExposureType;
+                            r1["exposureValue"] = exposureValue;
+                            r1["expsoureValueUnits"] = expsoureValueUnits;
+                            r1["modeled"] = modeled;
+                            r1["dataSource"] = dataSource;
+                            r1["modelName"] = modelName;
+                            r1["modelReference"] = modelReference;
+                            activityInfo.Rows.Add(r1);
+                        }
+
+                        // Get Activity Information
+
+                        sheet = sheets.ElementAt(2);
+                        relationshipId = sheet.Id.Value;
+                        worksheetPart = (DocumentFormat.OpenXml.Packaging.WorksheetPart)spreadSheetDocument.WorkbookPart.GetPartById(relationshipId);
+                        workSheet = worksheetPart.Worksheet;
+                        sheetData = workSheet.GetFirstChild<DocumentFormat.OpenXml.Spreadsheet.SheetData>();
+                        rows = sheetData.Descendants<DocumentFormat.OpenXml.Spreadsheet.Row>();
+                        for (int i = 1; i < rows.Count(); i++)
+                        {
+                            string activity = string.Empty;
+                            string equation = string.Empty;
+                            string mediaOrRoute = string.Empty;
+                            string exposureType = string.Empty;
+                            string exposureComponent = string.Empty;
+                            string expsoureInputType = string.Empty;
+                            string source = string.Empty;
+                            string variableDescription = string.Empty;
+                            string variableValue = string.Empty;
+                            string variableValueUnits = string.Empty;
+                            string measuredOrEstimated = string.Empty;
+                            string measurementSource = string.Empty;
+                            string estimateBasis = string.Empty;
+                            string equationUsed = string.Empty;
+                            string reference = string.Empty;
+                            foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(i))
+                            {
+                                string cellReference = cell.CellReference;
+                                if (cellReference.StartsWith("A")) activity = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("B")) equation = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("C")) mediaOrRoute = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("D")) exposureType = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("E")) exposureComponent = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("F")) expsoureInputType = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("G")) source = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("H")) variableDescription = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("I")) variableValue = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("J")) variableValueUnits = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("K")) measuredOrEstimated = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("L")) measurementSource = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("M")) estimateBasis = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("N")) equationUsed = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("O")) reference = GetCellValue(spreadSheetDocument, cell);
+                            }
+                            DataRow r1 = equationInfo.NewRow();
+                            r1["name"] = name;
+                            r1["activity"] = activity;
+                            r1["equation"] = equation;
+                            r1["mediaOrRoute"] = mediaOrRoute;
+                            r1["exposureType"] = exposureType;
+                            r1["exposureComponent"] = exposureComponent;
+                            r1["source"] = source;
+                            r1["variableDescription"] = variableDescription;
+                            r1["variableValue"] = variableValue;
+                            r1["variableValueUnits"] = variableValueUnits;
+                            r1["measuredOrEstimated"] = measuredOrEstimated;
+                            r1["measurementSource"] = measurementSource;
+                            r1["estimateBasis"] = estimateBasis;
+                            r1["equationUsed"] = equationUsed;
+                            r1["reference"] = reference;
+                            equationInfo.Rows.Add(r1);
+                        }
+                    }
+                }
+            }
         }
 
         void BuildTree()
@@ -1951,6 +2178,59 @@ namespace GenericScenarioEvaluation
 
         void SetUpDataTables()
         {
+
+            // General Info from EPA Review
+            this.generalInfo.Columns.Add("reviewer");
+            this.generalInfo.Columns.Add("name");
+            this.generalInfo.Columns.Add("year");
+            this.generalInfo.Columns.Add("description");
+            this.generalInfo.Columns.Add("flowDiagram");
+            this.generalInfo.Columns.Add("numActvities");
+            this.generalInfo.Columns.Add("numSources");
+            this.generalInfo.Columns.Add("throughput");
+            this.generalInfo.Columns.Add("concCOI");
+            this.generalInfo.Columns.Add("batchSize");
+            this.generalInfo.Columns.Add("batchDuration");
+            this.generalInfo.Columns.Add("batchPerDay");
+            this.generalInfo.Columns.Add("daysOp");
+            this.generalInfo.Columns.Add("NAICS");
+            this.generalInfo.Columns.Add("facSize");
+            this.generalInfo.Columns.Add("MarketShare");
+
+            // Activity Info from EPA review
+            this.activityInfo.Columns.Add("name");
+            this.activityInfo.Columns.Add("reviewer");
+            this.activityInfo.Columns.Add("year");
+            this.activityInfo.Columns.Add("activity");
+            this.activityInfo.Columns.Add("chemSteerActivity");
+            this.activityInfo.Columns.Add("Description");
+            this.activityInfo.Columns.Add("ExposureType");
+            this.activityInfo.Columns.Add("exposureValue");
+            this.activityInfo.Columns.Add("expsoureValueUnits");
+            this.activityInfo.Columns.Add("modeled");
+            this.activityInfo.Columns.Add("dataSource");
+            this.activityInfo.Columns.Add("modelName");
+            this.activityInfo.Columns.Add("modelReference");
+
+            // EquationInfo from EPA Review
+
+            this.equationInfo.Columns.Add("name");
+            this.equationInfo.Columns.Add("activity");
+            this.equationInfo.Columns.Add("equation");
+            this.equationInfo.Columns.Add("mediaOrRoute");
+            this.equationInfo.Columns.Add("exposureType");
+            this.equationInfo.Columns.Add("exposureComponent");
+            this.equationInfo.Columns.Add("source");
+            this.equationInfo.Columns.Add("variableDescription");
+            this.equationInfo.Columns.Add("variableValue");
+            this.equationInfo.Columns.Add("variableValueUnits");
+            this.equationInfo.Columns.Add("measuredOrEstimated");
+            this.equationInfo.Columns.Add("measurementSource");
+            this.equationInfo.Columns.Add("estimateBasis");
+            this.equationInfo.Columns.Add("equationUsed");
+            this.equationInfo.Columns.Add("reference");
+
+
             // dataValueDataGridView.Rows.Add(new string[] { el.Element, el.ElementName, el.Type,el.SourceSummary });
             this.parameterTable.Columns.Add("Element Number");
             this.parameterTable.Columns.Add("Scenario Name");
@@ -2319,6 +2599,9 @@ namespace GenericScenarioEvaluation
             this.expsoureNotCategorizedTable.Columns.Add("Type");
             this.expsoureNotCategorizedTable.Columns.Add("Summary");
 
+            generalInfoDataGridView.DataSource = generalInfo;
+            activityInfoDataGridView.DataSource = activityInfo;
+            equationInfoDataGridView.DataSource = equationInfo;
             processDescriptionDataGridView.DataSource = procDescriptionTable;
             occupationalExposureDataGridView.DataSource = occExpTable;
             environmentalReleaseDataGridView.DataSource = envReleaseTable;

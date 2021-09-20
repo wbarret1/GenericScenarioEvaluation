@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>GenericScenarioEvaluation</RootNamespace>
     <AssemblyName>GenericScenarioEvaluation</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
@@ -117,6 +117,44 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="Reviewed Scenarios\BB\Aqueous Film-Forming Foams in Firefighting Draft.xlsx" />
+    <None Include="Reviewed Scenarios\BB\Chemical Additives Used in Automotive Lubricants Draft.xlsx" />
+    <None Include="Reviewed Scenarios\BB\Electroplating for Metal Treatment.xlsx" />
+    <None Include="Reviewed Scenarios\BB\Fabric Finishing Draft.xlsx" />
+    <None Include="Reviewed Scenarios\BB\Film Deposition in Integrated Circuit Fabrication Draft.xlsx" />
+    <None Include="Reviewed Scenarios\BB\Flexographic Printing Draft.xlsx" />
+    <None Include="Reviewed Scenarios\BB\Formulation of Photoresists Draft.xlsx" />
+    <None Include="Reviewed Scenarios\BB\Formulation of Waterborne Coatings Draft.xlsx" />
+    <None Include="Reviewed Scenarios\BB\Material Fabrication Process for Manufacture of Printed Circuits Boards Draft.xlsx" />
+    <None Include="Reviewed Scenarios\BB\Transformer Manufacturing Draft.xlsx" />
+    <None Include="Reviewed Scenarios\BB\Updates to Environmental Releases Estimates in the ESD on Photoresist Use in Semiconductor Manufacturing.xlsx" />
+    <None Include="Reviewed Scenarios\BB\Use of Metalworking Fluids.xlsx" />
+    <None Include="Reviewed Scenarios\DM\ScenarioReviewMatrix_MetalProducts.xlsx" />
+    <None Include="Reviewed Scenarios\DM\ScenarioReviewMatrix_NewspaperPrinting.xlsx" />
+    <None Include="Reviewed Scenarios\DM\ScenarioReviewMatrix_PhotographicIndustry.xlsx" />
+    <None Include="Reviewed Scenarios\DM\ScenarioReviewMatrix_RollCoating.xlsx" />
+    <None Include="Reviewed Scenarios\DM\ScenarioReviewMatrix_SolidTransfer.xlsx" />
+    <None Include="Reviewed Scenarios\DM\ScenarioReviewMatrix_SurfactantsIndustrialLaundries.xlsx" />
+    <None Include="Reviewed Scenarios\DM\ScenarioReviewMatrix_Template_PetroleumRefining.xlsx" />
+    <None Include="Reviewed Scenarios\NA\Paper dyeing GS review.xlsx" />
+    <None Include="Reviewed Scenarios\RLS\ScenarioReviewMatrix_ApplicationOfChemicalsInEnhancedOilRecovery_2021_03_22.xlsx" />
+    <None Include="Reviewed Scenarios\RLS\ScenarioReviewMatrix_ApplicationOfWaterborneWoodPreservativesUsingPressureTreatment_2021_03_29.xlsx" />
+    <None Include="Reviewed Scenarios\RLS\ScenarioReviewMatrix_AutomotiveBrakePadReplacement_2021_03_30.xlsx" />
+    <None Include="Reviewed Scenarios\RLS\ScenarioReviewMatrix_BiotechnologyPremanufacturingNotices_2021_04_01.xlsx" />
+    <None Include="Reviewed Scenarios\RLS\ScenarioReviewMatrix_ChemicalAdditivesUsedInMineralAndMetalOreFlotation_Quick-Strike_2021_04_15.xlsx" />
+    <None Include="Reviewed Scenarios\RLS\ScenarioReviewMatrix_MetalCleaningAndDegreasing_Semi-AqueousCleanerApplication_2021_03_26.xlsx" />
+    <None Include="Reviewed Scenarios\RLS\ScenarioReviewMatrix_PetroleumWellCasingAndCementing_2021_03_25.xlsx" />
+    <None Include="Reviewed Scenarios\RLS\ScenarioReviewMatrix_UseOfAdhesives_ESD_2021_05_13.xlsx" />
+    <None Include="Reviewed Scenarios\RLS\ScenarioReviewMatrix_WaterTreatmentCoagulants_Application_2021_03_18.xlsx" />
+    <None Include="Reviewed Scenarios\ST\Automobile spray paint 1996.xlsx" />
+    <None Include="Reviewed Scenarios\ST\Coating application via spray painting.xlsx" />
+    <None Include="Reviewed Scenarios\ST\Drum residual.xlsx" />
+    <None Include="Reviewed Scenarios\ST\Granular detergents manufacture.xlsx" />
+    <None Include="Reviewed Scenarios\ST\Paper dyes.xlsx" />
+    <None Include="Reviewed Scenarios\ST\Synthetic fiber manufacture.xlsx" />
+    <None Include="Reviewed Scenarios\ST\Use of textile dyes.xlsx" />
+    <None Include="Reviewed Scenarios\ST\Water disinfection.xlsx" />
+    <None Include="Reviewed Scenarios\ST\Wet cleaning process in IC fabrication.xlsx" />
     <None Include="Revised Data Element Comparison Draft_2.19.2020_To EPA_with review notes.xlsx" />
   </ItemGroup>
   <ItemGroup>

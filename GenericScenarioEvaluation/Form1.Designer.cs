@@ -32,6 +32,7 @@
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage16 = new System.Windows.Forms.TabPage();
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.occupationalExposureDataGridView = new System.Windows.Forms.DataGridView();
             this.tabPage2 = new System.Windows.Forms.TabPage();
@@ -61,7 +62,12 @@
             this.ConcentrationDataGridView = new System.Windows.Forms.DataGridView();
             this.tabPage15 = new System.Windows.Forms.TabPage();
             this.CalculationdataGridView = new System.Windows.Forms.DataGridView();
-            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+            this.tabPage17 = new System.Windows.Forms.TabPage();
+            this.tabPage18 = new System.Windows.Forms.TabPage();
+            this.tabPage19 = new System.Windows.Forms.TabPage();
+            this.generalInfoDataGridView = new System.Windows.Forms.DataGridView();
+            this.activityInfoDataGridView = new System.Windows.Forms.DataGridView();
+            this.equationInfoDataGridView = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.remainingValuesDataGridView)).BeginInit();
             this.tabControl1.SuspendLayout();
             this.tabPage16.SuspendLayout();
@@ -94,6 +100,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.ConcentrationDataGridView)).BeginInit();
             this.tabPage15.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CalculationdataGridView)).BeginInit();
+            this.tabPage17.SuspendLayout();
+            this.tabPage18.SuspendLayout();
+            this.tabPage19.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.generalInfoDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.activityInfoDataGridView)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.equationInfoDataGridView)).BeginInit();
             this.SuspendLayout();
             // 
             // remainingValuesDataGridView
@@ -111,6 +123,9 @@
             // tabControl1
             // 
             this.tabControl1.Controls.Add(this.tabPage16);
+            this.tabControl1.Controls.Add(this.tabPage17);
+            this.tabControl1.Controls.Add(this.tabPage18);
+            this.tabControl1.Controls.Add(this.tabPage19);
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage3);
@@ -152,6 +167,13 @@
             this.treeView1.Name = "treeView1";
             this.treeView1.Size = new System.Drawing.Size(1011, 525);
             this.treeView1.TabIndex = 0;
+            // 
+            // propertyGrid1
+            // 
+            this.propertyGrid1.Location = new System.Drawing.Point(263, 73);
+            this.propertyGrid1.Name = "propertyGrid1";
+            this.propertyGrid1.Size = new System.Drawing.Size(130, 130);
+            this.propertyGrid1.TabIndex = 1;
             // 
             // tabPage1
             // 
@@ -485,12 +507,62 @@
             this.CalculationdataGridView.Size = new System.Drawing.Size(1011, 525);
             this.CalculationdataGridView.TabIndex = 0;
             // 
-            // propertyGrid1
+            // tabPage17
             // 
-            this.propertyGrid1.Location = new System.Drawing.Point(263, 73);
-            this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(130, 130);
-            this.propertyGrid1.TabIndex = 1;
+            this.tabPage17.Controls.Add(this.generalInfoDataGridView);
+            this.tabPage17.Location = new System.Drawing.Point(4, 22);
+            this.tabPage17.Name = "tabPage17";
+            this.tabPage17.Size = new System.Drawing.Size(1011, 525);
+            this.tabPage17.TabIndex = 16;
+            this.tabPage17.Text = "General Info";
+            this.tabPage17.UseVisualStyleBackColor = true;
+            // 
+            // tabPage18
+            // 
+            this.tabPage18.Controls.Add(this.activityInfoDataGridView);
+            this.tabPage18.Location = new System.Drawing.Point(4, 22);
+            this.tabPage18.Name = "tabPage18";
+            this.tabPage18.Size = new System.Drawing.Size(1011, 525);
+            this.tabPage18.TabIndex = 17;
+            this.tabPage18.Text = "Activity Info";
+            this.tabPage18.UseVisualStyleBackColor = true;
+            // 
+            // tabPage19
+            // 
+            this.tabPage19.Controls.Add(this.equationInfoDataGridView);
+            this.tabPage19.Location = new System.Drawing.Point(4, 22);
+            this.tabPage19.Name = "tabPage19";
+            this.tabPage19.Size = new System.Drawing.Size(1011, 525);
+            this.tabPage19.TabIndex = 18;
+            this.tabPage19.Text = "Equation Info";
+            this.tabPage19.UseVisualStyleBackColor = true;
+            // 
+            // generalInfoDataGridView
+            // 
+            this.generalInfoDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.generalInfoDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.generalInfoDataGridView.Location = new System.Drawing.Point(0, 0);
+            this.generalInfoDataGridView.Name = "generalInfoDataGridView";
+            this.generalInfoDataGridView.Size = new System.Drawing.Size(1011, 525);
+            this.generalInfoDataGridView.TabIndex = 0;
+            // 
+            // activityInfoDataGridView
+            // 
+            this.activityInfoDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.activityInfoDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.activityInfoDataGridView.Location = new System.Drawing.Point(0, 0);
+            this.activityInfoDataGridView.Name = "activityInfoDataGridView";
+            this.activityInfoDataGridView.Size = new System.Drawing.Size(1011, 525);
+            this.activityInfoDataGridView.TabIndex = 0;
+            // 
+            // equationInfoDataGridView
+            // 
+            this.equationInfoDataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.equationInfoDataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.equationInfoDataGridView.Location = new System.Drawing.Point(0, 0);
+            this.equationInfoDataGridView.Name = "equationInfoDataGridView";
+            this.equationInfoDataGridView.Size = new System.Drawing.Size(1011, 525);
+            this.equationInfoDataGridView.TabIndex = 0;
             // 
             // Form1
             // 
@@ -533,6 +605,12 @@
             ((System.ComponentModel.ISupportInitialize)(this.ConcentrationDataGridView)).EndInit();
             this.tabPage15.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.CalculationdataGridView)).EndInit();
+            this.tabPage17.ResumeLayout(false);
+            this.tabPage18.ResumeLayout(false);
+            this.tabPage19.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.generalInfoDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.activityInfoDataGridView)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.equationInfoDataGridView)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -573,6 +651,12 @@
         private System.Windows.Forms.TabPage tabPage16;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.PropertyGrid propertyGrid1;
+        private System.Windows.Forms.TabPage tabPage17;
+        private System.Windows.Forms.DataGridView generalInfoDataGridView;
+        private System.Windows.Forms.TabPage tabPage18;
+        private System.Windows.Forms.DataGridView activityInfoDataGridView;
+        private System.Windows.Forms.TabPage tabPage19;
+        private System.Windows.Forms.DataGridView equationInfoDataGridView;
     }
 }
 
