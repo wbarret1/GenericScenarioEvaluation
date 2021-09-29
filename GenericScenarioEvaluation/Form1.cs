@@ -148,8 +148,13 @@ namespace GenericScenarioEvaluation
 
         readonly DataSet epaReview = new DataSet();
         readonly DataTable generalInfo = new DataTable("GeneralInfo");
-        readonly DataTable activityInfo = new DataTable("GeneralInfo");
-        readonly DataTable equationInfo = new DataTable("GeneralInfo");
+        readonly DataTable activityInfo = new DataTable("Activity Info");
+        readonly DataTable equationInfo = new DataTable("Equation Info");
+
+        readonly List<generalInformation> generalInfos = new List<generalInformation>();
+        readonly List<Model> models = new List<Model>();
+        readonly List<Activity2> act2 = new List<Activity2>();
+        readonly List<Variable> variable = new List<Variable>();
 
 
         readonly string[] scenarioElements = new string[]{
@@ -228,6 +233,19 @@ namespace GenericScenarioEvaluation
                         string name = string.Empty;
                         string reviewer = string.Empty;
                         string date = string.Empty;
+                        string description = string.Empty;
+                        string flowDiagram = string.Empty;
+                        string numActvities = string.Empty;
+                        string numSources = string.Empty;
+                        string throughput = string.Empty;
+                        string concCOI = string.Empty;
+                        string batchSize = string.Empty;
+                        string batchDuration = string.Empty;
+                        string batchPerDay = string.Empty;
+                        string daysOp = string.Empty;
+                        string NAICS = string.Empty;
+                        string facSize = string.Empty;
+                        string MarketShare = string.Empty;
                         DataRow r = generalInfo.NewRow();
                         foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(1))
                         {
@@ -254,57 +272,134 @@ namespace GenericScenarioEvaluation
                         }
                         foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(4))
                         {
-                            if (cell.CellReference.ToString().StartsWith("D")) r["description"] = GetCellValue(spreadSheetDocument, cell);
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                description = GetCellValue(spreadSheetDocument, cell);
+                                r["description"] = description;
+                            }
                         }
                         foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(5))
                         {
-                            if (cell.CellReference.ToString().StartsWith("D")) r["flowDiagram"] = GetCellValue(spreadSheetDocument, cell);
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                flowDiagram = GetCellValue(spreadSheetDocument, cell);
+                                r["flowDiagram"] = flowDiagram;
+                            }
                         }
                         foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(6))
                         {
-                            if (cell.CellReference.ToString().StartsWith("D")) r["numActvities"] = GetCellValue(spreadSheetDocument, cell);
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                numActvities = GetCellValue(spreadSheetDocument, cell);
+                                r["numActvities"] = numActvities;
+                            }
                         }
                         foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(7))
                         {
-                            if (cell.CellReference.ToString().StartsWith("D")) r["numSources"] = GetCellValue(spreadSheetDocument, cell);
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                numSources = GetCellValue(spreadSheetDocument, cell);
+                                r["numSources"] = numSources;
+                            }
                         }
                         foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(8))
                         {
-                            if (cell.CellReference.ToString().StartsWith("D")) r["throughput"] = GetCellValue(spreadSheetDocument, cell);
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                throughput = GetCellValue(spreadSheetDocument, cell);
+                                r["throughput"] = throughput;
+                            }
                         }
                         foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(9))
                         {
-                            if (cell.CellReference.ToString().StartsWith("D")) r["concCOI"] = GetCellValue(spreadSheetDocument, cell);
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                concCOI = GetCellValue(spreadSheetDocument, cell);
+                                r["concCOI"] = concCOI;
+                            }
                         }
                         foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(10))
                         {
-                            if (cell.CellReference.ToString().StartsWith("D")) r["batchSize"] = GetCellValue(spreadSheetDocument, cell);
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                batchSize = GetCellValue(spreadSheetDocument, cell);
+                                r["batchSize"] = batchSize;
+                            }
                         }
                         foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(11))
                         {
-                            if (cell.CellReference.ToString().StartsWith("D")) r["batchDuration"] = GetCellValue(spreadSheetDocument, cell);
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                batchDuration = GetCellValue(spreadSheetDocument, cell);
+                                r["batchDuration"] = batchDuration;
+                            }
                         }
                         foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(12))
                         {
-                            if (cell.CellReference.ToString().StartsWith("D")) r["batchPerDay"] = GetCellValue(spreadSheetDocument, cell);
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                batchPerDay = GetCellValue(spreadSheetDocument, cell);
+                                r["batchPerDay"] = batchPerDay;
+                            }
                         }
                         foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(13))
                         {
-                            if (cell.CellReference.ToString().StartsWith("D")) r["daysOp"] = GetCellValue(spreadSheetDocument, cell);
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                daysOp = GetCellValue(spreadSheetDocument, cell);
+                                r["daysOp"] = daysOp;
+                            }
                         }
                         foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(14))
                         {
-                            if (cell.CellReference.ToString().StartsWith("D")) r["NAICS"] = GetCellValue(spreadSheetDocument, cell);
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                NAICS = GetCellValue(spreadSheetDocument, cell);
+                                r["NAICS"] = NAICS;
+                            }
                         }
                         foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(15))
                         {
-                            if (cell.CellReference.ToString().StartsWith("D")) r["facSize"] = GetCellValue(spreadSheetDocument, cell);
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                facSize = GetCellValue(spreadSheetDocument, cell);
+                                r["facSize"] = facSize;
+                            }
                         }
                         foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(16))
                         {
-                            if (cell.CellReference.ToString().StartsWith("D")) r["MarketShare"] = GetCellValue(spreadSheetDocument, cell);
+                            if (cell.CellReference.ToString().StartsWith("D"))
+                            {
+                                MarketShare = GetCellValue(spreadSheetDocument, cell);
+                                r["MarketShare"] = MarketShare;
+                            }
                         }
                         generalInfo.Rows.Add(r);
+                        generalInformation gI = new generalInformation()
+                        {
+                            name = name,
+                            reviewer = reviewer,
+                            year = date,
+                            description = description,
+                            flowDiagram = flowDiagram,
+                            numActvities = numActvities,
+                            numSources = numSources,
+                            throughput = throughput,
+                            concCOI = concCOI,
+                            batchSize = batchSize,
+                            batchDuration = batchDuration,
+                            batchPerDay = batchPerDay,
+                            daysOp = daysOp,
+                            NAICS = NAICS,
+                            facSize = facSize,
+                            MarketShare = MarketShare
+                        };
+                        generalInfos.Add(gI);
+                        if (string.IsNullOrEmpty(name))
+                        {
+
+                        }
+
 
                         // Get Activity Information
 
@@ -355,9 +450,50 @@ namespace GenericScenarioEvaluation
                             r1["modelName"] = modelName;
                             r1["modelReference"] = modelReference;
                             activityInfo.Rows.Add(r1);
+                            gI.Activities.Add(new activityInformation()
+                            {
+                                name = name,
+                                year = date,
+                                reviewer = reviewer,
+                                activity = activity,
+                                chemSteerActivity = chemSteerActivity,
+                                Description = Description,
+                                ExposureType = ExposureType,
+                                exposureValue = exposureValue,
+                                expsoureValueUnits = expsoureValueUnits,
+                                modeled = modeled,
+                                dataSource = dataSource,
+                                modelName = modelName,
+                                modelReference = modelReference
+                            }
+                            );
+                            Model m = null;
+                            string[] names = null;
+                            if (modelName.Contains(",")) names = modelName.Split(',');
+                            else if (modelName.Contains(";")) names = modelName.Split(';');
+                            else if (modelName.Contains('\n')) names = modelName.Split('\n');
+                            else names = new string[] { modelName };
+                            foreach (string n in names)
+                            {
+                                foreach (Model m1 in models) if (m1.name == n) m = m1;
+                                if (m is null && !string.IsNullOrEmpty(n))
+                                {
+                                    m = new Model(n);
+                                    models.Add(m);
+                                }
+                                if (!(m is null) && !m.ScenariosUsedIn.Contains(name)) m.ScenariosUsedIn.Add(name);
+                            }
+                            Activity2 a2 = null;
+                            foreach (Activity2 a in act2) if (a.name == activity) a2 = a;
+                            if (a2 is null && !string.IsNullOrEmpty(activity))
+                            {
+                                a2 = new Activity2(activity);
+                                act2.Add(a2);
+                            }
+                            if (!(a2 is null) && !a2.ScenariosUsedIn.Contains(name)) a2.ScenariosUsedIn.Add(name);
                         }
 
-                        // Get Activity Information
+                        // Get Equation Information
 
                         sheet = sheets.ElementAt(2);
                         relationshipId = sheet.Id.Value;
@@ -417,11 +553,66 @@ namespace GenericScenarioEvaluation
                             r1["estimateBasis"] = estimateBasis;
                             r1["equationUsed"] = equationUsed;
                             r1["reference"] = reference;
+                            gI.Equations.Add(new equationInformation()
+                            {
+                                name = name,
+                                activity = activity,
+                                equation = equation,
+                                mediaOrRoute = mediaOrRoute,
+                                exposureType = exposureType,
+                                exposureComponent = exposureComponent,
+                                source = source,
+                                variableDescription = variableDescription,
+                                variableValue = variableValue,
+                                variableValueUnits = variableValueUnits,
+                                measuredOrEstimated = measuredOrEstimated,
+                                measurementSource = measurementSource,
+                                estimateBasis = estimateBasis,
+                                equationUsed = equationUsed,
+                                reference = reference
+                            }
+                            );
                             equationInfo.Rows.Add(r1);
+                            Variable v = null;
+                            foreach (Variable a in variable) if (a.name == activity) v = a;
+                            if (v is null && !string.IsNullOrEmpty(activity))
+                            {
+                                v = new Variable(activity);
+                                variable.Add(v);
+                            }
+                            if (!(v is null) && !v.ScenariosUsedIn.Contains(name)) v.ScenariosUsedIn.Add(name);
+
                         }
                     }
                 }
             }
+            models.Sort();
+            List<string> output = new List<string>();
+            foreach (Model m in models)
+            {
+                output.Add(m.name);
+                foreach (string s in m.ScenariosUsedIn) output.Add("\t" + s);
+                output.Add(System.Environment.NewLine);
+            }
+            System.IO.File.WriteAllLines("ModelsUsed.txt", output);
+            output.Clear();
+            act2.Sort();
+            foreach (Activity2 a in act2)
+            {
+                output.Add(a.name);
+                foreach (string s in a.ScenariosUsedIn) output.Add("\t" + s);
+                output.Add(System.Environment.NewLine);
+            }
+            System.IO.File.WriteAllLines("Activities.txt", output);
+            output.Clear();
+            variable.Sort();
+            foreach (Variable a in variable)
+            {
+                output.Add(a.name);
+                foreach (string s in a.ScenariosUsedIn) output.Add("\t" + s);
+                output.Add(System.Environment.NewLine);
+            }
+            System.IO.File.WriteAllLines("Variable.txt", output);
         }
 
         void BuildTree()
