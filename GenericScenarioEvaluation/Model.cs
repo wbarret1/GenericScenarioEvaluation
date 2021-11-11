@@ -15,7 +15,7 @@ namespace GenericScenarioEvaluation
         {
             name = s;
         }
-        public string name { get; }
+        public string name { get; set; }
         public List<string> ScenariosUsedIn = new List<string>();
 
         public int CompareTo(Model other)

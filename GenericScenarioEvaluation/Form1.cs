@@ -153,8 +153,16 @@ namespace GenericScenarioEvaluation
 
         readonly List<generalInformation> generalInfos = new List<generalInformation>();
         readonly List<Model> models = new List<Model>();
+        readonly List<string> modelNames = new List<string>();
+        readonly List<activityInformation> act = new List<activityInformation>();
         readonly List<Activity2> act2 = new List<Activity2>();
+        readonly List<activityInformation> notModeled = new List<activityInformation>();
+        readonly List<equationInformation> measured = new List<equationInformation>();
         readonly List<Variable> variable = new List<Variable>();
+        readonly List<equationInformation> equations = new List<equationInformation>();
+
+        int variables = 0;
+        int measuredVariables = 0;
 
 
         readonly string[] scenarioElements = new string[]{
@@ -212,6 +220,36 @@ namespace GenericScenarioEvaluation
 
         void ProcessReviews()
         {
+            string[] lines = System.IO.File.ReadAllText("..\\..\\ModelsUsed.txt").Split(new Char[] { '\r', '\n' });
+            List<string> enterredModelName = new List<string>();
+            List<string> actualModelName = new List<string>();
+            foreach (string line in lines)
+            {
+                if (!string.IsNullOrEmpty(line))
+                {
+                    string[] current = line.Split('\t');
+                    enterredModelName.Add(current[0]);
+                    if (current.Length > 1)
+                        actualModelName.Add(current[1]);
+                    else actualModelName.Add(string.Empty);
+                }
+            }
+
+            lines = System.IO.File.ReadAllText("..\\..\\Activities.txt").Split(new Char[] { '\r', '\n' });
+            List<string> enterredActivityName = new List<string>();
+            List<string> chemSteerActivityName = new List<string>();
+            foreach (string line in lines)
+            {
+                if (!string.IsNullOrEmpty(line))
+                {
+                    string[] current = line.Split('\t');
+                    enterredActivityName.Add(current[0]);
+                    if (current.Length > 1)
+                        chemSteerActivityName.Add(current[1]);
+                    else chemSteerActivityName.Add(string.Empty);
+                }
+            }
+
             foreach (string dir in System.IO.Directory.EnumerateDirectories(@"..\..\Reviewed Scenarios"))
             {
                 foreach (string fileName in System.IO.Directory.EnumerateFiles(dir))
@@ -257,6 +295,16 @@ namespace GenericScenarioEvaluation
                             if (cell.CellReference.ToString().StartsWith("D"))
                             {
                                 name = GetCellValue(spreadSheetDocument, cell);
+                                if (name.Contains('\n'))
+                                {
+                                    string[] parts = name.Split('\n');
+                                    name = string.Empty;
+                                    foreach (string p in parts)
+                                    {
+                                        name = name + p + " ";
+                                    }
+                                    name = name.Remove(name.Length - 1, 1);
+                                }
                                 r["name"] = name;
                             }
                         }
@@ -395,14 +443,8 @@ namespace GenericScenarioEvaluation
                             MarketShare = MarketShare
                         };
                         generalInfos.Add(gI);
-                        if (string.IsNullOrEmpty(name))
-                        {
-
-                        }
-
 
                         // Get Activity Information
-
                         sheet = sheets.ElementAt(1);
                         relationshipId = sheet.Id.Value;
                         worksheetPart = (DocumentFormat.OpenXml.Packaging.WorksheetPart)spreadSheetDocument.WorkbookPart.GetPartById(relationshipId);
@@ -424,8 +466,15 @@ namespace GenericScenarioEvaluation
                             foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(i))
                             {
                                 string reference = cell.CellReference;
-                                if (reference.StartsWith("A")) activity = GetCellValue(spreadSheetDocument, cell);
+                                if (reference.StartsWith("A"))
+                                {
+                                    activity = GetCellValue(spreadSheetDocument, cell);
+                                    //if (!string.IsNullOrEmpty(actualModelName[enterredModelName.IndexOf(activity)]))
+                                    //    activity = actualModelName[enterredModelName.IndexOf(activity)];
+                                }
                                 if (reference.StartsWith("B")) chemSteerActivity = GetCellValue(spreadSheetDocument, cell);
+                                if (reference.StartsWith("B") && !string.IsNullOrEmpty(activity))
+                                    if (string.IsNullOrEmpty(chemSteerActivity)) chemSteerActivity = chemSteerActivityName[enterredActivityName.IndexOf(activity.Replace('\n', ' '))];
                                 if (reference.StartsWith("C")) Description = GetCellValue(spreadSheetDocument, cell);
                                 if (reference.StartsWith("D")) ExposureType = GetCellValue(spreadSheetDocument, cell);
                                 if (reference.StartsWith("E")) exposureValue = GetCellValue(spreadSheetDocument, cell);
@@ -433,6 +482,24 @@ namespace GenericScenarioEvaluation
                                 if (reference.StartsWith("G")) modeled = GetCellValue(spreadSheetDocument, cell);
                                 if (reference.StartsWith("H")) dataSource = GetCellValue(spreadSheetDocument, cell);
                                 if (reference.StartsWith("I")) modelName = GetCellValue(spreadSheetDocument, cell);
+                                if (modelName.Contains("Specific model used is based on the type and size of the containers"))
+                                {
+                                    modelName = modelName.Replace("Specific model used is based on the type and size of the containers, and on the physical state of the waterborne coating component:\n", string.Empty);
+                                    modelName = modelName.Replace("\nRelease estimates to each medium of release can be estimated for site with an on-site wastewater treatment system.", string.Empty);
+
+                                }
+                                if (modelName == "Routine, direct handling of solids, 2 hands") modelName = "EPA/OPPT 2-Hand Dermal Contact with Liquid Model";
+                                //if (!string.IsNullOrEmpty(modelName))
+                                //{
+                                //    if (!(modelName.Contains("Specific model used is based on the type and size of the containers, and on the physical state ")
+                                //         || modelName.Contains("Specific model used is based on daily amount of waterborne coating component handled: For amounts")
+                                //         || modelName.Contains("Specific model used is based on the type and size of the containers, and on the physical state of the waterborne coating component:")
+                                //         || modelName.Contains("EPA/OPPT Bulk Transport Residual Model \nEPA/OPPT Drum Residual Model(Default) \nEPA/OPPT Small Container Residual Model \nEPA/OPPT Solid Residuals in Transport Containers Model")
+                                //         || modelName.Contains("EPA/OPPT Bulk Transport Residual Model may be used for large containers (e.g. totes, tank trucks, rail cars) containing greater than or equal to 100 gallons of liquid;\nEPA/OPPT Drum Residual Model may be used for drums containing between 20 and 100 gallons of liquid;EPA/OPPT Small Container Residual Model may be used for liquid containers containing less than 20 gallons;\nEPA/OPPT Solid Residuals in Transport Containers Model may be used for containers of all sizes containing solids.")
+                                //         || modelName.Contains("EPA/OPPT 2-Hand Dermal Contact with Liquid Model; EPA/OPPT Direct 2-Hand Dermal Contact with Solids Model.")))
+                                //    {
+                                //    }
+                                //}
                                 if (reference.StartsWith("J")) modelReference = GetCellValue(spreadSheetDocument, cell);
                             }
                             DataRow r1 = activityInfo.NewRow();
@@ -450,7 +517,7 @@ namespace GenericScenarioEvaluation
                             r1["modelName"] = modelName;
                             r1["modelReference"] = modelReference;
                             activityInfo.Rows.Add(r1);
-                            gI.Activities.Add(new activityInformation()
+                            activityInformation a = new activityInformation()
                             {
                                 name = name,
                                 year = date,
@@ -464,33 +531,51 @@ namespace GenericScenarioEvaluation
                                 modeled = modeled,
                                 dataSource = dataSource,
                                 modelName = modelName,
-                                modelReference = modelReference
+                                modelReference = modelReference,
+                                Scenario = gI
+                            };
+                            gI.Activities.Add(a);
+                            act.Add(a);
+                            Activity2 a2 = null;
+                            foreach (Activity2 a1 in act2) if (a.name == activity) a2 = a1;
+                            if (a2 is null && !string.IsNullOrEmpty(activity))
+                            {
+                                a2 = new Activity2(activity, chemSteerActivity);
+                                act2.Add(a2);
                             }
-                            );
-                            Model m = null;
+                            if (!modeled.StartsWith("mo", StringComparison.OrdinalIgnoreCase) || !modeled.StartsWith("mo", StringComparison.OrdinalIgnoreCase)) notModeled.Add(a);
+                            if (!(a2 is null) && !a2.ScenariosUsedIn.Contains(name))
+                            {
+                                a2.ScenariosUsedIn.Add(name);
+                                a2.years.Add(date);
+                            }
                             string[] names = null;
-                            if (modelName.Contains(",")) names = modelName.Split(',');
+                            if (!string.IsNullOrEmpty(modelName)) modelName = modelName.Replace(" or ", string.Empty).Trim();
+                            if (modelName == "Bulk Transport Residual Model, Drum Residual Model, Small Container Residual Model,Solid Residuals in Transport Containers Model") names = new string[] { "Bulk Transport Residual Model", "Drum Residual Model", "Small Container Residual Model", "Solid Residuals in Transport Containers Model" };
+                            else if (modelName.Contains("rail cars) containing greater thanequal to 100 ")) names = new string[] { "EPA/OPPT Drum Residual Model", "EPA/OPPT Small Container Residual Model", "EPA/OPPT Solid Residuals in Transport Containers Model" };
+                            else if (modelName.Contains(",")) names = modelName.Split(',');
                             else if (modelName.Contains(";")) names = modelName.Split(';');
                             else if (modelName.Contains('\n')) names = modelName.Split('\n');
                             else names = new string[] { modelName };
                             foreach (string n in names)
                             {
-                                foreach (Model m1 in models) if (m1.name == n) m = m1;
-                                if (m is null && !string.IsNullOrEmpty(n))
+                                if (!string.IsNullOrEmpty(n))
                                 {
-                                    m = new Model(n);
-                                    models.Add(m);
+                                    string t = n.Trim();
+                                    if (!string.IsNullOrEmpty(actualModelName[enterredModelName.IndexOf(t.Trim())]))
+                                        t = actualModelName[enterredModelName.IndexOf(t.Trim())];
+                                    Model m = null;
+                                    foreach (Model m1 in models) if (m1.name == t) m = m1;
+                                    if (m is null && !string.IsNullOrEmpty(t))
+                                    {
+                                        m = new Model(t);
+                                        models.Add(m);
+                                        modelNames.Add(t);
+                                    }
+                                    if (!(m is null) && !m.ScenariosUsedIn.Contains(name)) m.ScenariosUsedIn.Add(name);
+                                    if (!(a2 is null) && !a2.ModeledUsing.Contains(t)) a2.ModeledUsing.Add(t);
                                 }
-                                if (!(m is null) && !m.ScenariosUsedIn.Contains(name)) m.ScenariosUsedIn.Add(name);
                             }
-                            Activity2 a2 = null;
-                            foreach (Activity2 a in act2) if (a.name == activity) a2 = a;
-                            if (a2 is null && !string.IsNullOrEmpty(activity))
-                            {
-                                a2 = new Activity2(activity);
-                                act2.Add(a2);
-                            }
-                            if (!(a2 is null) && !a2.ScenariosUsedIn.Contains(name)) a2.ScenariosUsedIn.Add(name);
                         }
 
                         // Get Equation Information
@@ -521,7 +606,7 @@ namespace GenericScenarioEvaluation
                             foreach (DocumentFormat.OpenXml.Spreadsheet.Cell cell in rows.ElementAt(i))
                             {
                                 string cellReference = cell.CellReference;
-                                if (cellReference.StartsWith("A")) activity = GetCellValue(spreadSheetDocument, cell);
+                                if (cellReference.StartsWith("A")) activity = GetCellValue(spreadSheetDocument, cell).Replace('\t', ' ');
                                 if (cellReference.StartsWith("B")) equation = GetCellValue(spreadSheetDocument, cell);
                                 if (cellReference.StartsWith("C")) mediaOrRoute = GetCellValue(spreadSheetDocument, cell);
                                 if (cellReference.StartsWith("D")) exposureType = GetCellValue(spreadSheetDocument, cell);
@@ -553,7 +638,7 @@ namespace GenericScenarioEvaluation
                             r1["estimateBasis"] = estimateBasis;
                             r1["equationUsed"] = equationUsed;
                             r1["reference"] = reference;
-                            gI.Equations.Add(new equationInformation()
+                            equationInformation ei = new equationInformation()
                             {
                                 name = name,
                                 activity = activity,
@@ -569,19 +654,30 @@ namespace GenericScenarioEvaluation
                                 measurementSource = measurementSource,
                                 estimateBasis = estimateBasis,
                                 equationUsed = equationUsed,
-                                reference = reference
-                            }
-                            );
+                                reference = reference,
+                                Scenario = gI
+                            };
+                            equations.Add(ei);
+                            gI.Equations.Add(ei);
                             equationInfo.Rows.Add(r1);
                             Variable v = null;
-                            foreach (Variable a in variable) if (a.name == activity) v = a;
-                            if (v is null && !string.IsNullOrEmpty(activity))
+                            foreach (Variable a in variable) if (a.name == variableDescription) v = a;
+                            if (v is null && !string.IsNullOrEmpty(variableDescription))
                             {
-                                v = new Variable(activity);
+                                v = new Variable(variableDescription);
                                 variable.Add(v);
                             }
-                            if (!(v is null) && !v.ScenariosUsedIn.Contains(name)) v.ScenariosUsedIn.Add(name);
-
+                            if (!(v is null) && !v.ScenariosUsedIn.Contains(name))
+                            {
+                                v.ScenariosUsedIn.Add(name);
+                                v.Source.Add(measuredOrEstimated);
+                            }
+                            if (measuredOrEstimated.StartsWith("me", StringComparison.OrdinalIgnoreCase))
+                            {
+                                measuredVariables++;
+                                measured.Add(ei);
+                            }
+                            variables++;
                         }
                     }
                 }
@@ -590,29 +686,204 @@ namespace GenericScenarioEvaluation
             List<string> output = new List<string>();
             foreach (Model m in models)
             {
-                output.Add(m.name);
-                foreach (string s in m.ScenariosUsedIn) output.Add("\t" + s);
-                output.Add(System.Environment.NewLine);
+                if (m.name.Contains('\n'))
+                {
+                    string[] parts = m.name.Split('\n');
+                    m.name = string.Empty;
+                    foreach (string p in parts)
+                    {
+                        m.name = m.name + p + " ";
+                    }
+                    m.name = m.name.Remove(m.name.Length - 1, 1);
+                }
+                string line = m.name + '\t' + m.ScenariosUsedIn.Count();
+                foreach (string s in m.ScenariosUsedIn) line = line + '\t' + s;
+                output.Add(line);
+                //output.Add(System.Environment.NewLine);
+                //output.Add(m.name);
+                //foreach (string s in m.ScenariosUsedIn) output.Add("\t" + s);
+                //output.Add(System.Environment.NewLine);
             }
             System.IO.File.WriteAllLines("ModelsUsed.txt", output);
             output.Clear();
             act2.Sort();
             foreach (Activity2 a in act2)
             {
-                output.Add(a.name);
-                foreach (string s in a.ScenariosUsedIn) output.Add("\t" + s);
-                output.Add(System.Environment.NewLine);
+                if (a.name.Contains('\n'))
+                {
+                    string[] parts = a.name.Split('\n');
+                    a.name = string.Empty;
+                    foreach (string p in parts)
+                    {
+                        a.name = a.name + p + " ";
+                    }
+                    a.name = a.name.Remove(a.name.Length - 1, 1);
+                }
+                string line = string.Empty;
+                foreach (string s in a.ModeledUsing) line = line + ", " + s;
+                a.years.Sort();
+                line = a.name + '\t' + a.ChemSteerActivity + '\t' + a.ScenariosUsedIn.Count() + '\t' + a.years[0] + '\t' + a.ModeledUsing.Count() + '\t' + (string.IsNullOrEmpty(line) ? string.Empty : line.Remove(0, 2));
+                foreach (string s in a.ScenariosUsedIn) line = line + '\t' + s;
+                output.Add(line);
+                //output.Add(a.name);
+                //foreach (string s in a.ScenariosUsedIn) output.Add("\t" + s);
+                //output.Add(System.Environment.NewLine);
             }
             System.IO.File.WriteAllLines("Activities.txt", output);
+            output.Clear();
+            //notModeled.Sort();
+            foreach (equationInformation a in measured)
+            {
+                if (a.name.Contains('\n'))
+                {
+                    string[] parts = a.name.Split('\n');
+                    a.name = string.Empty;
+                    foreach (string p in parts)
+                    {
+                        a.name = a.name + p + " ";
+                    }
+                    a.name = a.name.Remove(a.name.Length - 1, 1);
+                }
+                //string line = a.name + '\t' + a.year + '\t';
+                // foreach (string s in a.name) line = line + ", " + s;
+                //a.years.Sort();
+                //string line = a.name + '\t' + a.year + '\t' + a.chemSteerActivity + '\t' + a.modelName;
+                //foreach (string s in a.ScenariosUsedIn) line = line + '\t' + s;
+                // output.Add(line);
+                //output.Add(a.name);
+                //foreach (string s in a.ScenariosUsedIn) output.Add("\t" + s);
+                //output.Add(System.Environment.NewLine);
+            }
+            System.IO.File.WriteAllLines("measured.txt", output);
+            output.Clear();
+            //notModeled.Sort();
+            foreach (activityInformation a in notModeled)
+            {
+                if (a.name.Contains('\n'))
+                {
+                    string[] parts = a.name.Split('\n');
+                    a.name = string.Empty;
+                    foreach (string p in parts)
+                    {
+                        a.name = a.name + p + " ";
+                    }
+                    a.name = a.name.Remove(a.name.Length - 1, 1);
+                }
+                //string line = a.name + '\t' + a.year + '\t';
+                // foreach (string s in a.name) line = line + ", " + s;
+                //a.years.Sort();
+                string line = a.name + '\t' + a.year + '\t' + a.chemSteerActivity + '\t' + a.modelName;
+                //foreach (string s in a.ScenariosUsedIn) line = line + '\t' + s;
+                output.Add(line);
+                //output.Add(a.name);
+                //foreach (string s in a.ScenariosUsedIn) output.Add("\t" + s);
+                //output.Add(System.Environment.NewLine);
+            }
+            System.IO.File.WriteAllLines("notModeled.txt", output);
             output.Clear();
             variable.Sort();
             foreach (Variable a in variable)
             {
-                output.Add(a.name);
-                foreach (string s in a.ScenariosUsedIn) output.Add("\t" + s);
-                output.Add(System.Environment.NewLine);
+                if (a.name.Contains('\n'))
+                {
+                    string[] parts = a.name.Split('\n');
+                    a.name = string.Empty;
+                    foreach (string p in parts)
+                    {
+                        a.name = a.name + p + " ";
+                    }
+                    a.name = a.name.Remove(a.name.Length - 1, 1);
+                }
+                string line = a.name + '\t' + a.name + '\t' + a.ScenariosUsedIn.Count();
+                foreach (string s in a.ScenariosUsedIn) line = line + '\t' + s;
+                output.Add(line);
+                //output.Add(a.name);
+                //foreach (string s in a.ScenariosUsedIn) output.Add("\t" + s);
+                //output.Add(System.Environment.NewLine);
             }
             System.IO.File.WriteAllLines("Variable.txt", output);
+            modelNames.Sort();
+            System.IO.File.WriteAllLines("ModelNames.txt", modelNames);
+
+            var envRelease = from a in act where a.ExposureType == "Environmental" && (a.modeled.ToLower() == "modeled" || a.modelName.ToLower().Contains("model")) select a;
+            output.Clear();
+            foreach (activityInformation r in envRelease)
+            {
+                output.Add(r.name + '\t' + r.activity + '\t' +  r.modelName + '\t' + "Modeled" + '\t' + r.Scenario.name + '\t' + r.Scenario.year);
+            }
+            System.IO.File.WriteAllLines("modeledReleases.txt", output);
+
+            var envRelease2 = from a in act where a.ExposureType == "Environmental" && a.modeled == "Measured" select a;
+            output.Clear();
+            foreach (activityInformation r in envRelease2)
+            {
+                output.Add(r.name + '\t' + r.activity + '\t' + r.modelName + '\t' + "Measured" + '\t' + r.Scenario.name + '\t' + r.Scenario.year);
+            }
+            System.IO.File.WriteAllLines("measuredReleases.txt", output);
+            var envRelease3 = from a in act where a.ExposureType == "Environmental" && (string.IsNullOrEmpty(a.modeled) || a.modeled == "n.a.") select a;
+            output.Clear();
+            foreach (activityInformation r in envRelease3)
+            {
+                output.Add(r.name + '\t' + r.activity + '\t' + r.modelName + '\t' + "" + '\t' + r.Scenario.name + '\t' + r.Scenario.year);
+            }
+            //System.IO.File.WriteAllLines("modeledReleases.txt", output);
+            var envRelease4 = from a in act where a.ExposureType == "Environmental" && !(a.modeled.ToLower() == "modeled" || a.modeled == "Measured" || a.modelName.ToLower().Contains("model") || string.IsNullOrEmpty(a.modeled)) select a;
+            //output.Clear();
+            foreach (activityInformation r in envRelease4)
+            {
+                output.Add(r.name + '\t' + r.activity + '\t' + r.modelName + '\t' + "Modeled" + '\t' + r.Scenario.name + '\t' + r.Scenario.year);
+            }
+            System.IO.File.WriteAllLines("ReleasesNotModeledOrMasured.txt", output);
+            var occExp = from a in act where a.ExposureType == "Occupational" && (a.modeled.ToLower() == "modeled" || a.modelName.ToLower().Contains("model")) select a;
+            output.Clear();
+            foreach (activityInformation r in occExp)
+            {
+                output.Add(r.name + '\t' + r.activity + '\t' + r.modelName + '\t' + "Modeled" + '\t' + r.Scenario.name + '\t' + r.Scenario.year);
+            }
+            System.IO.File.WriteAllLines("modeledOccExp.txt", output);
+            var occExp2 = from a in act where a.ExposureType == "Occupational" && a.modeled == "Measured" select a;
+            output.Clear();
+            foreach (activityInformation r in occExp2)
+            {
+                output.Add(r.name + '\t' + r.activity + '\t' + r.modelName + '\t' + "Measured" + '\t' + r.Scenario.name + '\t' + r.Scenario.year);
+            }
+            System.IO.File.WriteAllLines("measuredOccExp.txt", output);
+            var occExp3 = from a in act where a.ExposureType == "Occupational" && (string.IsNullOrEmpty(a.modeled) || a.modeled == "n.a.") select a;
+            output.Clear();
+            foreach (activityInformation r in occExp3)
+            {
+                output.Add(r.name + '\t' + r.activity + '\t' + r.modelName + '\t' + "" + '\t' + r.Scenario.name + '\t' + r.Scenario.year);
+            }
+            var occExp4 = from a in act where a.ExposureType == "Occupational" && !(a.modeled.ToLower() == "modeled" || a.modeled == "Measured" || string.IsNullOrEmpty(a.modeled) || a.modelName.ToLower().Contains("model")) select a;
+            foreach (activityInformation r in occExp4)
+            {
+                output.Add(r.name + '\t' + r.activity + '\t' + r.modelName + '\t' + "Modeled" + '\t' + r.Scenario.name + '\t' + r.Scenario.year);
+            }
+            System.IO.File.WriteAllLines("OccExpNotModeledOrMasured.txt", output);
+            var notCaptured = from a in act where string.IsNullOrEmpty(a.ExposureType) select a;
+            output.Clear();
+            foreach (activityInformation r in notCaptured)
+            {
+                output.Add(r.name + '\t' + r.activity + '\t' + r.modelName + '\t' + "" + '\t' + r.Scenario.name + '\t' + r.Scenario.year);
+            }
+            System.IO.File.WriteAllLines("notCaptured.txt", output);
+
+            var odd = from a in act where !string.IsNullOrEmpty(a.ExposureType) &&!(a.modeled.ToLower() == "modeled" || a.modeled == "Measured" || a.modeled == "n.a." || string.IsNullOrEmpty(a.modeled) || a.modelName.ToLower().Contains("model")) select a;
+            output.Clear();
+            foreach (activityInformation r in odd)
+            {
+                output.Add(r.name + '\t' + r.activity + '\t' + r.modelName + '\t' + "" + '\t' + r.Scenario.name + '\t' + r.Scenario.year);
+            }
+            System.IO.File.WriteAllLines("odd.txt", output);
+
+            int check = envRelease.Count() + envRelease2.Count() + envRelease3.Count() + envRelease4.Count() + occExp.Count() + occExp2.Count() + occExp3.Count() + occExp4.Count() + notCaptured.Count() + odd.Count();
+            bool reconsile = act.Count() == (envRelease.Count() + envRelease2.Count() + envRelease3.Count() + envRelease4.Count() + occExp.Count() + occExp2.Count() + occExp3.Count() + occExp4.Count() + notCaptured.Count() + odd.Count());
+
+            var calc = from e in equations where e.estimateBasis.ToLower().Contains("calc") select e;
+            var assumed = from e in equations where e.estimateBasis.ToLower().Contains("ass") select e;
+            var estimated = from e in equations where e.estimateBasis.ToLower().Contains("estima") select e;
+
+            var left = from e in equations where !e.estimateBasis.ToLower().Contains("calc") && !e.estimateBasis.ToLower().Contains("ass") && !e.estimateBasis.ToLower().Contains("estima") select e;
         }
 
         void BuildTree()

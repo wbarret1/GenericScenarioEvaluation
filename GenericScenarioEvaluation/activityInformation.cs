@@ -22,5 +22,6 @@ namespace GenericScenarioEvaluation
             public string modelName { get; set; }
             public string modelReference { get; set; }
 
+        public generalInformation Scenario { get; set; }
     }
 }

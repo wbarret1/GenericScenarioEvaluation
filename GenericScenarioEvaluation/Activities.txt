@@ -1,0 +1,191 @@
+Add chemical dyes	Unit Operations and Processes
+Air	Unit Operations and Processes
+Air Emission	Unit Operations and Processes
+Air Emissions	Unit Operations and Processes
+Air releases during manufacturing	Unit Operations and Processes
+Assembly	Unit Operations and Processes
+Automotive refinishing releases	Automotive Spray Coating
+Biotechnology Process Activities (Industrial Fermentation Processes)	Unit Operations and Processes
+black and white developing	Unit Operations and Processes
+Blending, sampling, and packaging	Sampling
+Cleaning	Cleaning Residuals
+Cleaning equipment and spray booth	Cleaning Residuals
+Coating product container residue disposal
+Collection and disposal of spent foam to water, incineration or land
+color developing	Unit Operations and Processes
+Commercial laundry use	Unit Operations and Processes
+Concentrate sent to Incineration
+Conformal coating
+Container cleaning	Cleaning Residuals
+Container residue and spillage losses to water, incineration or landfill	Cleaning Residuals
+Container residue losses	Cleaning Residuals
+Container Residue Losses	Cleaning Residuals
+Container residue losses to water, incineration or land	Cleaning Residuals
+Container residue losses to water, incineration, or landfill	Cleaning Residuals
+Container residue released to incineration	Cleaning Residuals
+Container Residue released to uncertain media (water, incineration, or landfill)	Cleaning Residuals
+Container residues released to water, incineration, or landfill.	Cleaning Residuals
+Control technology
+Crude Separation	Unit Operations and Processes
+Curtain coating
+Dermal
+Dermal and inhalation exposure during filter change.
+Dermal and inhalation exposure during process equipment cleaning.	Cleaning Residuals
+Dermal and inhalation exposure from bottling operation	Unit Operations and Processes
+Dermal and inhalation exposure from liquid and solid container cleaning.	Cleaning Residuals
+Dermal and inhalation exposure from unloading solid and liquid materials into the process equipment.	Unloading
+Dermal Exposure
+Dermal Exposure (mg/day)
+Dermal exposure during dying operations	Unit Operations and Processes
+Dermal exposure during manufacturing	Unit Operations and Processes
+Dermal exposure to liquid chemical
+Dermal exposure to liquid chemical  during container unloading or transferring	Unloading
+Dermal exposure to liquid chemical during container cleaning	Cleaning Residuals
+Dermal exposure to liquid chemical during container unloading or transferring	Unloading
+Dermal exposure to liquid chemical during product sampling	Sampling
+Dermal exposure to liquid chemical during container cleaning	Cleaning Residuals
+Dermal exposure to liquid chemical equipment cleaning	Cleaning Residuals
+Dermal exposure to liquid dye product during machine operation	Unit Operations and Processes
+Dermal exposure to solid chemical
+Disassembly and Cleaning of Brake System
+Disposal Concerns
+Disposal of expired AFFF to water, incineration or land
+Disposal of spent dyebath
+Disposal of spent lubricants to incineration
+Dragout Losses released to water (on-site treatment or POTW)	Unit Operations and Processes
+Encapsulation	Unit Operations and Processes
+Equipment cleaning	Cleaning Residuals
+Equipment cleaning and spillage	Cleaning Residuals
+Equipment cleaning and supply-line filter residues released to incineration or landfill	Cleaning Residuals
+Equipment Cleaning Losses	Cleaning Residuals
+Equipment cleaning losses to incineration or landfill	Cleaning Residuals
+Equipment cleaning releases to water, incineration, or landfill.	Cleaning Residuals
+Equipmetn cleaning	Cleaning Residuals
+Evaporative Losses to Air or Air and Incineration during Curing/Drying	Unit Operations and Processes
+Excess photoresist (spin-off) released to incineration	Unit Operations and Processes
+Exposure during Application of the Adhesive	Unit Operations and Processes
+Exposure during Curing/Drying
+Exposure during drying and screening	Unit Operations and Processes
+Exposure during equipment cleaning	Cleaning Residuals
+Exposure during mixing and pumping	Unit Operations and Processes
+Exposure during packaging	Unit Operations and Processes
+Exposure from Container Cleaning	Cleaning Residuals
+Exposure from Equipment Cleaning of Applicators and Other Process Equipment	Cleaning Residuals
+Exposure from Unloading and Transferring Adhesive Product	Unloading
+Exposure to AFFF concentrate during container cleaning	Cleaning Residuals
+Exposure to AFFF concentrate during disposal of expired stock
+Exposure to AFFF concentrate during unloading or transferring	Unloading
+Exposure to AFFF during discharge	Unit Operations and Processes
+Exposure to AFFF during disposal of spent foam	Unit Operations and Processes
+Exposure to liquid chemical during container cleaning	Cleaning Residuals
+Exposure to liquid chemical during filter media changeout and other recycling operations
+Exposure to liquid chemical during metal shaping operations, including rinsing, wiping, and/or transferring shaped parts	Unit Operations and Processes
+Exposure to liquid chemical during mixing and transfer of dilute metalworking fluid (water-based only)	Unit Operations and Processes
+Exposure to liquid chemical during on-site treatment operations	Unit Operations and Processes
+Exposure to liquid chemical during transfer of spent metalworking fluid and cleaning of shaping machine and trough
+Exposure to liquid chemical during unloading of neat metalworking fluid	Unloading
+Exposure to liquid or solid dye product during unloading or transferring	Unloading
+Exposure to liquid or solid dye product during container cleaning	Cleaning Residuals
+Filter Media and Other Recycling Wastes released to uncertain media (water-based: water, incineration, or landfill; straight oil: incineration or landfill)	Unit Operations and Processes
+Filtration, equipment cleaning and process water	Unit Operations and Processes
+Fluidized Catalytic Cracking	Unit Operations and Processes
+Flux residue removal	Unit Operations and Processes
+Fugitive Air Emissions	Unit Operations and Processes
+Handling / Transfer Operations	Vapor Exposure from Transfer Operations
+handling/feeding into the process	Unit Operations and Processes
+IC cleaning with aqueous solution	Unit Operations and Processes
+Impregnation	Unit Operations and Processes
+Industrial laundry use	Unit Operations and Processes
+Inhalation
+Inhalation (mg/day)
+Inhalation (mg/day):
+Inhalation (volatiles only) and dermal exposures during container cleaning	Cleaning Residuals
+Inhalation (volatiles only) and dermal exposures during container loading	Loading
+Inhalation (volatiles only) and dermal exposures during container unloading	Unloading
+Inhalation (volatiles only) and dermal exposures during equipment cleaning	Cleaning Residuals
+Inhalation (volatiles only) and dermal exposures during product sampling	Sampling
+Inhalation (volatiles only) exposure during formulation
+Inhalation during Flotation
+Inhalation Exposur
+Inhalation Exposure - Ink Preparation Room Inhalation Exposure	Unit Operations and Processes
+Inhalation Exposure - Printing Room Inhalation Exposure	Unit Operations and Processes
+Inhalation exposure during manufacturing	Unit Operations and Processes
+Inhalation of solid chemical particles	Unit Operations and Processes
+Inhalation of volatile liquid chemical vapors	Unit Operations and Processes
+Land
+Liquid Waste
+Loading
+Manual paint spraying	Automotive Spray Coating
+Manufacturing of paper dyes	Unit Operations and Processes
+Marking	Unit Operations and Processes
+Metal Finishing Operations
+Metal Shaping Operations	Unit Operations and Processes
+Mineral and Metal Ore Flotation	Unit Operations and Processes
+New automobile manufacturing releases from painting	Automotive Spray Coating
+New Brake Pad Installation and Reassembly
+Open surface losses of volatile chemicals during container cleaning to air	Cleaning Residuals
+Open surface losses of volatile chemicals during equipment cleaning to air	Cleaning Residuals
+Open surface losses of volatile chemicals during filter change.
+Open surface losses of volatile chemicals to air during blending	Unit Operations and Processes
+Open surface losses of volatile chemicals to air during container cleaning.	Cleaning Residuals
+Open surface losses of volatile chemicals to air during equipment cleaning.	Cleaning Residuals
+Open surface losses of volatile chemicals to air during product sampling	Sampling
+Open Surfaces Losses to Air During Container Cleaning	Cleaning Residuals
+Open Surfaces Losses to Air During Equipment Cleaning	Cleaning Residuals
+Over sprayed coatings and capture of oversprayed  coatings	Automotive Spray Coating
+Oversprayed  coatings not captured by emission controls	Automotive Spray Coating
+Packaging
+Packaging/equipment cleaning	Cleaning Residuals
+paper coating	Unit Operations and Processes
+paper making	Unit Operations and Processes
+PMN chemical releasse into water during manufacturing	Unit Operations and Processes
+PMN in Tailings	Unit Operations and Processes
+press cleaning	Cleaning Residuals
+Process Releases During Application of the Adhesive	Unit Operations and Processes
+Process Waste
+Product finishing	Unit Operations and Processes
+Product sampling wastes to water, incineration or landfill
+Receiving, storage, and transfer	Unloading
+Reject product released to incineration or landfill.	Unit Operations and Processes
+Release of chemicals trapped in spent filters to incineration or landfill.	Unit Operations and Processes
+Residual photoresist contained in waste developer solution released to on-site wastewater treatment	Unit Operations and Processes
+Residual photoresist contained in waste etching and stripping solutions released to on-site wastewater treatment or incineration (In some cases, waste solvents may also be destroyed)	Unit Operations and Processes
+Retained in Product
+Roll coating	Unit Operations and Processes
+Settled dust collected from the transfer of a solid powder into the mixing vessel released to water, incineration, or landfill.	Vapor Exposure from Transfer Operations
+Slurry preparation	Unit Operations and Processes
+Solid or liquid PMN  transferring or unloading
+Solid Waste
+Solid Waste Disposal
+Solid Wastes
+solvent transfer
+spent cloth handling	Unit Operations and Processes
+Spent Metalworking Fluid released to water (water-based: on-site treatment or POTW) or incineration (straight oil)
+Spray application	Automotive Spray Coating
+Spray drying
+Stack Air Emissions	Unit Operations and Processes
+Table 4-1 on p.61 of ESD lists releases
+Table 5-1 on p.77 of ESD lists activities
+Termination of magnet wires	Unit Operations and Processes
+Transfer	Vapor Exposure from Transfer Operations
+Transfer of liquid coating to spry gun	Vapor Exposure from Transfer Operations
+transfer of liquid/emptying drum	Vapor Exposure from Transfer Operations
+Transfer operation losses of volatile chemicals to air	Vapor Exposure from Transfer Operations
+Transfer operation losses to air of volatile chemicals during bottling operation.	Vapor Exposure from Transfer Operations
+Transfer operation losses to air of volatile chemicals during unloading into the mix vessels.	Unloading
+Transfer Operations Losses to Air from Unloading	Unloading
+transfer/unloading of solid powders	Unloading
+Treatment of spent cleaning solution	Cleaning Residuals
+Trimming Wastes Released to Incineration or Landfill	Unit Operations and Processes
+Unloading	Unloading
+Unloading the dye formulation	Unloading
+Unloading/ mixing liquid coating product	Unloading
+Use and Generation of Slurry	Unit Operations and Processes
+Use of paper dyes	Unit Operations and Processes
+Vented losses of volatile chemicals to air during blending	Unit Operations and Processes
+Vented losses of volatile chemicals to air during mixing operations.	Unit Operations and Processes
+Water
+Water Emissions
+Winding
+Wood Treatment Process Activities	Unit Operations and Processes
+Worker Exposure

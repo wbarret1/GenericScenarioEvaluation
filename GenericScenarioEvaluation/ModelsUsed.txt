@@ -1,0 +1,67 @@
+1-Hand Dermal Contact with Liquid Model	EPA/OPPT 1-Hand Dermal Contact with Liquid Model
+2 hands EPA/OPPT 2-Hand Dermal Contact with Liquid Model
+2-Hand Dermal Contact with Liquid Model	EPA/OPPT 2-Hand Dermal Contact with Liquid Model
+2-Hand Dermal Contact with Solids Model	EPA/OPPT 2-Hand Dermal Contact with Solids Model
+2-Hand Dermal Immersion in Liquid Model	EPA/OPPT 2-Hand Dermal Immersion with Liquid Model
+AP-42 Loading Model
+Assumed Fraction of Input Model (0.1-1%) (Ray made up name)	Fraction of Input
+Assumed Fraction of Input Model (100%) (Ray made up name)	Fraction of Input
+Assumed to be negligible due to process automation	Assumed negligble
+Automobile OEM Spray Coating Inhalation Exposure Model
+Automobile Refinish Spray Coating Inhalation Exposure Model
+Automotive Refinishing Coating Transfer Dermal Model
+Automotive Refinishing Spray Coating Dermal Model
+Automotive Refinishing Spray Coating Mist Inhalation Model
+Bulk Transport Residual Model	EPA/OPPT Bulk Transport Residual Model
+Dermal	Scenario-Specific Model
+developed as part of GS	Scenario-Specific Model
+direct handling of solids
+Drum Residual Model	EPA/OPPT Drum Residual Model
+Dust Emissions from Transferring Solids Model
+Dust Release Model	Scenario-Specific Model
+EPA/OPPT 2-Hand Dermal Contact with Liquid Model
+EPA/OPPT Bulk Transport Residual Model
+EPA/OPPT Bulk Transport Residual Model may be used for large containers (e.g. totes	EPA/OPPT Bulk Transport Residual Model
+EPA/OPPT Direct 2-Hand Dermal Contact with Solids Model.
+EPA/OPPT Drum Residual Model
+EPA/OPPT Drum Residual Model(Default)	EPA/OPPT Drum Residual Model
+EPA/OPPT Single Process Vessel Residual Model
+EPA/OPPT Small Container Residual Model
+EPA/OPPT Solid Residuals in Transport Containers Model
+Equation	Scenario-Specific Model
+Estimated
+Generic Model to Estimate Application Loss Releases from Roll Coating and Curtain Coating Operations
+if it is more than 54 kg/site-day use OSHA model
+Incidental contact
+Inhalation	Scenario-Specific Model
+less than 54 kg/site-day use  EPA model. OSHA Total Particulates Not Otherwise Regulated (PNOR) PEL-Limiting ModelEPA/OPPT Small Volume Solids Handling Inhalation Model.
+Loss rate is based on available industry specific data
+Loss rate is based on available industryspecific data	Loss rate is based on available industry specific data
+Loss rate is based on available industry-specific data	Loss rate is based on available industry specific data
+Loss rate is based on available industry-specific data.	Loss rate is based on available industry specific data
+Mass Balance Model
+Mist concentration data from industry-specific monitoring study
+Multiple Process Vessel Residual Model
+Multiple Process Vessel Residual Model Release estimates to each medium of release can be estimated for a site with an on-site wastewater treatment system.	Multiple Process Vessel Residual Model
+No methodology for quantifying the release from this source has been developed
+Nuisance Dust Medium-Duty Work Model (Ray made up name)
+Penetration Model
+rail cars) containing greater thanequal to 100 gallons of liquid;
+EPA/OPPT Drum Residual Model may be used for drums containing between 20 and 100 gallons of liquid;EPA/OPPT Small Container Residual Model may be used for liquid containers containing less than 20 gallons;	EPA/OPPT Drum Residual
+EPA/OPPT Solid Residuals in Transport Containers Model may be used for containers of all sizes containing solids.	EPA/OPPT Solid Residuals in Transport Containers Model
+Release rate is based on mass balance	Mass Balance Model
+Routine
+Scenario-Specific Model
+Selection of the appropriate equation should be based on the amount of dye formulation the worker is exposed to per day
+Single Process Vessel Residual Model
+Single Process Vessel Residual ModelMultiple Process Vessel Residual Model
+Small Container Residual Model
+Small Volume Solids Handling Inhalation Model
+Solid Residuals in Transport Containers Model
+Specific model used is based on daily amount of waterborne coating component handled: For amounts > 54 kg/day: OSHA PNOR PEL-Limiting Model For amounts < 54 kg/day: EPA/OPPT Small Volume Solids Handling Model
+Surface loading rate data from industry-specific monitoring study
+tank trucks
+two hands - liquid	EPA/OPPT 2-Hand Dermal Contact with Liquid Model
+Typical Dermal Exposure from Routine Contact Operations (Ray made up name)
+User Defined Loss Model
+UV Roll Coating Inhalation Model
